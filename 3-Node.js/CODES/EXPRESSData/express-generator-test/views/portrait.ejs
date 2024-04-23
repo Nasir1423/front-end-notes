@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户信息提交</title>
+</head>
+
+<body>
+    <!-- 如果要通过表单上传一个文件（同时请求方法时 POST），此时必须要有属性 enctype="multipart/form-data" -->
+    <form action="/portrait" method="post" enctype="multipart/form-data">
+        Username: <input type="text" name="username"><br>
+        Avatar: <input type="file" name="avatar"><br>
+        <hr>
+        <button>SUBMIT</button>
+    </form>
+
+</body>
+
+</html>

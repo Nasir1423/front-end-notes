@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>运算符</title>
+	<script>
+
+		/* 
+			1. 算术运算符：加法（+）、减法（-）、乘法（*）、除法（/）、幂（**）、模/取余（%）
+			
+				注：JS 是一门弱类型语言，在运算时会进行自动类型转换
+				- 对于算术运算，除了字符串加法（加法运算至少一个操作数是字符串），其他所有运算，如果操作数是非数值类型，则会先自动转换为数
+					值再运算（to Number）
+				- 任意一个值和字符串做加法运算时，会先将该值转换为字符串，然后进行拼串操作；任意类型的值可以通过和空串（""）做加法运算，实
+					现类型转换，原理与 String 函数相同，但是更加简洁（to String）
+		*/
+
+		let result
+
+
+		// result = 10 / 0
+		// console.log(result) // Infinity
+
+		// result = 10 ** 4
+		// console.log(result) // 10000
+
+		// result = 9 ** .5
+		// console.log(result) // 3
+
+		// result = 10 % 3
+		// console.log(result) // 1
+
+		// // to Number
+		// result = 10 - '5'
+		// console.log(result) // 5 = 10 - 5
+
+		// result = 10 + true
+		// console.log(result) // 11 = 10 + 1
+
+		// result = 5 + null
+		// console.log(result) // 5 = 5 + 0
+
+		// result = 6 - undefined
+		// console.log(result) // NaN = 6 - NaN
+
+		// // to String
+		// result = true + ""
+		// console.log(result) // true 
+
+
+		/*
+			2. 赋值运算符：=、??=、+=、-+、*=、/=、%=、**=
+				- 赋值运算符用于将一个值赋给一个变量，或者说是，将符号右边的值赋给左边的变量
+				- ??= 表示空赋值，只有变量的值为 null 或 undefined 时才对变量进行赋值
+				- a += n ↔ a = a + n；a -=n ↔ a = a - n；...... 其余以此类推
+		*/
+
+		// result = 10
+		// result += 5
+		// console.log(result) // 15
+
+		// result ??= 20
+		// console.log(result) // 15，未变化
+
+		// result = null
+		// result ??= 20
+		// console.log(result) // 20
+
+		/*
+			3. 正负运算符：正号（+）、负号（-）
+				- 正负运算符是一元运算符，+ 表示不改变数值的符号，- 表示数值符号位取反
+
+				注：我们可以通过正负运算符实现自动类型转换，因为当对非数值类型进行正负运算时，会先将其转换为数值然后再运算；任意类型的值可
+				以通过正号运算符转换为数值类型，原理与 Number 函数相同（to Number）
+		*/
+
+		// result = 10
+		// result = -result
+		// console.log(result) // -10
+
+		// // to Number
+		// result = "123"
+		// result = +result
+		// console.log(result) // 123
+
+		/*
+			4. 自增自减运算符：自增（++）、自减（--）
+				- 自增自减运算符是一元运算符，并且与其他运算符不同的是，运算后变量的值会变化（自增会增 1，自减会减 1），而其他运算符只是负
+				责计算出一个结果，由赋值运算符改变变量的值
+				- 自增分为前自增（++i）和后自增（i++）；无论哪种，运算后 i 的值都会增加 1；++i 的值是 i 增加后的新值，i++ 的值是 i 增加
+					前的旧值
+				- 自减分为前自减（--i）和后自减（i--）；无论哪种，运算后 i 的值都会减少 1；--i 的值是 i 减少后的新值，i-- 的值是 i 减少
+					前的旧值
+		*/
+
+		// let result1 = 1
+		// let result2 = 1
+		// console.log(result1++) // 1
+		// console.log(++result2) // 2
+
+		/*
+			5. 逻辑运算符
+				- 逻辑非 !
+					> 逻辑非运算符是一元运算符，可以对一个布尔值进行取反操作
+
+					注：我们可以通过逻辑非运算符实现自动类型转换，当我们对一个非布尔值进行逻辑非运算时，会先将其转换为布尔值后在进行取反操作；
+					任意类型的值可以通过两次取反转换为布尔类型（to Boolean）
+				
+				- 逻辑与 &&
+					> 逻辑与运算符是二运运算符，当两个操作数都为 true 时，运算结果才为 true，否则为 false
+					> 逻辑与运算是短路的与运算，如果第一个值为 false，则不会看第二个值，直接返回 false
+					> 非布尔值进行与运算，会先转换为布尔值然后再运算，但是最终会返回原值
+						>> 第一个值为 false，则返回第一个值
+						>> 第一个值为 true，则返回第二个值
+				
+				- 逻辑或 ||
+					> 逻辑或运算符是二运运算符，当两个操作数都为 false 时，运算结果才为 false，否则为 true
+					> 逻辑或运算是短路的或运算，如果第一个值为 true，则不会看第二个值，直接返回 true
+					> 非布尔值进行或运算，会先转换为布尔值然后再运算，但是最终会返回原值
+						>> 第一个值为 true，则返回第一个值
+						>> 第一个值为 false，则返回第二个值
+		*/
+
+		// // 逻辑非
+		// result = 1
+		// console.log(!!result) // true
+
+		// result = undefined
+		// console.log(!!result) // false
+
+		// result = null
+		// console.log(!!result) // false
+
+		// result = " "
+		// console.log(!!result) // true
+
+		// result = ""
+		// console.log(!!result) // false
+
+		// result = "Hello"
+		// console.log(!!result) // true
+
+		// // 逻辑与
+		// result = true && true
+		// console.log(result) // true
+
+		// result = true && false
+		// console.log(result) // false
+
+		// result = false && true
+		// console.log(result) // false
+
+		// result = false && false
+		// console.log(result) // false
+
+		// true && alert("短路与测试1") // alert 会执行
+		// false && alert("短路与测试2") // alert 被短路，不会执行
+
+		// result = 3 && 4
+		// console.log(result) // 4
+
+		// result = 0 && 9
+		// console.log(result) // 0
+
+		// // 逻辑或
+		// result = true || false
+		// console.log(result) // true
+
+		// result = false || true
+		// console.log(result) // true
+
+		// result = true || true
+		// console.log(result) // true
+
+		// result = false || false
+		// console.log(result) // false
+
+		// false || alert("短路或测试1")
+		// true || alert("短路与测试2")
+
+		// result = "hello" || NaN
+		// console.log(result) // "hello"
+
+		// result = NaN || null
+		// console.log(result) // null
+
+		/* 
+			6. 关系运算符：>、>=、<、<=
+				- 关系运算符用于检查两个值之间是否满足某种关系，满足则返回 true，否则返回 false
+				
+				注1：对非数值类型进行关系运算时，一般会先将其转换为数值类型后再进行关系运算
+				注2：如果俩个操作数都是字符串，则关系运算时，不会将字符串转换为数值，而是按照字符的 Unicode 编码逐位比较；可以利用这个特点
+				对字符串按照字母进行排序
+		*/
+
+		// num = 9
+		// result = num > 5 && num < 10
+		// console.log(result) // true
+
+		/* 
+			7. 相等运算符：相等（==）、全等（===）、不相等（!=）、不全等（!==）
+				- 相等，用于比较两个值是否相等：当比较两个不同类型的值，会先将其转换为相同的类型（通常转换为数值类型）再进行比较，类型转换
+				后值相同则会返回 true，否则返回 false
+					> NaN 不与任何值相等，包括自身
+					> null == undefined 结果是 true
+				- 全等，用于比较两个值是否全等：与相等不同的是，全等不会进行自动类型转换，两个值类型不同则直接返回 false，只有在类型相同值
+				相同时才返回 true
+					> null === undefined 结果是 false
+				- 不等，用于检查两个值是否不相等：对相等结果进行取反，涉及自动类型转换
+				- 不全等，用于检查两个值是否不全等：对全等结果进行取反，不涉及自动类型转换
+		*/
+
+		result = 1 == 1 // true
+		result = 1 == 2 // false
+		result = 1 == '1' // true
+		result = true == '1' // true
+		result = null == undefined // true
+		result = NaN == NaN // false
+		
+
+		/*
+			8. 条件运算符（三目运算符）
+				- 语法：
+					条件表达式 ? 表达式1 : 表达式2
+				- 运算规则：条件表达式运算结果为 true，则执行表达式1；false，则执行表达式2
+		*/
+
+		let a = 100
+		let b = 200
+		let max = a > b ? a : b
+		console.log(`max=${max}`) // max=200
+
+		/*
+			9. 运算符优先级：括号 () 的优先级最大
+		*/
+	</script>
+</head>
+
+<body>
+
+</body>
+
+</html>

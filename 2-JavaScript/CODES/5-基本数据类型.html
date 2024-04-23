@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>基本数据类型</title>
+	<script>
+		// 变量取值的类型检查：typeof 运算符；通过该运算符，我们可以检查不同值的类型
+
+		let a = "hello"
+
+		console.log(typeof a) // Output: string
+
+		/* 
+			1. 数值 Number：整数或浮点数
+				- JS 中的数值并不是无限大的，当超过一定范围后会显示近似值，因此进行高精度运算时要注意
+				- Infinity 和 NaN 是两个比较特殊的数
+					> Infinity 表示无穷大
+					> NaN（Not a Number） 表示非法数值
+				- 其他进制数字的表示（输出到控制台会变为十进制）
+					> 二进制 0b 开头
+					> 八进制 0o 开头
+					> 十六进制 0x 开头
+		 */
+
+		let ten_d = 10 // 十进制数字 10
+		let ten_b = 0b1010 // 二进制数字 10
+		let ten_o = 0o12 // 八进制数字 10
+		let ten_x = 0xA // 十六进制数字 10
+
+		console.log(ten_d) // Output: 10
+		console.log(ten_b) // Output: 10
+		console.log(ten_o) // Output: 10
+		console.log(ten_x) // Output: 10
+
+
+		/* 2. 大整数 BigInt：用于表示一些比较大的整数，以 n 结尾，可表示的数字范围是无限大（得看内存） */
+		
+		let big = 99999999999999999999999999n
+
+		console.log(big) // Output: 99999999999999999999999999n
+
+
+		/* 
+			3. 字符串 String
+				- JS 中使用单引号或双引号表示字符串
+				- JS 中可以使用转义字符（\）显示一些有特殊含义的字符
+					> \" 显示 "
+					> \' 显示 '
+					> \\ 显示 \
+					> \t 显示 制表符
+					> \n 显示 换行符
+				- 模板字符串是一种特殊的字符串，使用反引号（`）来表示，其特点是可以嵌入变量，通过 ${变量名} 的方式，可以在字符串中根据变量名输出变量的值
+		*/
+
+		let welcome = "Welcome to \"JavaScript\""
+
+		console.log(welcome) // Output: Welcome to "JavaScript"
+
+		let book = "红楼梦"
+
+		console.log(`${book}是四大名著之一`) // Output: 红楼梦是四大名著之一
+
+
+		/* 
+			4. 布尔值 Boolean：用于进行逻辑判断，只有 true 和 false 两个可选值
+			5. 空值 Null：表示空对象，只有 null 一个可选值；不能使用 typeof 运算符检查空置，使用 typeof 运算符检查空值时会返回 object
+			6. 未定义 Undefined：当一个变量没有赋值时，其数据类型就是 Undefined，只有 undefined 一个可选值
+			7. 符号 Symbol：用于创建一个唯一的表示
+
+			注：七种原始的数据类型是各种数据的基石，其在 JS 中是不可变类型，一旦创建就不能修改！！！
+				> 给已经赋值过的一个变量，赋一个新值，并不是修改了该变量原本的值，只是创建了一个新的值而已
+		*/
+
+	</script>
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>伸缩盒模型练习</title>
+	<style>
+		/* 重置样式表 */
+		* {
+			font-family: "华文行楷";
+			font-size: 14px;
+			margin: 0;
+			padding: 0;
+			border: none;
+		}
+
+		a {
+			text-decoration: none;
+			color: rgb(50, 89, 96);
+		}
+
+		ul {
+			list-style: none;
+		}
+
+		/* 设置 html 的宽高为视口的宽高 */
+		html {
+			width: 100%;
+			height: 100%;
+		}
+
+		/* 设置整个 html 页面的样式 */
+		body {
+			background-image: url("./images/flex-genshin/background.webp");
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+
+		/* 设置网页头部的样式 */
+		header {
+			height: 70px;
+			background-color: rgb(183, 215, 202, 0.5);
+			color: rgb(50, 89, 96);
+			padding: 0 20px;
+
+			/* 开启 flex 布局，变成伸缩容器 */
+			display: flex;
+			/* 主轴方向对齐 space-between */
+			justify-content: space-between;
+			/* 侧轴方向对齐 center */
+			align-items: center;
+		}
+
+		.header-name {
+			font-size: 28px;
+			padding: 8px;
+			border: 1px solid rgb(136, 172, 178);
+			border-radius: 8px;
+		}
+
+		.header-classification ul {
+			display: flex;
+		}
+
+		.header-classification a{
+			font-size: 25px;
+			color: rgb(50, 89, 96);
+			padding: 5px;
+			margin: 0 8px;
+			border: 1px solid rgb(136, 172, 178);
+			border-radius: 4px;
+		}
+
+		.header-classification li:hover {
+			transform: translateY(-2px) scale(1.02);
+		}
+
+		/* 设置网页内容样式 */
+		.content {
+			/* 用意：让子元素快捷进行水平垂直居中 */
+			display: flex;
+			height: calc(100vh - 70px);
+		}
+
+		/* 设置人物祈愿样式（默认显示） */
+		.pray-person {
+			width: 750px;
+			height: 300px;
+
+			margin: auto;
+
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+		}
+
+		.person,
+		.weapon {
+			width: 150px;
+			height: 300px;
+
+			display: flex;
+			justify-content: center;
+			align-items: flex-end;
+
+			transition: 0.2s linear all;
+		}
+
+		.person:hover,
+		.weapon:hover {
+			top: -5px;
+			transform: scale(1.05);
+		}
+
+		.person1 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/15401867c816f2bf80282573bfd55b0b_8731161919395728631.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.person2 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/9508060a82eff7a3519f798d6b3e73b3_8285733908347549777.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.person3 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/53c36e9379d624d8c83480625cafd7cb_3759600061164333916.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.person4 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/017a42da2c8183db0568aa6c6f7adc93_8994484806203309307.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.person5 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/142f43fc0fae2d18cdcb5a7335cac0db_627104977203185219.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.person span,
+		.weapon span {
+			margin-bottom: 27px;
+		}
+
+		/* 设置武器祈愿样式（需要进行其他操作显示） */
+		.pray-weapon {
+			display: none;
+			width: 900px;
+			height: 300px;
+
+			margin: auto;
+
+			/* display: flex; */
+			justify-content: space-evenly;
+			align-items: center;
+		}
+
+
+		.weapon1 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/205b5a82cbf9dbffb515040ef7ec1854_3407506338499129034.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.weapon2 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/3cea785032ad80b420bb59c750949243_1907464835048343914.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.weapon3 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/90ff4562ed1c3e48e9c746c3641b365b_211147115688890994.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.weapon4 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/45a4c796f24b14180086d6d28abee2bf_3311136311425997403.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.weapon5 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/5c27fb18642bb340f1a11b4d5d134f94_6852483222898716119.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+
+		.weapon6 {
+			background: url(https://act-webstatic.hoyoverse.com/puzzle/hk4e/pz_uGaXg8gTdF/resource/puzzle/2024/03/05/9bbb367b04a49fc2521b7eb8a7c97a96_7220323032195836805.png?x-oss-process=image/format,webp/quality,Q_90&quot;) center center / cover no-repeat;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- 网页头部 -->
+	<header>
+		<div class="header-name">集录祈愿：晨风之诗</div>
+		<div class="header-classification">
+			<ul>
+				<li><a href="#">角色复刻</a></li>
+				<li><a href="#">武器复刻</a></li>
+			</ul>
+		</div>
+	</header>
+	<!-- 网页内容区 -->
+	<div class="content">
+		<!-- 人物祈愿 -->
+		<div class="pray-person">
+			<a href="https://zh.wikipedia.org/wiki/%E7%90%B4_(%E5%8E%9F%E7%A5%9E)">
+				<div class="person person1">
+					<span>琴</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="person person2">
+					<span>可莉</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="person person3">
+					<span>阿贝多</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="person person4">
+					<span>莫娜</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="person person5">
+					<span>迪卢克</span>
+				</div>
+			</a>
+		</div>
+		<!-- 武器祈愿 -->
+		<div class="pray-weapon">
+			<a href="#">
+				<div class="weapon weapon1">
+					<span>苇海信标</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="weapon weapon2">
+					<span>松籁响起之时</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="weapon weapon3">
+					<span>狼的末路</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="weapon weapon4">
+					<span>天空之傲</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="weapon weapon5">
+					<span>四风原典</span>
+				</div>
+			</a>
+			<a href="#">
+				<div class="weapon weapon6">
+					<span>天空之卷</span>
+				</div>
+			</a>
+		</div>
+	</div>
+
+</body>
+
+</html>

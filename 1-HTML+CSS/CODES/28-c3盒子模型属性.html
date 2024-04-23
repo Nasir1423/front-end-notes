@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>盒子模型属性</title>
+	<style>
+		div {
+			width: 200px;
+			height: 200px;
+			margin: 20px;
+			padding: 10px;
+			border: 5px dashed red;
+			background-color: darksalmon;
+			text-align: center;
+			line-height: 200px;
+		}
+
+		.box1 {
+			box-sizing: content-box;
+		}
+
+		.box2 {
+			line-height: 170px;
+			box-sizing: border-box;
+		}
+
+		.box3 {
+			overflow: hidden;
+			resize: both;
+		}
+
+		.box-usage-1 {
+			box-shadow: 10px 10px;
+		}
+
+		.box-usage-2 {
+			box-shadow: 10px 10px blue;
+		}
+
+		.box-usage-3 {
+			box-shadow: 10px 10px 20px;
+		}
+
+		.box-usage-4 {
+			box-shadow: 10px 10px 20px blue;
+			line-height: 100px;
+		}
+
+		.box-usage-5 {
+			box-shadow: 10px 10px 20px 10px blue;
+			line-height: 100px;
+		}
+
+		.box-usage-6 {
+			box-shadow: 10px 10px 20px 10px blue inset;
+			line-height: 100px;
+		}
+
+		.float-dad {
+			width: 400px;
+			height: 300px;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			background-color: transparent;
+			position: relative;
+		}
+
+		.float {
+			position: absolute;
+		}
+
+		.float:hover {
+			box-shadow: 0px 0px 20px black;
+			top: -10px;
+			left: 0;
+		}
+
+		.box4 {
+			font-size: 30px;
+			font-weight: bold;
+			font-family: "楷体";
+			opacity: 0.5;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>box-sizing 属性测试</h2>
+	<div class="box1">默认盒模型</div>
+	<div class="box2">怪异盒模型</div>
+	<hr>
+	<h2>resize 属性测试</h2>
+	<div class="box3">可以调整元素宽高</div>
+	<hr>
+	<h2>box-shadow 属性测试</h2>
+	<!-- box-shadow 
+		1. 语法为 box-shadow: h-shadow v-shadow blur spread color inset
+		2. 根据参数值数量和类别的不同，该属性共有六种用法
+		3. h-shadow 和 v-shadow 是必选的两个参数，其他四个参数是可选的
+		4. 该属性默认值为 box-shadow: none -->
+	<div class="box-usage-1">h-shadow v-shadow</div>
+	<div class="box-usage-2">h-shadow v-shadow color</div>
+	<div class="box-usage-3">h-shadow v-shadow blur</div>
+	<div class="box-usage-4">h-shadow v-shadow blur color</div>
+	<div class="box-usage-5">h-shadow v-shadow blur spread color</div>
+	<div class="box-usage-6">h-shadow v-shadow blur spread color inset</div>
+	<h3>选中效果实现</h3>
+	<div class="float-dad">
+		<div class="float">你好世界</div>
+	</div>
+	<h2>opacity 属性测试</h2>
+	<div class="box4">透明度 0.5</div>
+</body>
+
+</html>

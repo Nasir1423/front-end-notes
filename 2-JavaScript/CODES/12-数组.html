@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组</title>
+    <script type="text/javascript">
+        /* 
+            1. 数组 Array
+                - 数组是一种复合数据类型，其中可以存储多个不同类型的数据（为了性能考虑，确保数组中存储的数据的类型是相同的）
+                - 数组中的数据是有序的，每个数据都有一个唯一的索引，可以通过索引来操作数据
+                - 数组中存储的数据称之为元素
+                - 数组中的元素的索引（index）从 0 开始计算
+                - 使用 typeof 关键字检查数组对象，结果为 object
+            
+            2. 数组的创建
+                - 方式一：构造函数 const arr = new Array()
+                - 方式二：数组字面量
+                    > const arr = []
+                    > const arr = [12, 34, 56, 56, 12]
+            
+            3. 元素的操作（假设 arr 是数组对象，index 是元素索引，element 是元素取值）
+                - 读取元素：arr[index]（如果 index 非法，不会报错而是返回 undefined）
+                - 添加元素：arr[index] = element（添加元素前数组中索引为 index 的元素不存在）
+                - 修改元素：arr[index] = element（添加元素前数组中索引为 index 的元素已存在）
+
+            4. 数组的 length 属性：数组的长度（元素的个数）
+                - 数组的长度 length = 数组最大索引 + 1
+                - 可以通过 arr[arr.length] = element 向数组末尾追加元素
+                - length 属性是可修改的：如果修改后的 length 比数组长度大，则会增加空元素；如果小，则会截掉尾部的元素满足 length
+
+            5. 数组与对象的区别
+                - 数组中的数据有序，对象中的数据无序
+                - 数组中的数据叫元素，对象中的数据叫属性
+        */
+
+        // const arr = [1]
+
+        // arr[3] = 10
+
+        // console.log(arr) // [ 1, <2 empty items>, 10 ]
+        // console.log(arr.length) // 4
+
+        // arr.length = 10
+
+        // console.log(arr) // [ 1, <2 empty items>, 10, <6 empty items> ]
+
+        // arr[arr.length] = 1345
+
+        // console.log(arr) // [ 1, <2 empty items>, 10, <6 empty items>, 1345 ]
+
+        /* 
+            6. 数组的遍历
+                - 方式一：for 循环
+                - 方式二：for-of 循环（可以遍历所有可迭代对象，如数组、字符串等）
+                    > 语法：for(变量 of 可迭代对象) { 语句 }
+                    > 执行流程：for-of 循环体执行的次数为可迭代对象中元素的个数，每次循环从可迭代对象中按顺序取出一个元素赋给变量
+        */
+
+        // // for 循环遍历数组
+        // const arr = ["孙悟空", "猪八戒", "沙和尚", "唐僧"]
+
+        // for (let i = 0; i < arr.length; i++) {
+        //     console.log(`第${i}个元素：${arr[i]}`)
+        // }
+
+        // // for-of 循环遍历数组
+        // for (let element of arr) {
+        //     console.log(element)
+        // }
+
+        // // for-of 循环遍历字符串
+        // let str = "hello world"
+
+        // for (let c of str) {
+        //     console.log(c)
+        // }
+
+        /*
+            7. 浅拷贝与深拷贝
+                - 浅拷贝（shallow copy）：通常对对象的拷贝都是浅拷贝，顾名思义，浅拷贝只对对象的浅层进行复制（或者说只复制一层）
+                    > 如果对象存储的数据是原始值，此时拷贝的深浅与否并不重要，作用相同；只有对象中存储的数据是对象时，才会有所差异
+                    > 浅拷贝只对对象本身进行复制，不会复制对象中的属性/元素
+                    > 对于数组对象，可以使用实例方法 arr.slice() 返回一个 arr 的浅拷贝
+                    > 举例
+                        >> origin: <img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/20240330235024.png"/>
+                        >> shallow copy: <img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/20240330235129.png"/>
+                - 深拷贝（deep copy）：不仅复制对象本身，还要复制对象中的属性/元素，不过因为性能问题，通常不是用深拷贝
+                    > 可以使用函数 structuredClone(arr) 返回一个 arr 的深拷贝
+                    > 举例
+                        >> origin: <img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/20240330235024.png"/>
+                        >> deep copy: <img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/20240331000307.png"/>
+        */
+
+        // const arr = [
+        //     { name: "孙悟空" },
+        //     { name: "猪八戒" }
+        // ]
+
+        // // 浅拷贝
+        // const arr2 = arr.slice()
+
+        // console.log(arr === arr2) // false
+        // console.log(arr[0] === arr2[0]) // true
+
+        // // 深拷贝
+        // const arr3 = structuredClone(arr)
+
+        // console.log(arr === arr3) // false
+        // console.log(arr[0] === arr3[0]) // false
+
+        /*
+            8. 数组的浅拷贝
+                - 方式一：使用数组的实例方法 slice() 去复制一个对象，注意，复制是要产生一个新的对象
+                    > 语法：const arr_new = arr_old.slice()
+                - 方式二：使用展开运算符（...）去复制一个对象
+                    > 语法：const arr_new = [...arr_old]
+                - 关于展开运算符（...）：可以将一个数组中的所有元素展开到另一个数组中，或者作为函数的参数传递
+                    > ...arr 表示将数组中的所有元素展开
+                    > "孙悟空", ...arr, "唐僧" 表示将数组中的所有元素展开，并在前后各加上一个元素
+        */
+
+        // const arr = ["孙悟空", "猪八戒", "沙和尚"]
+
+        // const arr2 = [...arr] // ["孙悟空", "猪八戒", "沙和尚"]
+
+        // const arr3 = [...arr, "白骨精"] // ["孙悟空", "猪八戒", "沙和尚", "白骨精"]
+
+        // const arr4 = ["白骨精", ...arr] // ["白骨精", "孙悟空", "猪八戒", "沙和尚"]
+
+        // function concatName(a, b, c) {
+        //     return a + b + c
+        // }
+
+        // concatName(...arr) // 孙悟空猪八戒沙和尚
+
+        /*
+            9. 对象的浅拷贝
+                - 方式一：使用函数 structuredClone(obj) 创建一个对象的浅拷贝
+                    > 语法：const obj_new = structuredClone(obj_old)
+                - 方式二：使用 Object 的静态方法 Object.assign(obj_target, obj_old) 将 obj_old 对象中的属性复制到 obj_target
+                对象中
+                    > 语法：const obj_target = object.assign(obj_target, obj_old)
+                    > 注：Object.assign 方法用于给 obj_target 中添加 obj_old 的属性，obj_old 会覆盖掉 obj_target 中的同名属性，
+                    而不同名属性不会影响
+                - 方式三：使用展开运算符（...）去复制一个对象
+                    > 语法：const arr_new = [...arr_old]
+        */
+
+        // const obj_old = {
+        //     name: "孙悟空",
+        //     age: 19
+        // }
+
+        // // 方式二
+        // const obj_target1 = Object.assign({}, obj_old) // { name: '孙悟空', age: 19 }
+        // const obj_target2 = Object.assign({ address: "花果山" }, obj_old) // { address: '花果山', name: '孙悟空', age: 19 }
+
+        // // 方式三
+        // const obj_new = { address: "花果山", ...obj_old, gender: "男" } // { address: '花果山', name: '孙悟空', age: 19, gender: '男' }
+
+        /*
+            10. 数组的常用非破坏性方法（即不会影响原数组，而是返回一个新的数组）
+                - 静态方法（Array 是数组类）
+                    > Array.isArray(obj)：检查一个对象是否是数组对象，是则返回 true，否则返回 false
+                - 实例方法（假设 arr 是一个数组对象）
+                    > arr.at(index)：根据索引返回数组中的指定元素；索引可指定为负数，如 -1 表示倒数第一个元素
+                    > arr.concat(arr1, arr2, ..., arrn)：连接两个或多个数组并返回连接结果
+                    > arr.indexOf(element, [start])：返回元素在数组中第一次出现的索引
+                    > arr.lastIndexOf(element, [start])：返回元素在数组中最后一次出现的索引
+                        > arr.indexOf 和 arr.lastIndexOf 都是用于返回数组中某个元素“第”一次出现的索引，找不到则返回 -1
+                        > 两个方法都接收最多两个参数，第一个参数表示要查询的元素（必选），第二个参数表示查询的起始位置（可选）
+                        > arr.indexOf 从前向后查询，arr.lastIndexOf 从后向前查询
+                    > arr.join([sep])：将数组中的元素连接为字符串并返回；默认连接符为逗号，可以通过可选的 sep 参数指定一个字符串作为连接符
+                    > arr.slice([start], [stop])：返回一个数组的切片，从 start 位置开始，到 stop 位置结束（不包含 stop 位置的元素）
+                        >> 截取的起始位置 start 可以省略，省略则表示从第一个元素开始截取；结束位置 stop 可以省略，省略则表示一直
+                        截取到最后一个元素
+                        >> 使用区间表示，则 [start, stop) 为实际截取的数组
+                        >> start、stop 取值可以为负数，如 -1 表示倒数第一个元素
+                        >> 如果将 start、stop 都省略，此时 arr.slice() 表示对数组进行浅拷贝
+        */
+        // // Array.isArray(obj)
+        // console.log(Array.isArray({ name: "孙悟空" })) // false
+        // console.log(Array.isArray([1, 2, 3])) // true
+
+        // // arr.at(index)
+        // const arr = ["孙悟空", "猪八戒", "沙和尚", "唐僧"]
+        // console.log(arr.at(-2)) // 沙和尚 (1)
+        // console.log(arr[arr.length - 2]) // 沙和尚 (2)
+        // // 方法 (1)、(2) 是等价的
+
+        // // arr.concat(arr1, arr2, ..., arrn)
+        // const arr1 = ["白晶晶", "白龙马"]
+        // const arr2 = arr.concat(arr1)
+        // console.log(arr2) // [ '孙悟空', '猪八戒', '沙和尚', '唐僧', '白晶晶', '白龙马' ]
+
+        // // arr.indexOf(element, [start])
+        // // arr.lastIndexOf(element, [start])
+        // const arr3 = ["孙悟空", "猪八戒", "唐僧", "孙悟空", "沙和尚", "唐僧"]
+        // console.log(arr3.indexOf("孙悟空")) // 0
+        // console.log(arr3.lastIndexOf("孙悟空")) // 3
+        // console.log(arr3.lastIndexOf("孙悟空", 1)) // 0
+
+        // // arr.join([sep])
+        // console.log(arr.join()) // 孙悟空,猪八戒,沙和尚,唐僧
+        // console.log(arr.join("^_^")) // 孙悟空^_^猪八戒^_^沙和尚^_^唐僧
+
+        // // arr.slice([start], [stop])
+        // console.log(arr.slice() === arr) // false
+        // console.log(arr.slice(1, -1)) // [ '猪八戒', '沙和尚' ]
+        // console.log(arr.slice(1, 3)) // [ '猪八戒', '沙和尚' ]
+        // console.log(arr.slice(1)) // [ '猪八戒', '沙和尚', '唐僧' ]
+
+
+        /*
+            11. 数组的常用破坏性方法（实例方法，假设 arr 是一个数组对象）
+                - arr.push(element1, element2, ..., elementn)：向数组的末尾添加一个或多个元素，并返回数组长度
+                - arr.pop()：删除并返回数组的最后一个元素
+                - arr.unshift(element1, element2, ..., elementn)：向数组的头部添加一个或多个元素，并返回数组长度
+                - arr.shift()：删除并返回数组的第一个元素
+                    >> 记忆 unshift 和 shift：队列数据结构中 shift 操作表示移除队列的第一个元素，而 JS 中 shift 表示移除数组的
+                    第一个元素，并将数组长度减 1；与之对应的 unshift 则意为向数组开头添加元素
+                - arr.splice(start, number, element1, element2, ..., elementn) 表示使用指定元素，替换数组中的若干元素，并返回数组中被替换掉的元素
+                    > start 表示数组元素被替换的开始位置；number 表示从 start 开始数组被替换掉元素的数量；element1->n 表示替换数组元素的新元素
+                    > splice 方法可以实现数组元素的删除（即用空去替换数组中的若干元素）
+                    > splice 方法可以实现数组元素的替换（即用指定元素替换数组中的若干元素）
+                    > splice 方法可以实现向数组中插入新元素（即用指定的元素在 start 位置替换 0 个数组原本的元素）
+                - arr.reverse() 表示反转数组
+        */
+
+        // // arr.push/pop/unshift/shift
+        // const arr = [1, 2, 3, 4, 5, 6, 7, 8]
+        // console.log(arr.length) // 8
+
+        // arr.push(111, 222)
+        // console.log(arr.length) // 10
+
+        // let num = arr.pop()
+        // console.log(num) // 222
+        // console.log(arr.length) // 9
+
+        // arr.unshift(3333)
+        // console.log(arr.length) // 10
+
+        // let num2 = arr.shift()
+        // console.log(num2) // 3333
+        // console.log(arr.length) // 9
+
+        // // arr.splice(start, number, element1, element2, ..., elementn)
+        // // splice 之实现元素删除
+        // const arr2 = ["dog", "cat", "bird", "fish", "fox"]
+        // let result = arr2.splice(1, 3) // 表示从索引为 1 的位置，删除三个元素
+        // console.log(arr2) // [ 'dog', 'fox' ]
+        // console.log(result) // [ 'cat', 'bird', 'fish' ]
+        // // splice 之实现元素插入
+        // const arr3 = ["dog", "cat", "bird", "fish", "fox"]
+        // result = arr3.splice(3, 0, "peach", "apple", "cheery") // 表示从索引为 3 的位置，添加三个元素 "peach", "apple", "cheery"
+        // console.log(arr3) // ['dog', 'cat', 'bird', 'peach', 'apple', 'cheery', 'fish', 'fox']
+        // console.log(result) // []
+        // // splice 之实现元素替换
+        // const arr4 = ["dog", "cat", "bird", "fish", "fox"]
+        // result = arr4.splice(1, 2, "CAT", "BIRD") // 表示从索引为 1 的位置，使用 "CAT", "BIRD" 替换掉两个元素
+        // console.log(arr4) // [ 'dog', 'CAT', 'BIRD', 'fish', 'fox' ]
+        // console.log(result) // [ 'cat', 'bird' ]
+
+        // // arr.reverse()
+        // const arr5 = ["H", "e", "l", "l", "o"]
+        // console.log(arr5) // [ 'H', 'e', 'l', 'l', 'o' ]
+        // console.log(arr5.reverse()) // [ 'o', 'l', 'l', 'e', 'H' ]
+
+        /* 
+            12. 练习：数组去重 arr = [1, 2, 1, 3, 2, 4, 5, 5, 6, 7]
+        */
+
+        // 算法思路-1：每次从 arr 中取出一个元素，和其后边所有元素进行比较，如果找到相同的元素则删除
+        // 注：因为删除元素存在数组长度自动缩减的情况，因此删除元素后，需要对索引进行倒退，以免跳过未比较的元素
+
+        // arr = [1, 2, 1, 3, 2, 2, 4, 5, 5, 6, 7]
+        // console.log("原始数组:", arr)
+
+        // for (let i = 0; i < arr.length; i++) {
+        //     for (let j = i + 1; j < arr.length; j++) {
+        //         if (arr[i] === arr[j]) {
+        //             arr.splice(j, 1) // 删除重复元素
+        //             j-- // 索引回退
+        //         }
+        //     }
+        // }
+
+        // console.log("去重后的数组:", arr)
+
+        // 算法思路-2：每次从 arr 中取出一个元素，使用 arr.indexOf(arr[i], i+1) 搜索是否存在重复元素，如果找到则删除
+        // 注：为了确保删除所有多余重复的元素，删除元素后，需要对索引进行倒退，避免没删除干净
+        // 算法思路-1 的索引倒退是针对待比较元素的，算法思路-2 的索引倒退是针对比较元素的
+
+        // arr = [1, 2, 1, 3, 2, 2, 4, 5, 5, 6, 7]
+        // console.log("原始数组:", arr)
+
+        // for (let i = 0; i < arr.length; i++) {
+        //     let index = arr.indexOf(arr[i], i + 1)
+        //     if (index !== -1) {
+        //         arr.splice(index, 1)
+        //         i--
+        //     }
+        // }
+
+        // console.log("去重后的数组:", arr)
+
+        // 算法思路-3：创建一个新的数组，每次从 arr 中取出一个元素，如果在新数组中不存在，则将该元素添加进新数组，存在则不做任何操作
+        // 注：算法思路-3 是非破坏性方法；算法思路-1、算法思路-2 都是破坏性方法
+
+        // const arr = [1, 2, 1, 3, 2, 2, 4, 5, 5, 6, 7]
+        // console.log("原始数组:", arr)
+
+        // newArr = []
+        // for (let element of arr) {
+        //     if (newArr.indexOf(element) === -1) {
+        //         newArr.push(element)
+        //     }
+        // }
+
+        // // for(let i = 0;i<arr.length;i++){
+        // //     if(newArr.indexOf(arr[i])===-1){
+        // //         newArr.push(arr[i])
+        // //     }
+        // // }
+
+        // console.log("去重后的数组:", newArr)
+
+        /* 
+            13. 练习：数组排序（升序） arr = [9, 1, 3, 2, 8, 0, 5, 7, 6, 4]
+        */
+
+        // 算法思路-1（冒泡排序）：每轮依次比较相邻的两个元素，然后根据大小关系决定是否进行位置交换，每轮比较使得一个元素处于正确位
+        // 置（每轮把最小或最大的元素放在“最后”）
+        // 注意：冒泡排序是最慢的排序方式，不适用于数据量较大的排序
+
+        // const arr = [9, 1, 3, 2, 8, 0, 5, 7, 6, 4]
+        // console.log("原始数组:", arr)
+
+        // // // 未改进版本
+        // // for (let i = 0; i < arr.length; i++) { // 一共 n 个元素，则共需要 n 轮比较
+        // //     for (let j = 0; j < arr.length - 1; j++) { // 每轮依次对 arr[j] 和 arr[j+1] 两两比较；确保 j+1 和 j < arr.length
+        // //         if (arr[j] > arr[j + 1]) {
+        // //             let temp = arr[j]
+        // //             arr[j] = arr[j + 1]
+        // //             arr[j + 1] = temp
+        // //         }
+        // //     }
+        // // }
+
+        // // 可改进-1：只需要 n-1 个元素处于正确位置即完成排序，因此外层循环次数可以减 1
+        // // 可改进-2
+        // // > 第一轮循环需要比较到 arr[arr.length-2] 和 arr[arr.length-1]
+        // // > 第二轮循环需要比较到 arr[arr.length-3] 和 arr[arr.length-2]（因为 arr[arr.length-1] 已经处于正确位置）
+        // // > 第 i 轮循环需要比较到 arr[arr.length-1-i] 和 arr[arr.length-i]（因为最后 i-1 个元素已经处于正确位置）
+        // // > 因为内层循环次数可以优化，跟随外层循环的轮次 i 的不同，内层循环的循环次数可以优化为 arr.length-1-i
+
+        // // 改进版本
+        // for (let i = 0; i < arr.length - 1; i++) { // 一共 n 个元素，则共需要 n 轮比较
+        //     for (let j = 0; j < arr.length - 1 - i; j++) { // 每轮依次对 arr[j] 和 arr[j+1] 两两比较；确保 j+1 和 j < arr.length
+        //         if (arr[j] > arr[j + 1]) {
+        //             let temp = arr[j]
+        //             arr[j] = arr[j + 1]
+        //             arr[j + 1] = temp
+        //         }
+        //     }
+        //     // console.log(`第${i+1}轮比较后数组结果为: ${arr}`)
+        // }
+
+        // console.log("冒泡排序后的数组:", arr)
+
+        // 算法思路-2（选择排序）：依次比较每个位置和其后位置的元素，然后根据大小关系决定是否进行位置交换，每轮使得当前位置存在正确
+        // 的元素（每轮把最小或最大的元素放在“最前”）
+        // 注意：冒泡排序是将元素从后向前排好序，选择排序是将元素从前向后排好序
+
+        // const arr = [9, 1, 3, 2, 8, 0, 5, 7, 6, 4]
+        // console.log("原始数组:", arr)
+
+        // for (let i = 0; i < arr.length; i++) {
+        //     for (let j = i + 1; j < arr.length; j++) {
+        //         if (arr[i] > arr[j]) {
+        //             let temp = arr[i]
+        //             arr[i] = arr[j]
+        //             arr[j] = temp
+        //         }
+        //     }
+        //     // console.log(`第${i + 1}轮比较后数组结果为: ${arr}`)
+        // }
+
+        // console.log("选择排序后的数组:", arr)
+
+        /* 
+            14. 回调函数（callback）：如果将函数作为参数传递，那么就称这个（被传入的）函数为回调函数
+                - 通过回调函数，可以使得调用其的函数的功能变得十分灵活，甚至可以适用于不同的数据类型和不同的问题
+                - 一般而言，传入函数的回调函数是匿名函数，而不是先创建一个函数对象，再将创建的函数对象作为回调函数传入
+                - 例：见下述 filter 函数，通过传入不同的回调函数，既可以根据属性过滤对象，也可以根据奇偶过滤数值
+        */
+
+        // // filter 函数
+        // // 基于回调函数 cb 指定的规则，过滤出 arr 数组对象中符合条件的元素
+        // function filter(arr, cb) {
+        //     const newArr = []
+
+        //     for (element of arr) {
+        //         if (cb(element)) {
+        //             newArr.push(element)
+        //         }
+        //     }
+
+        //     return newArr
+        // }
+
+        // // 指定过滤规则，获取成绩合格的学生对象元素构成的数组
+
+        // class Student {
+        //     constructor(name, score) {
+        //         this.name = name
+        //         this.score = score
+        //     }
+        // }
+
+        // stuArr = [
+        //     new Student("张三", 90),
+        //     new Student("李四", 40),
+        //     new Student("王五", 23),
+        //     new Student("孙康", 46),
+        //     new Student("吴邪", 67)
+        // ]
+
+        // stuCB = (stuObj) => {
+        //     return stuObj.score >= 60
+        // }
+
+        // qualifiedStuArr = filter(stuArr, stuCB)
+
+        // console.log("合格学生对象为:")
+        // console.log(qualifiedStuArr)
+
+        // // 指定过滤规则，获取偶数元素构成的数组
+
+        // numArr = [1213, 2345, 56, 6787, 324, 6877, 3412, 23, 356, 787, 233, 6767]
+
+        // // evenCB = (number) => { return number % 2 === 0 }
+
+        // // evenNumArr = filter(numArr, evenCB)
+
+        // evenNumArr = filter(numArr, number => number % 2 === 0)
+
+        // console.log("偶数元素有:")
+        // console.log(evenNumArr)
+
+        /*
+            15. 高阶函数：如果一个函数的参数或返回值是函数，则这个函数就称为高阶函数
+                - 将函数作为参数（此时这个作为参数的函数就是回调函数），可以对另一个函数动态传递代码，示例见 [14. 回调函数]
+                - 将函数作为返回值，可以动态地生成一个新函数，在不修改原函数的基础上，增加其他功能，符合 OCP 开闭原则
+        */
+
+        // function sayHelloWorld() {
+        //     return "hello world"
+        // }
+
+        // // 通过高阶函数实现，在执行 sayHelloWorld 的同时，打印一条函数调用日志
+        // // 通过调用高阶函数，在 sayHelloWorld 函数功能不变的同时，扩展了其他功能，符合 OCP 开闭原则
+        // // 注意：高阶函数的返回值是一个扩展后的函数对象
+        // function outer(innerCB) {
+        //     return () => {
+        //         console.log("正在调用函数", innerCB)
+        //         return innerCB()
+        //     }
+        // }
+
+        // let result = outer(sayHelloWorld)
+        // console.log(result())
+        // // 正在调用函数 [Function: sayHelloWorld]
+        // // hello world
+
+        // // 修改上述高阶函数使其也适用于对其他函数的扩展：即保持函数功能不变的前提下，增加一个日志语句打印的功能
+        // function sumOfArray(arr) {
+        //     let sum = 0
+
+        //     for (ele of arr) {
+        //         sum += ele
+        //     }
+        //     return sum
+        // }
+
+        // function outer2(innerCB, arr) {
+        //     return () => {
+        //         console.log("正在调用函数", innerCB)
+        //         return innerCB(arr)
+        //     }
+        // }
+
+        // const arr = [1, 2, 3, 4]
+        // result = outer2(sumOfArray, arr)
+        // console.log(result())
+        // // 正在调用函数 [Function: sumOfArray]
+        // // 10
+
+        /*
+            16. 闭包
+                - 是什么？能访问到外部函数作用域中变量的函数
+                - 有啥用？可以隐藏一些不希望被他人访问的内容
+                - 三要素？函数的嵌套；内部函数需要引用外部函数中的变量；内部函数要作为返回值返回
+                - 注意
+                    > 闭包主要用于隐藏一些不希望被外部访问的内容，因此闭包的创建会占据一定的内存空间
+                    > 相较于类，因为闭包没有原型，会比较浪费内存，一般只调用一次外部函数创建一个闭包
+            
+            17. 闭包的原理：词法作用域
+                - 函数的作用域在函数创建时就已经确定，与调用的位置无关
+
+            18. 闭包的生命周期
+                - 创建：外部函数调用时产生；外部函数的每次调用都会产生一个全新的闭包
+                - 销毁：内部函数丢失时销毁；内部函数被垃圾回收，此时闭包才会消失
+        */
+
+        // // 闭包举例：创建一个函数，第一次调用时打印 1，第二次调用时打印 2，...
+        // function outer() {
+        //     let num = 1
+
+        //     return () => {
+        //         console.log(`第 ${num} 次调用函数，打印 num = ${num++}`)
+        //     }
+        // }
+
+        // const printNum = outer()
+
+        // printNum() // 第 1 次调用函数，打印 num = 1
+        // printNum() // 第 2 次调用函数，打印 num = 2
+        // printNum() // 第 3 次调用函数，打印 num = 3
+
+        // // 词法作用域举例
+        // let a = "全局作用域中的变量 a"
+
+        // function f1() {
+        //     console.log(a)
+        // }
+
+        // function f2() {
+        //     let a = "f2 函数作用域中的变量 a"
+        //     f1()
+        // }
+
+        // f2() // 全局作用域中的变量 a（打印结果说明，函数作用域与创建位置有关，与调用位置无关）
+
+        /*
+            19. 递归
+                - 思想：将大问题拆解为小问题，通过小问题的解决，去解决大问题
+                - 两要素：基线条件（递归的终止条件）；递归条件（问题的拆分方式）
+                - 递归与循环：递归思路更加清晰，但是循环的执行性能较好
+        */
+
+        // // 递归计算阶乘
+        // function factorial(number) {
+        //     if (number === 1) {
+        //         return 1
+        //     }
+
+        //     return factorial(number - 1) * number
+        // }
+
+        // console.log(`10!=${factorial(10)}`)
+
+        // // 递归计算前 n 项斐波那契数列
+        // function fibonacci(n) {
+        //     if (n === 1 || n === 2) {
+        //         return 1
+        //     }
+
+        //     return fibonacci(n - 1) + fibonacci(n - 2)
+        // }
+
+        // function getFibArr(n) {
+        //     let fibArr = []
+
+        //     for (let i = 1; i <= n; i++) {
+        //         fibArr.push(fibonacci(i))
+        //     }
+
+        //     return fibArr
+        // }
+
+        // fibArr = getFibArr(10)
+
+        // console.log(`斐波那契数列前十项为 ${fibArr}`)
+
+        /*
+            20. 数组的方法（高阶）
+                - arr.sort([cb]) [破坏性方法] 用于对数组进行排序
+                    > 参数：cb 即回调函数，可以通过传入一个回调函数指定排序规则
+                        >> (a, b) => a - b，表示升序排列
+                        >> (a, b) => b - a，表示降序排列
+                    > 默认情况：不传入任何参数时，sort 会默认按照 Unicode 编码（字符串比较）对数组元素进行升序排列，此时数值数组
+                    调用 sort 可能会得到错误结果
+                - arr.forEach(cb) [非破坏性方法] 用于遍历数组
+                    > 参数：cb 即回调函数，可以通过传入一个回调函数指定遍历规则
+                        >> 数组中有几个元素，回调函数就会被调用几次
+                        >> 回调函数的每次调用都接受三个参数，分别为 element、index、array，分别表示当前元素、当前元素的索引、被
+                        遍历的数组
+                - arr.filter(cb) [非破坏性方法] 用于将数组中符合条件的元素保存到一个新的数组并返回
+                    > 参数：cb 即回调函数，可以通过传入一个回调函数指定选择规则
+                        >> 数组中有几个元素，回调函数就会被调用几次
+                        >> 回调函数的每次调用都接受一个参数，即 element，表示当前元素
+                        >> filter 根据回调函数的返回值（布尔值）决定是否将该元素添加到新数组中
+                - arr.map(cb) [非破坏性方法] 用于根据当前数组以一定方式生成一个新数组
+                    > 参数：cb 即回调函数，可以通过传入一个回调函数指定生成规则
+                        >> 数组中有几个元素，回调函数就会被调用几次
+                        >> 回调函数的每次调用都接受一个参数，即 element，表示当前元素
+                        >> map 根据回调函数的返回值作为新数组中的元素
+                - arr.reduce(cb, [initial]) [非破坏性方法] 用于将一个数组中的所有元素整合为一个值
+                    > 参数：cb 即回调函数，可以通过传入一个回调函数指定整合规则；initial 表示整合初始值
+                        >> 回调函数的每次调用都接受两个参数，即 a 和 b
+                    > 函数执行规则（假设没指定 initial）
+                        >> 回调函数第一次调用 a=arr[0] b=arr[1]
+                        >> 回调函数第二次调用 a=cb(arr[0], arr[1]) b=arr[2]
+                        >> 回调函数第三次调用 a=cb(cb(arr[0], arr[1]), arr[2]) b=arr[3]
+                        >> ......
+                        >> 回调函数第 n 次调用 a=cb(cb(cb(...),arr[n-2]), arr[n-1]) b=arr[n]
+                        >> 即除了第一次调用以外，a = 回调函数上次调用的结果，b = 下一个未参与计算的数组元素
+                        >> 如果设定了 initial，则第一次调用 a=initial b=arr[0]；第二次调用 a=cb(initial, arr[0]) b=arr[1]；...
+        */
+
+        // // 1-arr.sort
+        // const arr1 = [1, 34, 1, 435, 243, 86, 3, -232, 13, 342, 44]
+        // console.log("原始数组 " + arr1)
+        // // 原始数组 1,34,1,435,243,86,3,-232,13,342,44
+
+        // arr1.sort((a, b) => a - b) // 升序排列
+        // console.log("升序排列后的数组 " + arr1)
+        // // 升序排列后的数组 -232,1,1,3,13,34,44,86,243,342,435
+
+        // arr1.sort((a, b) => (b - a))
+        // console.log("降序排列后的数组 " + arr1)
+        // // 降序排列后的数组 435,342,243,86,44,34,13,3,1,1,-232
+
+        // // 2-arr.forEach
+        // const arr2 = [1, 34, 1, 435, 243, 86, 3, -232, 13, 342, 44]
+        // console.log("原始数组 " + arr2)
+        // // 原始数组 1,34,1,435,243,86,3,-232,13,342,44
+
+        // arr2.forEach(
+        //     (element, index, array) => {
+        //         console.log(`正在遍历数组 ${array} 中第 ${index} 个元素 ${element}`)
+        //     }
+        // )
+        // // 正在遍历数组 1,34,1,435,243,86,3,-232,13,342,44 中第 0 个元素 1
+        // // 正在遍历数组 1,34,1,435,243,86,3,-232,13,342,44 中第 1 个元素 34
+        // // ............
+        // // 正在遍历数组 1,34,1,435,243,86,3,-232,13,342,44 中第 10 个元素 44
+
+        // // 3-arr.filter
+        // const arr3 = [1, 34, 1, 435, 243, 86, 3, -232, 13, 342, 44]
+        // console.log("原始数组 " + arr3)
+        // // 原始数组 1,34,1,435,243,86,3,-232,13,342,44
+
+        // positiveEvenArr = arr3.filter(
+        //     (element) => {
+        //         return element >= 0 && element % 2 == 0
+        //     }
+        // )
+        // console.log("过滤（选择大于等于 0 的偶数）后的数组为 " + positiveEvenArr)
+        // // 过滤（选择大于等于 0 的偶数）后的数组为 34,86,342,44
+
+        // // 4-arr.map
+        // const arr4 = [1, 34, 1, 435, 243, 86, 3, -232, 13, 342, 44]
+        // console.log("原始数组 " + arr4)
+        // // 原始数组 1,34,1,435,243,86,3,-232,13,342,44
+
+        // doubleArr = arr4.map(element => element * 2)
+        // console.log("2x 映射后的数组为 " + doubleArr)
+        // // 2x 映射后的数组为 2,68,2,870,486,172,6,-464,26,684,88
+
+        // // 5-arr.reduce
+        // const arr5 = [1, 34, 1, 435, 243, 86, 3, -232, 13, 342, 44]
+        // console.log("原始数组 " + arr5)
+        // // 原始数组 1,34,1,435,243,86,3,-232,13,342,44
+
+        // sumValue = arr5.reduce((a, b) => a + b)
+        // console.log("原始数组的加和为 " + sumValue)
+        // // 原始数组的加和为 970
+
+        // sumValue = arr5.reduce((a, b) => a + b, -960)
+        // console.log("原始数组的加和为（initial=-960） " + sumValue)
+        // // 原始数组的加和为（initial=-960） 10
+
+        /* 
+            21. arguments
+                - arguments 是函数中的一个隐含参数（this 也是函数中的一个隐含参数），用于存储传递进函数的实参（无论用户是否给函数
+                定义了形参，定义了多少形参），可以直接通过该对象访问实参
+                - arguments 是一个类数组（伪数组）对象
+                    > 和数组相似：可以通过索引读取元素；有 length 属性；可以使用 for-of 语句遍历内容
+                    > 与数组不同：不是数组对象；不能调用数组相关方法
+                - 不足之处：无法根据函数形式了解调用函数是否需要传递参数；因为是类数组对象，无法调用数组的方法
+
+        */
+
+        // function testArguments(arg1, arg2) {
+        //     console.log("正在调用函数，以测试隐含参数 arguments");
+        //     console.log("隐含参数 arguments 的长度为 ", arguments.length);
+        //     console.log("隐含参数 arguments 的内容为 ", arguments);
+        //     if (arguments.length > 0) {
+        //         console.log("遍历隐含参数 arguments 的内容如下");
+        //         for (let arg of arguments) {
+        //             console.log(arg);
+        //         }
+        //     }
+        // }
+
+        // testArguments("猪八戒", 123, true, undefined)
+
+        /*
+            22. 可变参数
+                - 语法：...参数名
+                - 作用：表示可以接受任意数量的实参，并将其存储到一个以参数名为名字的数组
+                - 注意
+                    > 与函数的隐含参数 arguments 不同，可变参数的名字可以自己指定
+                    > 同样的，可变参数就是一个数组，可以直接使用数组的方法
+                    > 可变参数可以配合其他参数一起使用，但是需要将可变参数写到最后；而 arguments 参数不能配合其他参数一起使用
+        */
+
+        // function testVariableArgs(arg1, arg2, ...args) {
+        //     console.log("arg1=" + arg1);
+        //     console.log("arg2=" + arg2);
+        //     console.log("args=" + args);
+        //     console.log();
+        // }
+
+        // testVariableArgs(3, 4, 5);
+        // testVariableArgs(3, 4, 5, 6, 7);
+
+        /*
+            23. call、apply、bind
+                - fun.call(this_pointer, arg1, arg2, ...) 我们可以通过 fun.call() 的方式调用一个函数，此时 call 的第一个参数
+                可以用来指定函数中的 this，之后的一个个参数为传进函数的实参
+                - fun.apply(this_pointer, args) 我们可以通过 fun.apply() 的方式调用一个函数，此时 call 的第一个参数可以用来指
+                定函数中的 this，第二个参数为传进函数的数组
+                - fun.bind(this_pointer, arg1, arg2, ...) 我们可以通过 fun.bind() 的方式创建一个新的函数，此时 bind 的第一个
+                参数表示为新的函数绑定 this，之后的一个个参数表示为新的函数绑定实参
+                    > 注：一旦绑定 this 或实参，则再也无法无法修改
+
+            24. 函数的 this 总结
+                - 函数形式调用，则 this 是 window
+                - 方法形式调用，则 this 是调用方法的对象
+                - 构造函数（constructor）中，this 是新创建的实例对象
+                - 箭头函数没有自己的 this，其 this 由外层作用域决定
+                - 使用 call、apply 调用函数，可以通过第一个参数指定函数的 this
+                - 使用 bind 返回函数，可以通过第一个参数指定函数的 this（无法修改）
+                - 箭头函数没有自己的 this，因此也无法通过 call、apply、bind 修改其 this（箭头函数也没有 arguments）
+                - 通过 call、apply 的第一个参数，可以指定调用的函数的 this
+                - 通过 bind 返回的函数，无法在改变其 this
+        */
+
+        // // 测试 call 和 apply 方法
+        // function testCallApply(arg1, arg2) {
+        //     console.log("函数的 this is");
+        //     console.log(this);
+
+        //     console.log("函数的第一个参数为", arg1);
+        //     console.log("函数的第二个参数为", arg2);
+        // }
+
+        // obj = { name: "Tom" }
+
+        // testCallApply() // Window {window: Window, self: Window, document: document, name: '', location: Location, …}
+        // testCallApply.call(obj, 666, 777) // {name: 'Tom'}
+        // testCallApply.apply(obj, [666, 777]) // {name: 'Tom'}
+
+        // // bind 方法测试
+        // function testBind(arg1, arg2) {
+        //     console.log("函数的 this is");
+        //     console.log(this);
+
+        //     console.log("函数的第一个参数为", arg1);
+        //     console.log("函数的第二个参数为", arg2);
+        // }
+
+        // let newFun = testBind.bind({ name: "Tom" }, 666, 777)
+
+        // newFun(999, 222) // 因为函数的 bind 方法已经给 newFun 绑定了此时函数传入的参数失效
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>伪类</title>
+	<style>
+		/* 动态伪类 */
+		a:link {
+			color: black;
+		}
+
+		a:visited {
+			color: grey;
+		}
+
+		a:hover {
+			color: pink;
+		}
+
+		a:active {
+			color: red;
+		}
+
+		input:focus {
+			background-color: pink;
+		}
+
+	</style>
+</head>
+
+<body>
+	<h2>动态伪类</h2>
+	<a href="https://www.baidu.com">跳转到百度（未访问黑色、访问后灰色、悬浮时粉色、点击时灰色）</a>
+	<br>
+	<input type="text" value="请输入用户名">
+</body>
+
+</html>

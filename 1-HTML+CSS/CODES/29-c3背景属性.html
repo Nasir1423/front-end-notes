@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>新增背景属性</title>
+	<style>
+		div {
+			width: 200px;
+			height: 200px;
+			line-height: 200px;
+			text-align: center;
+			background-color: skyblue;
+			color: red;
+			font-size: 30px;
+			font-weight: bold;
+			padding: 30px;
+			border: 20px #ff000088 dashed;
+			margin-top: 10px;
+		}
+
+		.box1,
+		.box2,
+		.box3,
+		.box4,
+		.box5,
+		.box6,
+		.box7 {
+			background-image: url("./favicon.ico");
+		}
+
+		.box1 {
+			background-repeat: no-repeat;
+			background-origin: content-box;
+		}
+
+		.box2 {
+			background-repeat: no-repeat;
+			background-origin: padding-box;
+		}
+
+		.box3 {
+			background-repeat: no-repeat;
+			background-origin: border-box;
+		}
+
+		.box4 {
+			background-clip: content-box;
+		}
+
+		.box5 {
+			background-clip: padding-box;
+		}
+
+		.box6 {
+			background-clip: border-box;
+		}
+
+		.box7 {
+			background-clip: text;
+			color: transparent;
+			font-size: 90px;
+			font-weight: bold;
+		}
+
+		section {
+			width: 300px;
+			height: 300px;
+			text-align: center;
+			line-height: 300px;
+			font-size: 30px;
+			font-weight: bold;
+			background-repeat: no-repeat;
+			border: 1px black solid;
+			background-image: url("./two-levels-up/托马生日图.jpg");
+			background-origin: padding-box;
+			margin-top: 10px;
+		}
+
+		.sec1 {
+			background-size: 200px 200px;
+		}
+
+		.sec2 {
+			background-size: 100% 100%;
+		}
+
+		.sec3 {
+			background-size: auto;
+		}
+
+		.sec4 {
+			background-size: contain;
+		}
+
+		.sec5 {
+			background-size: cover;
+		}
+
+		.composite {
+			background-color: transparent;
+			background-image: none;
+			background-repeat: repeat;
+			background-position: 0px 0px;
+			background-size: auto;
+			background-origin: padding-box;
+			background-clip: border-box;
+			/* 以上是清除样式 */
+			background: skyblue url("./two-levels-up/托马生日图.jpg") no-repeat 30px 30px / cover border-box content-box;
+		}
+
+		.multi-bg-img {
+			background-color: transparent;
+			background-image: none;
+			background-repeat: repeat;
+			background-position: 0px 0px;
+			background-size: auto;
+			background-origin: padding-box;
+			background-clip: border-box;
+			/* 以上是清除样式 */
+			background: url("./two-levels-up/托马生日图.jpg") no-repeat left top / 100px 100px border-box content-box,
+				url("./two-levels-up/parent/托马睡觉图.png") no-repeat right top / 100px 100px border-box padding-box,
+				url("./two-levels-up/parent/current/托马比拼图.jpg") no-repeat left bottom / 100px 100px content-box,
+				url("./two-levels-up/parent/current/child/托马和达达利亚.png") no-repeat right bottom / 100px 100px padding-box;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>background-origin 测试</h2>
+	<div class="box1">content-box</div>
+	<div class="box2">padding-box</div>
+	<div class="box3">border-box</div>
+	<hr>
+	<h2>background-clip 测试</h2>
+	<div class="box4">content-box</div>
+	<div class="box5">padding-box</div>
+	<div class="box6">border-box</div>
+	<h3>利用 background: text 实现背景呈现在文字上</h3>
+	<div class="box7">text</div>
+	<hr>
+	<h2>background-size 测试</h2>
+	<section class="sec1">200px 200px</section>
+	<section class="sec2">100% 100%</section>
+	<section class="sec3">auto</section>
+	<section class="sec4">contain</section>
+	<section class="sec5">cover</section>
+	<hr>
+	<h2>background 作为复合属性的测试</h2>
+	<div class="composite">复合属性</div>
+	<hr>
+	<h2>background 引入多个背景图片</h2>
+	<div class="multi-bg-img">多个背景图片</div>
+</body>
+
+
+</html>

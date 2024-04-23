@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>表格的使用</title>
+</head>
+
+<body>
+	<div>
+		<h2>HTML 中的表格</h2>
+		<span>表格=标题+头部+主体+脚注</span>
+		<ul>
+			<li>表格由 table 标签表示</li>
+			<li>标题由 caption 标签表示</li>
+			<li>
+				<span>头部由 thead（table head） 标签表示</span>
+				<ul>
+					<li>tr 表示行</li>
+					<li>th 表示单元格</li>
+				</ul>
+			</li>
+			<li>
+				<span>主体由 tbody（table body） 标签表示</span>
+				<ul>
+					<li>tr 表示行</li>
+					<li>td 表示单元格</li>
+				</ul>
+			</li>
+			<li>
+				<span>脚注由 tfoot（table foot） 标签表示</span>
+				<ul>
+					<li>tr 表示行</li>
+					<li>td 表示单元格</li>
+				</ul>
+			</li>
+		</ul>
+		<span>注意补充</span>
+		<ul>
+			<li>table 的属性 border="1" 可以设置表格边框和单元格边框为1px；但是当取值大于1时候，只能设置表格边框，单元格边框此时为 1px</li>
+		</ul>
+	</div>
+
+	<div>
+		<h2>课程表格</h2>
+		<table border="5" cellspacing="0" height="300" width="800">
+			<caption>课程表</caption>
+			<thead height="50" align="center" valign="middle">
+				<tr>
+					<th>3月</th>
+					<th>星期一 11</th>
+					<th>星期二 12</th>
+					<th>星期三 13</th>
+					<th>星期四 14</th>
+					<th>星期五 15</th>
+					<th>星期六 16</th>
+					<th>星期日 17</th>
+				</tr>
+			</thead>
+			<tbody height="300" align="center" valign="middle">
+				<tr>
+					<td>1</td>
+					<td rowspan="2">数据挖掘</td>
+					<td rowspan="2">休息</td>
+					<td rowspan="2">深度学习</td>
+					<td rowspan="2">休息</td>
+					<td rowspan="10" colspan="3">休息</td>
+					<!-- <td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>2</td>
+					<!-- <td>数据挖掘</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>深度学习</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>3</td>
+					<td rowspan="2">智能实验</td>
+					<td rowspan="2">图像理解</td>
+					<td rowspan="4">休息</td>
+					<td rowspan="2">图像理解</td>
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>4</td>
+					<!-- <td>智能实验</td> -->
+					<!-- <td>图像理解</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>图像理解</td> -->
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>5</td>
+					<td rowspan="4">休息</td>
+					<td rowspan="2">舞蹈形体</td>
+					<!-- <td>休息</td> -->
+					<td rowspan="2">网球理论</td>
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>6</td>
+					<!-- <td>休息</td> -->
+					<!-- <td>舞蹈形体</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>网球理论</td> -->
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>7</td>
+					<!-- <td>休息</td> -->
+					<td rowspan="2">计算智能</td>
+					<td rowspan="2">大学体育</td>
+					<td rowspan="4">休息</td>
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>8</td>
+					<!-- <td>休息</td> -->
+					<!-- <td>计算智能</td> -->
+					<!-- <td>大学体育</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>9</td>
+					<td rowspan="2">就业指导</td>
+					<td rowspan="2">休息</td>
+					<td rowspan="2">休息</td>
+					<!-- <td>休息</td> -->
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+				<tr>
+					<td>10</td>
+					<!-- <td>就业指导</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>休息</td> -->
+					<!-- <td>休息</td>
+					<td>休息</td>
+					<td>休息</td> -->
+				</tr>
+			</tbody>
+			<tfoot height="35" align="right" valign="bottom">
+				<tr>
+					<td colspan="8">第三周</td>
+					<!-- <td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td> -->
+					<!-- <td>第三周</td> -->
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</body>
+
+</html>

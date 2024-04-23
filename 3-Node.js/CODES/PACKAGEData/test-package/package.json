@@ -1,0 +1,14 @@
+{
+  "name": "test-package-hahaha",
+  "version": "1.1.1",
+  "description": "this is a package for learning npm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "uniq": "^1.0.1"
+  }
+}

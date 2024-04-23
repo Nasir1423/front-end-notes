@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对象的序列化</title>
+    <script>
+        /* 
+            1. 对象的序列化
+                - 是什么？序列化指的是将存储于计算机内存中的对象转换为一个可以存储的格式 —— JSON 字符串
+                - 有何用？数据传递；编写配置文件
+                - 怎么做？使用 JavaScript 提供的工具类 JSON（JavaScript Object Notation）
+                    - JSON.stringify(obj) 用于将一个 JS 对象转换为 JSON 字符串
+                    - JSON.parse(str) 用于将一个 JSON 字符串转换为 JS 对象
+                
+            2. JSON 字符串的注意事项
+                - JSON 字符串有两种类型：对象 {}、数组 []
+                - JSON 字符串的属性名必须使用双引号引起
+                - JSON 字符串中的属性值可以是 Number、String（必须使用双引号表示）、Boolean、Null、Object、Array
+                - JSON 字符串和 JS 对象格式基本一样，但是最后一个属性的后边不能加逗号
+        */
+
+        const obj = {
+            name: "yiTu",
+            age: 22,
+        };
+
+        const jsonStr = JSON.stringify(obj);
+        console.log(jsonStr); // {"name":"yiTu","age":22}
+
+        const objShallowCopy = JSON.parse(jsonStr);
+        console.log(objShallowCopy);
+
+        /* 
+            3. 对象的深拷贝和浅拷贝总结
+                - 浅拷贝
+                    - const objNew = Object.assign({}, objOld)
+                    - const objNew = [...objOld]
+                - 深拷贝
+                    - const objNew = structuredCLone(objOld)
+                    - const objNew = JSON.parse(JSON.stringify(objOld))
+        */
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

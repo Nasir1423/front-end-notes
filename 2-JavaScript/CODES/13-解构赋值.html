@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解构赋值</title>
+    <script>
+        /*
+            1. 数组的解构赋值
+                - 语法
+                    > [arg1, arg2, ...] = [value1, value2, ...]
+                    > [arg1, arg2, ...] = arr
+                - 变量与值数量不一的情况分析
+                    > 如果左边变量数 > 右边值的数，则多余的变量被赋值为 undefined（不是不会被赋值）
+                    > 如果左边变量数 < 右边值的数，则多余的值被忽略
+                - 变量默认值（此时，如果左边存在多余的变量，并不会被赋 undefined，而是赋默认值）
+                    > arg1 = value1，如果 arg1 没有被赋值，则默认取值 value1
+                    > arg1 = arg1，如果 arg1 没有被赋值，则保持其值不变
+                - 注
+                    > = 左边的 [] 里边的每个单词表示一个变量，右边的 [] 里边的每个单词表示一个具体的值
+                    > 可以使用 ...arg 作为变量，获取右边多余的值，类似于可变参数
+                    > 如果函数返回值是一个数组，则此时可以使用解构赋值获取返回值内容，如 [arg1, arg2] = fn()
+                    > 可以使用解构赋值快速交换两个变量的值
+        */
+
+        // "use strict"
+
+        // const arr = ["孙悟空", "猪八戒", "沙和尚"];
+
+        // // 声明与解构同时进行
+        // let [a, b, c] = [arr[0], arr[1], arr[2]];
+        // console.log(a, b, c); // 孙悟空 猪八戒 沙和尚
+
+        // // 先声明，再解构
+        // let d, e, f;
+        // [d, e, f] = arr;
+        // console.log(d, e, f); // 孙悟空 猪八戒 沙和尚
+
+        // // 默认值
+        // [a, b, c, d = d, e, f = "白龙马"] = arr;
+        // console.log(a, b, c, d, e, f); // 孙悟空 猪八戒 沙和尚 孙悟空 undefined 白龙马
+
+        // // ...args
+        // let [h, i, ...j] = arr;
+        // console.log(h, i, j); // 孙悟空 猪八戒 [ '沙和尚' ]
+
+        // // 交换变量的值
+        // let num1 = 222;
+        // let num2 = 333;
+        // console.log("交换前 num1=" + num1 + " num2=" + num2); // 交换前 num1=222 num2=333
+        // [num1, num2] = [num2, num1]
+        // console.log("交换后 num1=" + num1 + " num2=" + num2); // 交换后 num1=333 num2=222
+
+
+        /*
+            2. 二维数组的解构赋值
+                - 二维数组：一个数组的元素还是数组，则称该数组为二维数组
+                - 解构赋值：我们可以使用数组嵌套的形式，实现对二维数组的解构赋值
+        */
+
+        // const arr = [["张三", 19, "男"], ["李四", 32, "女"]];
+
+        // let [[name, age, gender], obj] = arr;
+
+        // console.log(name, age, gender, obj); // 张三 19 男 [ '李四', 32, '女' ]
+
+        /*
+            3. 对象的解构赋值
+             - 语法
+                > [name, age, ...] = [name: "张三", age: "李四", ...]
+                > [arg1, arg2, ...] = obj
+            - 变量别名，如 [name: a, age: b]，此时我们可以调用 a、b 分别表示属性 name、age 对应的值
+            > 变量默认值，如 [name="张三", age=19]，此时如果没有在右边的对象中找到对应的属性，则使用默认值（如果不指定默认值，且
+            无法在对象中找到对应的属性，则自动被赋值为 undefined）
+            > 变量别名和默认值，如 [name:a="张三",age:b=19]
+            - 注：在不指定别名的情况下，左边的变量名必须和右边对象中的属性名相同，但是与此同时，左边变量的顺序则任意
+        */
+
+        // const tomSun = { name: "孙悟空", age: 10 }
+
+        // // // 声明和解构同时进行
+        // // let { name, age } = tomSun
+        // // console.log(name, age); // 孙悟空 10
+
+        // // 先声明，再解构
+        // let name, age;
+        // ({ name, age } = tomSun); // 注：因为这里 JS 将 {} 错误解析为代码块，导致报错，因此需要加一个括号解决
+        // console.log(name, age); // 孙悟空 10
+
+        // // 别名和默认值
+        // let { name: a, age: b, gender: c = "男" } = tomSun // 注意，此时声明的变量是 a、b、c
+        // console.log(a, b, c); // 孙悟空 10 男
+
+        // // console.log(gender); // ReferenceError: gender is not defined
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

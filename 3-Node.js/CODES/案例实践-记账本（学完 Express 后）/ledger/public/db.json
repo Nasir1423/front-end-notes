@@ -1,0 +1,28 @@
+{
+  "ledger-list": [
+    {
+      "id": "R1UTa00RXeAbM9v8g0m7N",
+      "item": "发工资2",
+      "occurrence-time": "2024-03-29",
+      "type": "income",
+      "amount": "50002",
+      "remarks": "开心12121"
+    },
+    {
+      "id": "9VWEre0I3pNZEXB11YNqD",
+      "item": "发工资",
+      "occurrence-time": "2024-03-29",
+      "type": "income",
+      "amount": "5000",
+      "remarks": "开心"
+    },
+    {
+      "id": "qjtCWt4D21bU4BImCzSnf",
+      "item": "吃饭",
+      "occurrence-time": "2024-04-06",
+      "type": "expenditure",
+      "amount": "50",
+      "remarks": "好吃"
+    }
+  ]
+}

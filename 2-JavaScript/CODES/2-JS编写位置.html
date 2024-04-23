@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>JS 的三个编写位置</title>
+	<!-- 位置一：写在 script 标签中（可以不写 type 属性） -->
+	<!-- <script type="text/javascript">
+		alert("Hello World");
+	</script> -->
+
+	<!-- 位置二：通过 script 标签引入外部 js 文件（此时不能再往标签中写东西了） -->
+	<!-- <script src="./js/external.js"></script> -->
+</head>
+<body>
+	<!-- 位置三：写在元素的指定属性中（根据触发条件执行 js 代码） -->
+	<button onclick="alert('点击成功')">点击我</button>
+	<button onmousemove="alert('触摸成功')">触摸我</button>
+	<a href="javascript:alert('海棠');">点击报花名</a>
+	<a href="javascript:;">点击我什么也不做</a>
+	
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "39608454",
+      "name": "电脑笔记本",
+      "font_class": "a-jisuanjidiannaobijibenshouji",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "39608472",
+      "name": "时间时钟",
+      "font_class": "a-clock-timeshijianshizhonglishi",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "39608500",
+      "name": "错误警告提示",
+      "font_class": "a-errorcuowujinggaotixingtishi",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "39608501",
+      "name": "许可版权",
+      "font_class": "a-licensecertificatexukezhengxukexieyi",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    }
+  ]
+}

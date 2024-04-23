@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <!-- 
+        在练习 39 的基础进行改进
+
+        练习 39 存在的问题：每个图片的第一次访问是通过修改路径实现的，而这个过程（图片加载）需要时间，影响用户体验
+        
+        问题的解决思路：提前一次性将要轮播的图片加载！
+            - 通过 ul 的每个 li 加载一张图片，然后清除 ul、li 样式，再让所有 li 通过绝对定位重叠在一起
+            - 通过修改 index，可以修改图片之间的层叠关系，以此实现图片的轮播
+        
+        仍需考虑的功能
+            - 图片切换的过渡实现
+            - 图片左中和右中分别增加两个按钮，进行图片的上一张和下一张切换（不影响轮播效果）
+     -->
+    <style>
+        #pictures-container {
+            /* 给容器设置高度，避免因为给其中内容设置了绝对定位而使容器塌陷 */
+            height: 350px;
+            /* 容器居中 */
+            width: 600px;
+            margin: 0 auto;
+            /* 设置相对定位，称为 li 的包含块 */
+            position: relative;
+            /* 设置容器外边距 */
+            margin-top: 50px;
+        }
+
+        #pictures-container ul,
+        #pictures-container li {
+            /* 清除列表的默认样式 */
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        #pictures-container li {
+            /* 设置绝对定位，使图片脱离文档流 */
+            position: absolute;
+            /* 开启过渡效果 */
+            opacity: 0;
+            transition: 2s opacity;
+        }
+
+
+        #pictures-container img {
+            /* 清除图片的默认样式，因为图片是行内元素，由于基线原因，垂直方向难以对齐，需要设置垂直方向上的对齐方式  */
+            vertical-align: top;
+            /* 清楚图片的默认样式，也可以通过将图片设置为块元素而实现 */
+            /* display: block; */
+            /* 设置图片的样式 */
+            width: 600px;
+            height: 350px;
+            object-fit: cover;
+            /* 
+                object-fit 是一个 CSS 属性，用于控制嵌入内容（如 img, video, iframe 等）在容器中的缩放方式，在保持原始比例的同
+                时，使其适应容器的特定尺寸。
+                可选值：
+                    - fill 默认值，嵌入内容会被拉伸或压缩以完全嵌入其容器
+                    - contain 内容按比例缩放，使其完全装入容器内（不会裁剪内容，不一定填满整个容器）
+                    - cover 内容按比例缩放，使其完全覆盖容器（可能会裁剪内容，但是一定填满整个容器），常用
+                    - none 内容不缩放，多余部分直接裁剪，常常配合 overflow 属性使用
+                    - scale-down ...... 略
+            */
+        }
+
+        #pictures-container .topmost {
+            /* 我们设置类名为 topmost 的图片显示层级最高，然后通过动态删除添加类名，实现对图片显示层级的修改 */
+            z-index: 10;
+            opacity: 1;
+        }
+
+        #skip div {
+            width: 30px;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: aliceblue;
+            opacity: 0.5;
+            text-align: center;
+            font-family: '华文楷体';
+            font-size: 18px;
+
+            position: absolute;
+            z-index: 20;
+        }
+
+        #skip div:hover {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        #previous {
+            top: 140px
+        }
+
+        #next {
+            right: 0;
+            top: 140px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            // 第一张图片
+            const firstPic = document.querySelector('#pictures-container li');
+            // 最后一张图片
+            const lastPic = document.querySelector('#pictures-container li:last-child');
+            // 上一张按钮
+            const preBtn = document.querySelector('#previous');
+            // 下一张按钮
+            const nextBtn = document.querySelector('#next');
+
+            // 初始：第一张图片在顶层
+            firstPic.classList.add('topmost');
+
+            // 当前轮播图片
+            let topmostPic = firstPic;
+            // 下一张图片
+            let nextPic;
+            // 上一张图片
+            let prePic;
+
+            // 存储定时器 token
+            let timer;
+
+            // 开启图片轮播
+            timer = setTimeout(function autoPlay() {
+                nextBtn.click()
+                timer = setTimeout(autoPlay, 3000);
+            }, 3000)
+
+            // 切换到上一张图片
+            preBtn.onclick = function () {
+                // 停止图片轮播
+                clearTimeout(timer);
+                // 获取上一张图片
+                prePic = topmostPic.previousElementSibling;
+                if (!prePic) {
+                    prePic = lastPic;
+                }
+                // 切换到上一张图片
+                topmostPic.classList.remove('topmost');
+                prePic.classList.add('topmost');
+                topmostPic = prePic;
+            }
+
+            // 切换到下一张图片
+            nextBtn.onclick = function () {
+                // 停止图片轮播
+                clearTimeout(timer);
+                // 获取下一张图片
+                nextPic = topmostPic.nextElementSibling;
+                if (!nextPic) {
+                    nextPic = firstPic;
+                }
+                // 切换到上一张图片
+                topmostPic.classList.remove('topmost');
+                nextPic.classList.add('topmost');
+                topmostPic = nextPic;
+            }
+
+            // 添加键盘 <-、-> 控制切换图片
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowLeft') {
+                    preBtn.click();
+                } else if (event.key === 'ArrowRight') {
+                    nextBtn.click();
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="pictures-container">
+        <ul>
+            <li>
+                <img src="./images/1108136.jpg">
+            </li>
+            <li>
+                <img src="./images/1108905.jpg">
+            </li>
+            <li>
+                <img src="./images/1210474.jpg">
+            </li>
+            <li>
+                <img src="./images/1219675.jpg">
+            </li>
+            <li>
+                <img src="./images/1221809.png">
+            </li>
+        </ul>
+        <div id="skip">
+            <div id="previous">上一张</div>
+            <div id="next">下一张</div>
+        </div>
+    </div>
+</body>
+
+</html>

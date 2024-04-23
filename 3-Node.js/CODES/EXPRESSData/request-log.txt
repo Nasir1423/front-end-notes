@@ -1,0 +1,14 @@
+/home    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/login    ::ffff:127.0.0.1
+/register    ::ffff:127.0.0.1
+/registe    ::ffff:127.0.0.1
+/home    ::ffff:127.0.0.1
+/login    ::ffff:127.0.0.1
+/login    ::ffff:127.0.0.1

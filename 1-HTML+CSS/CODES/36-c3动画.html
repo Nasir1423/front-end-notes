@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>动画</title>
+	<style>
+		.outer {
+			width: 800px;
+			height: 150px;
+			border: 1px solid black;
+
+			overflow: hidden;
+		}
+
+		@keyframes roll {
+			from {}
+
+			to {
+				transform: translateX(650px) rotate(360deg);
+				background-color: violet;
+				border-radius: 50%;
+			}
+		}
+
+		.inner {
+			width: 150px;
+			height: 150px;
+			background-color: pink;
+
+			animation-name: roll;
+			animation-duration: 2s;
+			animation-delay: 0.3s;
+			animation-timing-function: ease-in;
+			animation-iteration-count: infinite;
+			animation-direction: alternate;
+			animation-fill-mode: forwards;
+		}
+
+		.outer:hover .inner {
+			animation-play-state: paused;
+		}
+
+		@keyframes cycling {
+			from {}
+			to {
+				background-position: 0px -4030px;
+			}
+		}
+
+		.bike-man {
+			width: 130px;
+			height: 130px;
+			margin: 0 auto;
+			background-image: url("./images/bike.png");
+			background-position: 0px 4030px;
+
+			animation-name: cycling;
+			animation-duration: 1s;
+			animation-timing-function: steps(31, start);
+			animation-iteration-count: infinite;
+		}
+
+		.bike-man:hover {
+			animation-play-state: paused;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>动画练习1</h2>
+	<div class="outer">
+		<div class="inner"></div>
+	</div>
+	<h2>动画练习2: 单车小人</h2>
+	<div class="bike-man"></div>
+</body>
+
+</html>

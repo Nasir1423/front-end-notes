@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>边框属性</title>
+	<style>
+		div {
+			width: 200px;
+			height: 100px;
+			background-color: skyblue;
+			margin: 10px auto;
+			line-height: 100px;
+			text-align: center;
+			font-size: 10px;
+		}
+
+		div:first-of-type {
+			border-radius: 10px;
+		}
+
+		div:nth-of-type(2) {
+			border-radius: 10%;
+			/* border-radius: 40px / 20px; */
+		}
+
+		div:nth-of-type(3) {
+			border-radius: 10px 20px;
+		}
+
+		div:nth-of-type(4) {
+			border-radius: 10% 20%;
+			/* border-radius: 40px 80px 40px 80px / 20px 40px 20px 40px; */
+		}
+
+		div:nth-of-type(5) {
+			border-radius: 10% 20px;
+		}
+
+		div:nth-of-type(6) {
+			border-radius: 10px 20px 30px;
+		}
+
+		div:nth-of-type(7) {
+			line-height: 100px;
+			border-radius: 10px 20px 30px 40px;
+		}
+
+		div:nth-of-type(8) {
+			border-radius: 10px / 20px;
+		}
+
+		div:nth-of-type(9) {
+			border-radius: 10px 5% / 20px 30px;
+		}
+
+		div:nth-of-type(10) {
+			font-size: 30px;
+			outline-offset: 10px;
+			outline: red solid 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>详细说明 border-radius 的相关用法</h2>
+	<div>10px</div>
+	<div>10%</div>
+	<div>10px 20px</div>
+	<div>10% 20%</div>
+	<div>10% 20px</div>
+	<div>10px 20px 30px</div>
+	<div>10px 20px 30px 40px</div>
+	<div>10px / 20px</div>
+	<div>10px 5% / 20px 30px</div>
+	<h2>outline 相关属性测试</h2>
+	<div>LIGHT</div>
+
+
+</body>
+
+</html>

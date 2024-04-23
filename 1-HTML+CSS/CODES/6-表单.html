@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>表单</title>
+</head>
+
+<body>
+	<!-- 表单的基本结构 -->
+	<!-- <form action="https://www.baidu.com/s" target="_blank">
+			<input type="text" name="wd">
+			<button>通过百度搜索</button>
+		</form>
+		<form action="https://search.jd.com/search" target="_self">
+			<input type="text" name="keyword">
+			<button>通过京东搜索</button>
+		</form> -->
+
+	<!-- 信息收集表单 -->
+	<h2>Person Information Sheet</h2>
+	<form action="https://search.jd.com/search">
+		<fieldset>
+			<legend>Majority</legend>
+			<label for="act">
+				Account:
+			</label>
+			<input id="act" type="text" name="acct" value="admin" maxlength="10"> <br>
+			<label>
+				Password: <input type="password" name="pwd" maxlength="8">
+			</label> <br>
+			Gender:
+			<input type="radio" name="gender" value="male" checked>Male
+			<input type="radio" name="gender" value="female">Female <br>
+			Language:
+			<input type="checkbox" name="language" value="c">C
+			<input type="checkbox" name="language" value="java">Java
+			<input type="checkbox" name="language" value="python" checked>Python <br>
+			<input type="hidden" name="from" value="jd">
+		</fieldset>
+		<fieldset>
+			<legend>Supplement</legend>
+			Preferred Salary:
+			<select name="salary">
+				<option value="level-1">10k+</option>
+				<option value="level-2">13k+</option>
+				<option value="level-3" selected>15k+</option>
+				<option value="level-4">18k+</option>
+			</select> <br>
+			Self-Assessment:
+			<textarea name="msg" cols="12" rows="3">Make a assessment of yourself here</textarea> <br>
+		</fieldset>
+
+
+		<button type="submit">confirm</button>
+		<button type="reset">reset</button>
+		<button type="button">verify</button>
+	</form>
+
+</body>
+
+</html>

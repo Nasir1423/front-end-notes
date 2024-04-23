@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>流程控制</title>
+	<script>
+
+		// 练习1：编写程序，获取一个用户输入的整数，然后通过程序显示这个数是奇数还是偶数
+		// 注：可以通过 prompt 函数获取用户输入，以字符串形式返回结果，函数接收一个字符串参数作为输入提示语 placeholder
+		// 注：可以通过 isNaN 函数判断一个数字是不是合法数字
+
+		// let number = +prompt("请输入一个整数: ") // 正号运算符，直接将字符串转换为一个数字
+		// // let number = parseInt(prompt("请输入一个整数: ")) // 另一种方式，将字符串转换为数字
+
+		// if (isNaN(number)) { // 不能使用 == or === 判断一个数字是否 NaN；可以用 NaN 函数来检查
+		// 	alert("你的输入非法，请输入一个整数")
+		// } else {
+		// 	if (number % 2 == 0)
+		// 		alert(`${number} 是偶数`)
+		// 	else
+
+		// 		alert(`${number} 是奇数`)
+		// }
+
+		// 练习2：从键盘输入小明期末成绩，成绩 100 ，打印满分；成绩 [80, 99]，打印优秀；成绩 [60, 79]，打印良好；成绩其他，打印一般
+
+		// let score = +prompt("输入小明的期末成绩: ")
+
+		// if (isNaN(score) || score < 0 || score > 100) {
+		// 	alert("请输入合法分数")
+		// } else {
+		// 	if (score === 100)
+		// 		alert("满分")
+		// 	else if (score <= 99 && score >= 80)
+		// 		alert("优秀")
+		// 	else if (score <= 79 && score >= 60)
+		// 		alert("良好")
+		// 	else
+		// 		alert("一般")
+		// }
+
+		// 练习3：如果一个人的身高、财富、颜值满足一定条件，则可以在找对象时吃香，以下是判断条件
+		// 身高 >= 180cm，财富 >= 1000万，颜值 >= 500 分
+		// 如果同时满足三个条件，则判断 “一定很多人追”
+		// 如果至少满足一个条件，则判断 “可以找到对象”
+		// 如果都不满足，则判断 “单身”
+
+		// let height = +prompt("请输入身高") >= 180
+		// let wealth = +prompt("请输入资产") >= 1000
+		// let beauty = +prompt("请输入颜值得分") >= 500
+
+		// if (height && wealth && beauty) {
+		// 	alert("一定很多人追")
+		// } else if (height || wealth || beauty) {
+		// 	alert("可以找到对象")
+		// } else {
+		// 	alert("单身")
+		// }
+
+		// 练习4：假设银行年利率 5%，1000 块存多少年可以变成 5000 块？
+
+		// let amount = 1000 // 初始化表达式
+
+		// let count = 0
+
+		// while (amount < 5000) { // 条件表达式
+		// 	amount *= 1.05 // 更新表达式
+		// 	count ++
+		// }
+
+		// alert(`需要 ${count} 年时间，1000 元存款可以变成 5000 元`) // 33
+
+		// 练习5：求 100 以内所有 3 的倍数的数量和总和
+		// let number = 0
+		// let sum = 0
+
+		// for (let i = 1; i <= 100; i++) {
+		// 	if (i % 3 == 0) {
+		// 		number++;
+		// 		sum += i
+		// 	}
+		// }
+
+		// for (let i = 3; i <= 100; i += 3) { // 方式二
+		// 	number++
+		// 	sum += i
+		// }
+
+		// alert(`100 以内 3 的倍数有 ${number} 个，总和为 ${sum}`)
+
+		// 练习6：求解 1000 以内的水仙花数
+		// 注：一个 n>=3 位数，如果它各位上的数字的 n 次幂之和还等于这个数，那么这个数就是水仙花数；如 153 = 1^3 + 5^3 + 3^3
+
+		// for (let i = 100; i < 1000; i++) {
+		// 	let onesPlace = i % 10;
+		// 	let tensPlace = Math.floor((i % 100) / 10);
+		// 	let hundredsPlace = Math.floor(i / 100);
+
+		// 	if (onesPlace ** 3 + tensPlace ** 3 + hundredsPlace ** 3 === i) {
+		// 		console.log(`${i} 是水仙花数`);
+		// 	}
+		// }
+
+		// for (let i = 100; i < 1000; i++) {
+		// 	let str = i + ""
+		// 	if (str[0] ** 3 + str[1] ** 3 + str[2] ** 3 === i)
+		// 		console.log(i);
+		// }
+
+		// 练习7：获取用户输入的大于 1 的整数，编写代码检查这个数字是否是质数，打印结果
+		// 质数：一个数如果只能被 1 和它本身整除，那么这个数就是质数；1 既不是质数，也不是合数
+
+		// let number = +prompt("请输入一个大于1的整数")
+
+		// let isPrime = true
+
+		// for (let i = 2; i < number; i++)
+		// 	if (number % i === 0){
+		// 		isPrime = false
+		// 		break
+		// 	}
+				
+		// isPrime ? alert(`${number} is prime`) : alert(`${number} is not prime`)
+
+		// 练习8：网页中打印 99 乘法表
+
+		// for (let i = 1; i <= 9; i++) {
+		// 	for (let j = 1; j <= i; j++) {
+		// 		document.write(`${i}*${j}=${i * j}&nbsp;`)
+		// 	}
+		// 	document.write("<br>")
+		// }
+
+		// 练习9：求解 100 以内的所有质数
+
+		// for (let i = 2; i <= 100; i++) {
+		// 	let isPrime = true
+		// 	for (j = 2; j < i; j++) // 可以修改条件表达式为 j < i ** .5
+		// 		if (i % j === 0){
+		// 			isPrime = false
+		// 			break
+		// 		}
+					
+		// 	isPrime ? document.write(`${i} is prime<br>`) : ""
+		// }
+		
+		/* 
+			我们可以使用 console.time("名称") 和 console.timeEnd("名称")，处于一段代码片前后，记录代码的运行时间
+		*/
+
+	</script>
+</head>
+
+<body>
+</body>
+
+</html>

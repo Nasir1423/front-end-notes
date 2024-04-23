@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 工具类</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            Math
+            - 介绍：Math 是一个命名空间对象，包含静态属性（数学常量）和静态方法（数学函数）
+            - 注意
+                - Math 只适用于 Number，不适用于 BigInt
+                - Math 不是一个构造函数，不可以使用 new Math() 的方法创建对象，也不可以使用 Math() 调用
+                - Math 的所有属性和方法都是静态的
+            - 常用静态属性（数学常量）
+                - Math.PI 圆周率
+            - 常用静态方法（数学函数）
+                - Math.abs(x) 求 x 的绝对值
+                - Math.min(x1, x2, ..., xn) 求多个值的最小值
+                - Math.max(x1, x2, ..., xn) 求多个值的最大值
+                - Math.power(x, y) 求 x^y
+                - Math.sqrt(x) 求 x 的平方根
+                
+                - Math.floor(x) 向下取整
+                - Math.ceil(x) 向上取整
+                - Math.round(x) 四舍五入取整
+                - Math.trunc(x) 直接取整数位（truncate，截断）
+
+                - Math.random() 生成一个 [0, 1) 的随机数
+            - 生成固定范围内的随机数
+                - 生成 [0, x) 之间的随机数：getRandomArbitrary1(x)
+                - 生成 [min, max) 之间的随机数：getRandomArbitrary2(min, max)
+                - 生成 [min, max] 之间的随机整数：getRandomInt1(min, max)
+                - 生成 [minCeiled, maxFloored) 之间的随机整数：getRandomInt2(min, max)
+        */
+
+        function getRandomArbitrary1(x) {
+            return Math.random() * x
+        }
+
+        function getRandomArbitrary2(min, max) {
+            return Math.random() * (max - min) + min
+        }
+
+        function getRandomInt1(min, max) {
+            const minCeiled = Math.ceil(min)
+            const maxFloored = Math.floor(max)
+            return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled)
+        }
+
+        function getRandomInt2(min, max) {
+            const minCeiled = Math.ceil(min)
+            const maxFloored = Math.floor(max)
+            return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled)
+        }
+
+        // getRandomInt 准确性测试
+        function frequencyStatistics(min, max, getRandomInt, testNumbers = 10000000) {
+            const minCeiled = Math.ceil(min);
+            const maxFloored = Math.floor(max);
+
+            let statisticsMap = new Map() // 记录每个整数和其出现的频次的键值对（整数-频次）
+            for (let i = minCeiled; i <= maxFloored; i++) {
+                statisticsMap.set(i, 0);
+            }
+
+            for (let i = 0; i < testNumbers; i++) {
+                let number = getRandomInt(min, max);
+                for (let [integer, frequency] of statisticsMap.entries()) {
+                    if (integer === number) {
+                        statisticsMap.set(integer, frequency + 1)
+                    }
+                }
+            }
+
+            for (let [integer, frequency] of statisticsMap.entries()) {
+                console.log(`[${min}, ${max}) 之间的整数 ${integer} 的出现频率为 ${frequency / testNumbers}`);
+            }
+        }
+
+        frequencyStatistics(3.5, 9.5, getRandomInt1)
+
+
+
+    </script>
+</body>
+
+</html>

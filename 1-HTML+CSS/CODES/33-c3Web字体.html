@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Web字体</title>
+	<style>
+		@font-face {
+			font-family: 'webfont';
+			font-display: swap;
+			src: url('./webfont_hsjem6j3qfb/webfont.eot');
+			/* IE9 */
+			src: url('./webfont_hsjem6j3qfb/webfont.eot?#iefix') format('embedded-opentype'),
+				/* IE6-IE8 */
+				url('./webfont_hsjem6j3qfb/webfont.woff2') format('woff2'),
+				url('./webfont_hsjem6j3qfb/webfont.woff') format('woff'),
+				/* chrome、firefox */
+				url('./webfont_hsjem6j3qfb/webfont.ttf') format('truetype'),
+				/* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+				url('./webfont_hsjem6j3qfb/webfont.svg#webfont') format('svg');
+			/* iOS 4.1- */
+		}
+
+		.web-font {
+			font-size: 30px;
+			font-family: "webfont";
+		}
+
+		.icon {
+			font-size: 20px;
+			fill: currentColor;
+			overflow: hidden;
+		}
+	</style>
+	<script src="./font_oxr6mwf6qw/iconfont.js"></script>
+</head>
+
+<body>
+	<h2>定制字体</h2>
+	<i class="web-font">悟已往之不谏，知来者之可追</i>
+	<h2>字体图标</h2>
+	<svg class="icon" aria-hidden="true">
+		<use xlink:href="#icon-a-jisuanjidiannaobijibenshouji"></use>
+	</svg>
+	<svg class="icon" aria-hidden="true">
+		<use xlink:href="#icon-a-clock-timeshijianshizhonglishi"></use>
+	</svg>
+	<svg class="icon" aria-hidden="true">
+		<use xlink:href="#icon-a-errorcuowujinggaotixingtishi"></use>
+	</svg>
+	<svg class="icon" aria-hidden="true">
+		<use xlink:href="#icon-a-licensecertificatexukezhengxukexieyi"></use>
+	</svg>
+
+
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>绝对定位的注意点</title>
+	<style>
+		.outer {
+			width: 400px;
+			height: 200px;
+			background-color: skyblue;
+			padding: 50px;
+			border: 5px black solid;
+			position: relative;
+		}
+
+		.inner {
+			width: 100px;
+			height: 100px;
+			background-color: pink;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			border: 5px red dotted;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="outer">
+		<div class="inner">
+		</div>
+	</div>
+</body>
+
+</html>
