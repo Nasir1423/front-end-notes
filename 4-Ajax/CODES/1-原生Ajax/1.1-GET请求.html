@@ -24,6 +24,7 @@
             margin-top: 20px;
         }
     </style>
+    <script src="../utils/functions/responseLoaded.js"></script>
 </head>
 
 <body>
@@ -50,39 +51,26 @@
             xhr.send();
 
             // 4. 通过 onreadystatechange 方法绑定事件，处理服务端返回的结果
-            /* 
-                - readyState 是 xhr 对象的属性，取值 0、1、2、3、4 表示不同的状态
-                    - 0 表示未初始化时
-                    - 1 表示 open 方法调用完毕
-                    - 2 表示 send 方法调用完毕
-                    - 3 表示服务端返回部分结果
-                    - 4 表示服务端返回全部结果
-                - readystatechange 事件共计会触发四次，我们选择 readyState = 4 时再对响应结果进行处理
-            */
             xhr.onreadystatechange = function () {
-                // 判断：服务端是否返回了全部结果
-                if (xhr.readyState === 4) {
-                    // 判断：响应是否属于成功响应（响应状态码是否为 2xx）
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        /* 
-                            xhr.status 响应状态码
-                            xhr.statusText 响应状态信息
-                            xhr.getAllResponseHeaders() 响应头
-                            xhr.response 响应体
-                            xhr.responseXML xml 格式的响应体
-                            xhr.responseText 文本格式的响应体
-                        */
-                        let res = {
-                            '响应行': {
-                                '响应状态码': xhr.status,
-                                '响应状态信息': xhr.statusText
-                            },
-                            '响应头': xhr.getAllResponseHeaders(),
-                            '响应体': xhr.response
-                        };
-                        console.log(res);
-                        div.innerHTML = xhr.response;
-                    }
+                if (responseLoaded(xhr)) {
+                    /* 
+                        xhr.status 响应状态码
+                        xhr.statusText 响应状态信息
+                        xhr.getAllResponseHeaders() 响应头
+                        xhr.response 响应体
+                        xhr.responseXML xml 格式的响应体
+                        xhr.responseText 文本格式的响应体
+                    */
+                    let res = {
+                        '响应行': {
+                            '响应状态码': xhr.status,
+                            '响应状态信息': xhr.statusText
+                        },
+                        '响应头': xhr.getAllResponseHeaders(),
+                        '响应体': xhr.response
+                    };
+                    console.log(res);
+                    div.innerHTML = xhr.response;
                 }
             };
         });

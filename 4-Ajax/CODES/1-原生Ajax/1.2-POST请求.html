@@ -18,6 +18,7 @@
             margin: 20px auto;
         }
     </style>
+    <script src="../utils/functions/responseLoaded.js"></script>
 </head>
 
 <body>
@@ -46,10 +47,6 @@
                 }
             }
         });
-
-        function responseLoaded(xhr) {
-            return xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300;
-        }
     </script>
 </body>
 

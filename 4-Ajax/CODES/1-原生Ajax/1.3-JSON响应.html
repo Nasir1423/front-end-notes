@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX JSON 响应</title>
+    <!-- 
+        AJAX 响应 JSON 类型的数据
+
+        该实例实现效果：当键盘按下后，1. 发送一个 AJAX 请求 GET /json-server，2. 在 div 中呈现 JSON 响应的内容
+     -->
+    <style>
+        #post-result {
+            width: 200px;
+            height: 100px;
+            border: 3px solid purple;
+            margin: 20px auto;
+        }
+    </style>
+    <script src="../utils/functions/responseLoaded.js"></script>
+</head>
+
+<body>
+    <div id="post-result"></div>
+    <script>
+        const div = document.querySelector('#post-result');
+
+        window.onkeydown = function () {
+            // 1. 创建 XMLHttpRequest 对象
+            const xhr = new XMLHttpRequest();
+
+            // 2. 设置请求方式和请求 URL
+            xhr.open('GET', 'http://127.0.0.1:9000/json-server');
+
+            // 3. 发送请求
+            xhr.send();
+
+            // 4. 设置请求体类型
+            xhr.responseType = "json";
+
+            // 5. 处理响应结果
+            xhr.onreadystatechange = function () {
+                if (responseLoaded(xhr)) {
+                    div.innerHTML = xhr.response.name;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

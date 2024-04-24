@@ -1,11 +1,11 @@
 const express = require('express');
-const corsMiddleware = require('./utils/middlewares/cors'); // 中间件：允许跨域请求和自定义的请求头
 const preflightRouter = require('./utils/routers/preflight'); // 路由：处理预检请求
+const corsMiddleware = require('./utils/middlewares/cors'); // 中间件：允许跨域请求和自定义的请求头
 
 const app = express();
 
-app.use(corsMiddleware); // 使用中间件
-app.use(preflightRouter); // 使用路由
+app.use(preflightRouter); // 预检请求（OPTIONS）路由
+app.use(corsMiddleware);
 
 // get 路由
 app.get('/server', (_, res) => {
@@ -16,6 +16,12 @@ app.get('/server', (_, res) => {
 app.post('/server', (_, res) => {
     res.send('<h1>Post Ajax!</h1>');
 });
+
+// JSON 响应
+app.get('/json-server', (_, res) => {
+    let person = { name: "孙悟空", age: 19, gender: "男" };
+    res.json(person);
+})
 
 // 404 路由规则
 app.all('*', (_, res) => {

@@ -9,7 +9,7 @@
     是否可以继续发送实际请求。因此，OPTIONS 请求在跨域请求中起到了确定是否允许跨域访问的作用，并且可以设置允许的自定义请求头。
 */
 const express = require('express');
-const corsMiddleware = require('../middlewares/cors');
+const corsMiddleware = require('../middlewares/cors'); // 中间件：允许跨域请求和自定义的请求头
 
 const router = express.Router();
 
