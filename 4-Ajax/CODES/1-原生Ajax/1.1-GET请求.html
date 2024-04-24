@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX GET 请求</title>
+    <!-- 
+        AJAX 获取 GET 请求的响应数据
+
+        该实例实现效果：当点击按钮后，1. 发送一个 AJAX 请求，GET /server，2. 在 div 中呈现响应体内容
+     -->
+    <style>
+        #outer {
+            width: 200px;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #get-result {
+            height: 100px;
+            border: 3px solid palevioletred;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="outer">
+        <button id="smt">点击发送请求</button>
+        <div id="get-result"></div>
+    </div>
+
+    <script>
+        const btn = document.querySelector('#smt');
+        const div = document.querySelector('#get-result');
+
+        btn.addEventListener('click', function () {
+            // 1. 创建 XMLHttpRequest 对象（AJAX 所有操作都是基于该对象实现的）
+            const xhr = new XMLHttpRequest();
+
+            // 2.1 通过 open 方法设置请求行信息 —— 请求方法与 URL（该 URL 必须包含协议、域名、端口号等信息）
+            // 注：GET 请求的参数需要在 open 方法的 URL 参数中进行设置
+            xhr.open('GET', 'http://127.0.0.1:9000/server?username=chuanyitu&password=123456');
+            // 2.2 通过 setRequestHeader(键, 值) 方法设置请求头信息
+            xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded'); // 设置请求体的数据类型为表单数据
+
+            // 3. 通过 send 方法发送请求
+            xhr.send();
+
+            // 4. 通过 onreadystatechange 方法绑定事件，处理服务端返回的结果
+            /* 
+                - readyState 是 xhr 对象的属性，取值 0、1、2、3、4 表示不同的状态
+                    - 0 表示未初始化时
+                    - 1 表示 open 方法调用完毕
+                    - 2 表示 send 方法调用完毕
+                    - 3 表示服务端返回部分结果
+                    - 4 表示服务端返回全部结果
+                - readystatechange 事件共计会触发四次，我们选择 readyState = 4 时再对响应结果进行处理
+            */
+            xhr.onreadystatechange = function () {
+                // 判断：服务端是否返回了全部结果
+                if (xhr.readyState === 4) {
+                    // 判断：响应是否属于成功响应（响应状态码是否为 2xx）
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        /* 
+                            xhr.status 响应状态码
+                            xhr.statusText 响应状态信息
+                            xhr.getAllResponseHeaders() 响应头
+                            xhr.response 响应体
+                            xhr.responseXML xml 格式的响应体
+                            xhr.responseText 文本格式的响应体
+                        */
+                        let res = {
+                            '响应行': {
+                                '响应状态码': xhr.status,
+                                '响应状态信息': xhr.statusText
+                            },
+                            '响应头': xhr.getAllResponseHeaders(),
+                            '响应体': xhr.response
+                        };
+                        console.log(res);
+                        div.innerHTML = xhr.response;
+                    }
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>

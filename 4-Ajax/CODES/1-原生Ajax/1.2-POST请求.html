@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX POST 请求</title>
+    <!-- 
+        AJAX 获取 POST 请求的响应数据
+
+        该实例实现效果：当鼠标移入 div 后，1. 发送一个 AJAX 请求 POST /server，2. 再 div 中呈现响应体内容
+     -->
+    <style>
+        #post-result {
+            width: 200px;
+            height: 100px;
+            border: 3px solid purple;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="post-result"></div>
+    <script>
+        const div = document.querySelector('#post-result');
+
+        div.addEventListener('mouseenter', function () {
+            // 1. 创建 xhr 对象
+            const xhr = new XMLHttpRequest();
+
+            // 2.1 设置请求行信息
+            xhr.open('POST', 'http://127.0.0.1:9000/server');
+            // 2.2 设置请求头信息
+            xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded'); // 设置请求体的数据类型为表单数据
+            xhr.setRequestHeader('address', 'china'); // 自定义的请求头，需要在服务器端进行相关配置避免报错
+
+            // 3. 发送请求
+            // 注：POST 请求的参数需要作为 send 的参数传递
+            xhr.send('username=chuanyitu&password=123456');
+
+            // 4. 处理服务器返回的响应结果
+            xhr.onreadystatechange = function () {
+                if (responseLoaded(xhr)) {
+                    div.innerHTML = xhr.response;
+                }
+            }
+        });
+
+        function responseLoaded(xhr) {
+            return xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300;
+        }
+    </script>
+</body>
+
+</html>
