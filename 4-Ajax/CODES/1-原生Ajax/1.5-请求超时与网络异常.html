@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX 请求超时与网络异常</title>
+    <!-- 
+        AJAX 之 请求超时与网络异常
+        
+        - 请求超时处理
+            - 超时时间(最长请求时间，单位为 ms) xhr.timeout = 时间
+            - 超时回调 xhr.ontimeout = callback
+        - 网络异常处理
+            - 网络异常回调 xhr.onerror = callback
+
+        该实例实现效果：当点击按钮后，1. 发送一个 AJAX 请求，GET /delay，2. 在 div 中呈现响应体内容
+     -->
+    <style>
+        #outer {
+            width: 200px;
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #get-result {
+            height: 100px;
+            border: 3px solid palevioletred;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="../utils/functions/responseLoaded.js"></script>
+</head>
+
+<body>
+    <div id="outer">
+        <button id="smt">点击发送请求</button>
+        <div id="get-result"></div>
+    </div>
+
+    <script>
+        const btn = document.querySelector('#smt');
+        const div = document.querySelector('#get-result');
+
+        btn.addEventListener('click', function () {
+            // 1. 创建 XMLHttpRequest 对象（AJAX 所有操作都是基于该对象实现的）
+            const xhr = new XMLHttpRequest();
+
+            /* 请求超时处理 */
+            xhr.timeout = 2000; // 设置最长请求时间为 2s
+            xhr.ontimeout = () => {
+                alert('请求超时，请稍候重试~');
+            }; // 设置请求超时回调
+
+            /* 网络异常处理 */
+            xhr.onerror = () => {
+                alert('无法正常连接网络~');
+            }
+
+            // 2 通过 open 方法设置请求行信息 —— 请求方法与 URL（该 URL 必须包含协议、域名、端口号等信息）
+            xhr.open('GET', 'http://127.0.0.1:9000/delay');
+
+            // 3. 通过 send 方法发送请求
+            xhr.send();
+
+            // 4. 通过 onreadystatechange 方法绑定事件，处理服务端返回的结果
+            xhr.onreadystatechange = function () {
+                if (responseLoaded(xhr)) {
+                    div.innerHTML = xhr.response;
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>

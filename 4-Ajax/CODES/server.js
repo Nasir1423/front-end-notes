@@ -21,6 +21,18 @@ app.post('/server', (_, res) => {
 app.get('/json-server', (_, res) => {
     let person = { name: "孙悟空", age: 19, gender: "男" };
     res.json(person);
+});
+
+// ie 缓存
+app.get('/ie', (_, res) => {
+    res.send('<h1>Hello IE!</h1>')
+});
+
+// 延时响应
+app.get('/delay', (_, res) => {
+    setTimeout(() => {
+        res.send('<h1>延时响应</h1>')
+    }, 3000);
 })
 
 // 404 路由规则

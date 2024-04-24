@@ -44,8 +44,8 @@
    - 请求行 `xhr.open(请求方式, URL)`
    - 请求头 `xhr.setRequestHeader(键, 值)`
    - 请求体
-     - 对于 GET 请求，在 open 方法中通过 URL 的查询字符串传递参数
-     - 对于 POST 请求，在 send 方法中可通过任意方式传递参数
+     - 对于 [GET 请求](./CODES/1-原生Ajax/1.1-GET请求.html)，在 open 方法中通过 URL 的查询字符串传递参数
+     - 对于 [POST 请求](./CODES/1-原生Ajax/1.2-POST请求.html)，在 send 方法中可通过任意方式传递参数
 3. 发送请求 `xhr.send()`
 4. 处理响应报文
    - 响应行
@@ -64,11 +64,11 @@
    - 条件：`xhr.readyState === 4 && (xhr.status >= 200 && xhr.status < 300)`
    - 前者条件解释：服务端是否返回了全部结果
      - `readyState` 是 xhr 对象的属性，取值 0、1、2、3、4 表示不同的状态
-       - 0 表示未初始化时
-       - 1 表示 open 方法调用完毕
+       - 0 表示 XMLHttpRequest 实例已经生成，但是 open 方法还没有被调用
+       - 1 表示 open 方法调用完毕，此时 send 方法还没有被调用
        - 2 表示 send 方法调用完毕
-       - 3 表示服务端返回部分结果
-       - 4 表示服务端返回全部结果
+       - 3 表示正在接收服务器传来的部分数据
+       - 4 表示已经接收服务器传来的全部数据 or 本次数据接受失败
      - `readystatechange` 事件共计会触发四次，我们选择 readyState = 4 时再对响应结果进行处理
    - 后者条件解释：响应是否属于成功响应（响应状态码是否为 2xx）
 2. 什么是预检请求？
@@ -81,7 +81,7 @@
    res.setHeader('Access-Control-Allow-Headers', '*'); // 设置允许自定义的响应头
    ```
 
-### 2.3 JSON 响应
+### 2.3 [JSON 响应](./CODES/1-原生Ajax/1.3-JSON响应.html)
 
 1. 方式一
    - 服务器返回 JSON 对象字符串 `JSON.stringify(JSON 对象) => JSON 字符串`, `res.send(JSON 字符串)`
@@ -90,3 +90,11 @@
    - 服务器返回 JSON 对象字符串
    - 然后浏览器设置响应体类型为 json `xhr.responseType = 'json'(此时 response 类型为 json)`
 3. 注：服务器也可以直接用 `res.json(JSON 对象)` 的方式返回 JSON 对象字符串
+
+### 2.4 [IE 缓存问题](./CODES/1-原生Ajax/1.4-IE缓存问题.html)
+
+### 2.5 [请求超时与网络异常](./CODES/1-原生Ajax/1.5-请求超时与网络异常.html)
+
+### 2.6 [取消请求](./CODES//1-原生Ajax/1.6-取消请求.html)
+
+### 2.7 [重复请求问题](./CODES/1-原生Ajax/1.7-重复请求问题.html)
