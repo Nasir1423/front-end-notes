@@ -40,6 +40,11 @@ app.all('/jquery-server', (_, res) => {
     res.send('<h1>Hello jQuery Ajax</h1>');
 });
 
+// axios 服务
+app.all('/axios-server', (_, res) => {
+    res.send('<h1>Hello axios Ajax</h1>');
+});
+
 // 404 路由规则
 app.all('*', (_, res) => {
     res.status(404).send('<h1>404 Not Found</h1>')

@@ -1,5 +1,19 @@
 # AJAX
 
+- [AJAX](#ajax)
+  - [1. AJAX 简介](#1-ajax-简介)
+  - [2. 原生发送 AJAX 请求](#2-原生发送-ajax-请求)
+    - [2.1 基本使用](#21-基本使用)
+    - [2.2 几个注意点](#22-几个注意点)
+    - [2.3 JSON 响应](#23-json-响应)
+    - [2.4 IE 缓存问题](#24-ie-缓存问题)
+    - [2.5 请求超时与网络异常](#25-请求超时与网络异常)
+    - [2.6 取消请求](#26-取消请求)
+    - [2.7 重复请求问题](#27-重复请求问题)
+  - [3. jQuery 发送 AJAX 请求](#3-jquery-发送-ajax-请求)
+  - [4. axios 发送 AJAX 请求](#4-axios-发送-ajax-请求)
+
+
 ## 1. AJAX 简介
 
 1. 什么是 AJAX？
@@ -35,7 +49,7 @@
      - **存在跨域问题（同源策略）**：AJAX 的请求受同源策略的限制，即只能向与当前页面具有相同协议、域名和端口的服务器发送请求，因此跨域请求需要通过其他方式来处理
      - **SEO 不友好**：搜索引擎爬虫通常不会执行 JavaScript，因此如果网站的内容依赖于 AJAX 动态加载，那么这部分内容可能无法被搜索引擎索引，从而影响网站的 SEO 排名
 
-## 2. 原生 AJAX
+## 2. 原生发送 AJAX 请求
 
 ### 2.1 基本使用
 
@@ -99,3 +113,47 @@
 
 ### 2.7 [重复请求问题](./CODES/1-原生Ajax/1.7-重复请求问题.html)
 
+## [3. jQuery 发送 AJAX 请求](./CODES/2-jQueryAjax.html)
+
+- GET 请求 `$.get(请求 URL, 请求参数对象, 回调函数[, 响应类型])`
+- POST 请求 `$.post(请求 URL, 请求参数对象, 回调函数[, 响应类型])`
+- 自定义请求
+  ```javascript
+   $.ajax({
+      url: 'xxx', // 表示请求 URL
+      data: {xxx}, // 表示请求参数对象
+      type: 'xxx', // 表示请求类型，如 GET、POST 等
+      dataType: 'xxx', // 表示服务端返回的内容类型的字符串，如 'json' 等
+      success: (res) => {}, // 回调函数，AJAX 请求成功得到响应后该回调函数自动调用，接收一个参数 res，表示服务端返回的内容
+      timeout: xxx, // 表示最长请求时间，单位为毫秒
+      error: () => {}, // 回调函数，请求超时或网络异常时自动调用,
+      headers: {xxx} // 表示请求头对象
+   })
+  ```
+
+## [4. axios 发送 AJAX 请求](./CODES/3-axiosAjax.html)
+
+- GET 请求
+  ```javascript
+  axios.get(请求 URL, {
+      params: {xxx}, // 表示 URL 参数
+      headers: {xxx}, // 表示请求头
+   }).then(res => {}) // 当 AJAX 请求成功得到响应后自动调用 then 中的回调函数，接收一个参数 res，表示封装的响应报文对象
+   ```                
+- POST 请求
+  ```javascript
+  axios.post(请求 URL, requestBody, { // 其中 requestBody 表示设置请求体内容
+      params: {xxx}, // 表示 URL 参数
+      headers: {}, // 表示请求头
+   }).then(res => {}) // 当 AJAX 请求成功得到响应后自动调用 then 中的回调函数，接收一个参数 res，表示封装的响应报文对象
+  ```
+- 自定义请求
+  ```javascript
+   axios({
+      method: 'xxx', // 表示请求类型，如 GET、POST 等
+      url: 'xxx', // 表示请求 URL
+      params: {xxx}, // 表示 URL 参数
+      headers: {xxx}, // 表示请求头
+      data: {xxx} // 表示请求体
+   }).then(res => {}) // 当 AJAX 请求成功得到响应后自动调用 then 中的回调函数，接收一个参数 res，表示封装的响应报文对象
+  ```
