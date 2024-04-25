@@ -12,6 +12,10 @@
     - [2.7 重复请求问题](#27-重复请求问题)
   - [3. jQuery 发送 AJAX 请求](#3-jquery-发送-ajax-请求)
   - [4. axios 发送 AJAX 请求](#4-axios-发送-ajax-请求)
+  - [5. fetch 发送给 AJAX 请求](#5-fetch-发送给-ajax-请求)
+  - [6. 同源策略与跨域请求](#6-同源策略与跨域请求)
+  - [7. 跨域策略之 jsonp](#7-跨域策略之-jsonp)
+  - [8. 跨域策略之 cors](#8-跨域策略之-cors)
 
 
 ## 1. AJAX 简介
@@ -157,3 +161,50 @@
       data: {xxx} // 表示请求体
    }).then(res => {}) // 当 AJAX 请求成功得到响应后自动调用 then 中的回调函数，接收一个参数 res，表示封装的响应报文对象
   ```
+
+## [5. fetch 发送给 AJAX 请求](./CODES/4-fetchAjax.html)
+
+```javascript
+fetch(请求 URL, {
+  method: 'xxx', // 请求方法，如 'GET', 'POST' 等
+  headers: {xxx}, // 请求头
+  body: 'xxx' 请求体内容
+}).then(res => { // 对请求返回的响应进行处理的部分，用于解析响应体中的 JSON 数据
+  return res.text();
+}).then(res => { // 处理上一个 .then() 方法返回的结果
+  xxx // 这里的 res 才是响应体内容
+})
+```
+
+## 6. 同源策略与跨域请求
+
+1. 同源策略：即 Same-Origin Policy，由 Netscape 公司提出，是浏览器的一种**安全**策略，这里的**同源**指的是**协议、域名、端口号必须完全相同**。
+2. 跨域：即**违背同源策略**的行为，如 AJAX 发送请求默认需要遵守同源策略，但很多时候需要向其他服务器发出请求，此时就需要跨域。
+3. 跨域请求的两种实现方式
+   - [非官方策略 jsonp](#7-跨域策略之-jsonp)
+   - [官方策略 cors](#8-跨域策略之-cors)
+
+## 7. 跨域策略之 jsonp
+
+1. 什么是 JSONP？
+   - JSONP，即 JSON with Padding，是一个**非官方**的跨域解决方案，只支持 GET 请求
+   - 因为网页中有一些标签**天生具有跨域的能力**，如 `img`、`link`、`iframe`、`script`，而 JSONP 就是利用 `script` 标签的跨域能力来发送请求的
+2. [原生实现 jsonp](./CODES/5-原生jsonp.html)
+3. [jQuery 实现 jsonp](./CODES/6-jQueryAjax.html)
+
+## 8. 跨域策略之 cors
+
+1. 什么是 CORS？
+   - CORS，即 Cross-Origin Resource Sharing，跨域资源共享
+   - CORS 是**官方**提供的跨域解决方案，其特点是不需要在客户端进行任何特殊的操作，完全在**服务器中进行处理**
+   - CORS 支持 GET 和 POST 请求
+   - [CORS 标准](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)新增了一组 HTTP 首部字段，允许服务器声明**哪些资源允许被哪些源站所访问**
+   - CORS 是通过**设置响应头**来告诉浏览器该请求允许跨域，浏览器在收到该响应后，以后就会对该响应放行
+2. 常用响应头举例
+   ```javascript
+    response.setHeader("Access-Control-Allow-Origin", "*"); // 允许跨域
+    response.setHeader("Access-Control-Allow-Headers", '*'); // 允许自定义头
+    response.setHeader("Access-Control-Allow-Method", '*'); // 允许所有方法
+   ```
+
+[跳转到顶部](#ajax)
