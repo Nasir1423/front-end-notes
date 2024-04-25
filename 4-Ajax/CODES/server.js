@@ -33,6 +33,7 @@ app.get('/delay', (_, res) => {
     setTimeout(() => {
         res.send('<h1>延时响应</h1>')
     }, 3000);
+<<<<<<< HEAD
 });
 
 // jQuery 服务
@@ -44,6 +45,9 @@ app.all('/jquery-server', (_, res) => {
 app.all('/axios-server', (_, res) => {
     res.send('<h1>Hello axios Ajax</h1>');
 });
+=======
+})
+>>>>>>> 5c4500197a8f9e1661f674fec809551cfd947991
 
 // 404 路由规则
 app.all('*', (_, res) => {
