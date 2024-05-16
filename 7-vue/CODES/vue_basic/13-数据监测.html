@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据监测</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结：Vue 监视数据的原理
+      1. Vue 会监视 data 中所有层次的数据。
+			2. 如何监测对象中的数据？通过 setter 实现监视，且要在 new Vue 时就传入要监测的数据。
+        - 对象中后追加的属性，Vue 默认不做响应式处理
+				- 如需给后添加的属性做响应式，请使用如下 API：
+					- Vue.set(target，propertyName/index，value) 或 
+					- vm.$set(target，propertyName/index，value)
+			3. 如何监测数组中的数据？通过包裹数组更新元素的方法实现，本质就是做了两件事：(1).调用原生对应的方法对数组进行更新。(2).重新解析模板，进而更新页面。
+			4.在Vue修改数组中的某个元素一定要用如下方法：
+				- push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+				- Vue.set() 或 vm.$set()
+			5. 注意
+        - Vue.set() 和 vm.$set() 不能给 vm 或 vm 的根数据对象 (如 data) 添加属性
+        - 数组元素不是通过 setter 实现响应式，但是数组元素 (如果是对象) 中的属性通过 setter 实现响应式
+   -->
+</head>
+
+<body>
+
+  <!-- #region 数据监测问题演示 -->
+  <div id="root1">
+    <h2>人员列表</h2>
+    <button @click="updateFirst">更新第一个员工的信息</button>
+    <ul>
+      <li v-for="(person, index) in persons" :key="person.id">
+        {{person.name}}-{{person.age}}-{{person.gender}}
+      </li>
+    </ul>
+  </div>
+  <hr>
+
+  <script>
+    new Vue({
+      el: '#root1',
+      data: {
+        persons: [
+          { id: '001', name: '马冬梅', age: 19, gender: '女' },
+          { id: '002', name: '周冬雨', age: 20, gender: '女' },
+          { id: '003', name: '周杰伦', age: 21, gender: '男' },
+          { id: '004', name: '温兆伦', age: 22, gender: '男' }
+        ]
+      },
+      methods: {
+        updateFirst() {
+          /* 凑效的方式 */
+          // this.persons[0].name = "马保国";
+          // this.persons[0].age = 40;
+          // this.persons[0].gender = "男";
+          /* 不奏效的方式 */
+          this.persons[0] = { id: '001', name: '马保国', age: 40, gender: '男' };
+          /* 不奏效的原因？与 Vue 监视数据的原理有关，此时 vm.persons[0] 已经正确修改，但是 Vue 没有监视到这一变化 */
+        }
+      },
+    })
+  </script>
+  <!-- #endregion -->
+
+  <!-- #region 监测对象数据的原理 -->
+  <script>
+    /* Vue 的响应式系统通过数据代理和数据劫持来实现对象数据的监视和更新。因此，当对象中的数据发生变化时，Vue 能够通过 setter 实现响应式更新。 */
+    /* 
+      1. Vue 会使用原始数据 data 创建一个数据监视对象 Observer，用于监视 data 中属性的变化。
+      2. Vue 将这个 Observer 实例对象添加到 vm 实例的一个内部属性上（通常是 _$data 或者 _data）
+      3. Vue 通过数据代理（Proxy 或 Object.defineProperty）将 Observer 中的数据添加到 vm 实例上，使得我们可以通过 vm 访问 data 中的属性，而不必直接访问 _$data 或者 _data。
+      注：可以认为 vm 实例拥有一个代理对象，该代理对象通过 Observer 实例连接了原始的数据对象 data。这个代理对象使得我们可以通过 vm 访问 data 中的属性，并且实现数据的响应式更新。
+      注：此时 vm._data.键 === vm.键 的结果为 true
+    */
+    // 以下是一个不完备的对象数据监测机制的简单实现
+    // 0. 准备原始数据
+    let data = {
+      name: "chuanYiTu",
+      gender: "Male"
+    }
+    // 1. 根据原始数据创建一个数据监视对象
+    // 数据监视类
+    class Observer {
+      constructor(data) {
+        Object.keys(data).forEach(key => { // 获取数据对象的键组成的数组 and 将数据对象中的每个键值对代理到数据监视实例中
+          Object.defineProperty(this, key, {
+            get: function reactiveGetter() {
+              return data[key];
+            },
+            set: function reactiveSetter(val) {
+              console.log(`修改 ${key} 数据；重新解析模板；生成虚拟 DOM；....`);
+              data[key] = val;
+            }
+          })
+        })
+      }
+    }
+    let observer = new Observer(data);
+    // 2. 将数据监视对象添加到 vm 实例的 _data 属性上
+    let vm = {};
+    vm._data = observer;
+    // 3. 通过数据代理将 Observer 中的数据添加在 vm 实例上
+    Object.keys(data).forEach(key => {
+      Object.defineProperty(vm, key, {
+        get: function reactiveGetter() {
+          return data[key];
+        },
+        set: function reactiveSetter(val) {
+          console.log(`修改 ${key} 数据；重新解析模板；生成虚拟 DOM；....`);
+          data[key] = val;
+        }
+      })
+    })
+  </script>
+  <!-- #endregion -->
+
+  <!-- #region 检测数组数据的原理 -->
+  <script>
+    /*
+      - Vue 没有为数组中的元素进行数据代理，因此数组元素没有 setter，此时如果通过索引修改数组元素，Vue 将无法检测到该修改，进而无法进行响应式更新
+      - Vue 通过包装数组身上七个常用的方法实现响应式，包装后的方法有两个功能 1. 完成方法本身要求的操作 2. 进行响应式更新 (生成虚拟 DOM、DIFF 比较等等)
+      - 七个常用的方法有 push、pop、shift、unshift、splice、sort、reverse
+      - 注：数组直接修改 (students[0] = xxx) 是无法监视到的，但是如果整体替换数组 (students = newArr) 是可以监视到的，因为数组变量是通过 setter 实现了响应式
+    */
+  </script>
+  <!-- #endregion -->
+
+  <!-- #region Vue.set / vm.$set 的使用 -->
+  <div id="root4">
+    <h2>{{name}} 信息展示</h2>
+    <h4>基本信息</h4>
+    <button @click.once="appendGender">点击添加性别</button>
+    <ul>
+      <li v-for="(value, key) in basicInfo">{{key}}: {{value}}</li>
+    </ul>
+    <h4>爱好</h4>
+    <button @click.once="appendSing">点击添加唱歌</button>
+    <button @click.once="removeFirst">点击删除首位</button>
+    <button @click.once="alterFirstUnknown">点击未知首位</button>
+    <ul>
+      <li v-for="hobby in hobbies">{{hobby}}</li>
+    </ul>
+
+
+  </div>
+  <script>
+    const v = new Vue({
+      el: '#root4',
+      data: {
+        name: "chuanYitu",
+        hobbies: ["篮球", "足球", "游泳", "跑步"],
+        basicInfo: {
+          age: 23,
+          weight: 78,
+          height: 178
+        }
+      },
+      methods: {
+        appendGender() {
+          // this.$set(this.basicInfo, 'gender', 'Male');
+          Vue.set(this.basicInfo, 'gender', 'Male');
+          /* 
+            Vue.set / vm.$set 可以用于给 data 中的对象添加响应式属性，但是注意：不能给 data 或 Vue 实例添加响应式属性
+            - Vue.set(对象名, 键, 值)
+            - vm.$set(对象名, 键, 值)
+          */
+        },
+        appendSing() {
+          this.hobbies.push('唱歌');
+        },
+        removeFirst() {
+          this.hobbies.shift();
+        },
+        alterFirstUnknown() {
+          /* 
+            Vue.set / vm.$set 也可以用于给 data 中的数组添加、修改属性，此时数组元素的变化是可以被监测到的
+            - Vue.set(数组名, 索引, 值)
+            - vm.$set(数组名, 索引, 值)
+          */
+          this.$set(this.hobbies, 0, "Unknown");
+        }
+      }
+    })
+  </script>
+  <!-- #endregion -->
+</body>
+
+</html>

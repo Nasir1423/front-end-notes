@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>绑定样式</title>
+  <script src="../js/vue.js"></script>
+  <style>
+    div.basic {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+      margin: 20px;
+    }
+
+    .basic {
+      width: 400px;
+      height: 100px;
+      border: 1px solid black;
+    }
+
+    .happy {
+      border: 4px solid red;
+      background-color: rgba(255, 255, 0, 0.644);
+      background: linear-gradient(30deg, yellow, pink, orange, yellow);
+    }
+
+    .sad {
+      border: 4px dashed rgb(2, 197, 2);
+      background-color: gray;
+    }
+
+    .normal {
+      background-color: skyblue;
+    }
+
+    .meta1 {
+      background-color: yellowgreen;
+    }
+
+    .meta2 {
+      font-size: 30px;
+      text-shadow: 2px 2px 10px red;
+    }
+
+    .meta3 {
+      border-radius: 20px;
+    }
+  </style>
+  <!-- 
+    小结 
+      1. :class 绑定样式 (常用)
+        - 语法 :class="xxx"，其中 xxx 可以是字符串，对象，数组
+        - 字符串写法：类名不确定，需要动态获取
+        - 对象写法：要绑定多个样式，个数不确定，类名也不确定
+        - 数组写法：要绑定多个样式，个数确定，类名确定，但不确定用不用
+      2. :style 绑定样式 
+        - 语法 :style="xxx"，其中 xxx 可以是样式对象对象，也可以是样式对象数组
+        - 样式对象：{驼峰命名法的样式名: 动态值}
+  -->
+</head>
+
+<body>
+  <div id="root">
+    <!-- :class 绑定样式 -->
+    <!-- 实现：点击随机在 happy sad normal 中切换样式 (字符串写法) -->
+    <div class="basic" :class="mood">
+      String
+      <button @click="changeMood">点击切换情绪主题，{{mood.toUpperCase()}} Now</button>
+    </div> <br>
+    <!-- 实现：绑定 meta1~meta3 中 0~3 个样式 (数组写法) -->
+    <div class="basic" :class="metaArr">
+      Array
+      <button @click="alterByValue(metaArr, 'meta1')">增加/取消 meta1</button>
+      <button @click="alterByValue(metaArr, 'meta2')">增加/取消 meta2</button>
+      <button @click="alterByValue(metaArr, 'meta3')">增加/取消 meta3</button>
+    </div> <br>
+    <!-- 实现：绑定 meta~meta3 这三个样式，但是控制是否可用 (对象写法) -->
+    <div class="basic" :class="metaObj">
+      Object
+      <button @click="alterByValue(metaObj, 'meta1')">增加/取消 meta1</button>
+      <button @click="alterByValue(metaObj, 'meta2')">增加/取消 meta2</button>
+      <button @click="alterByValue(metaObj, 'meta3')">增加/取消 meta3</button>
+    </div> <br>
+    <hr>
+
+    <!-- :style 绑定样式 -->
+    <!-- 实现：绑定 fontObj 样式对象，使得字体加粗加大 (对象写法) -->
+    <div class="basic" :style="fontObj">
+      Object
+    </div> <br>
+    <!-- 实现：绑定 styleArr 数组，使得字体加粗加大且颜色为紫色 (数组写法) -->
+    <div class="basic" :style="styleArr">
+      Array
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#root',
+      data: {
+        mood: 'normal', // mood 可选 happy sad normal
+        metaArr: ['meta1', 'meta2', 'meta3'],
+        metaObj: {
+          'meta1': true,
+          meta2: true,
+          meta3: true
+        },
+        fontObj: {
+          fontSize: '40px',
+          fontWeight: "bold"
+        },
+        colorObj: {
+          color: "red"
+        }
+      },
+      computed: {
+        styleArr() {
+          return [this.fontObj, this.colorObj]
+        }
+      },
+      methods: {
+        changeMood(event) {
+          while (1) {
+            let moods = ['happy', 'sad', 'normal'];
+            let randomIndex = Date.now() % 3;
+            if (this.mood !== moods[randomIndex]) {
+              console.log(`情绪样式更改成功 [${this.mood}] ==> [${moods[randomIndex]}]`);
+              this.mood = moods[randomIndex];
+              break;
+            }
+          }
+        },
+        alterByValue(metas, element) {
+          if (metas instanceof Array) {
+            let eleIndex = metas.indexOf(element);
+            if (eleIndex === -1) { // 向数组中添加
+              console.log(`添加样式 [${element}]`);
+              metas.push(element);
+            } else { // 从数组中删除
+              console.log(`删除样式 [${element}]`);
+              metas.splice(eleIndex, 1);
+            }
+          } else {
+            metas[element] = !metas[element];
+            metas[element] ? console.log(`添加样式 [${element}]`) : console.log(`删除样式 [${element}]`);
+          }
+        }
+      },
+    })
+  </script>
+
+</body>
+
+</html>

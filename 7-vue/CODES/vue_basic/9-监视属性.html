@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>监视属性</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结
+      1. 监视属性需要在 Vue 实例的 options 中的 watch 中配置
+        - 当被监视的属性变化时，配置回调函数 handler 自动调用，进行相关操作，其中 handler 接受两个参数，分别表示被监视属性的新值和旧值
+        - 监视的属性必须存在，才能进行监视
+				- 监视的两种写法：
+          - new Vue 时传入 watch 配置
+            watch: { 
+              要监视属性: 配置对象 
+            }
+          - 通过 vm.$watch(要监视属性的字符串, 配置对象) 监视
+      2. 深度监视
+        - Vue 中的 watch 默认不监测对象内部值的改变（一层）
+        - 配置 deep:true 可以监测对象内部值改变（多层）
+        - 注意
+          - Vue 自身可以监测对象内部值的改变，但 Vue 提供的 watch 默认不可以 (为了效率)
+          - 如果要深度监视 numbers: { a: 1, b: 2 }，则需要配置 deep: true；如果需要监视 a，则可以设置 'number.a': 配置对象 进行监视
+      3. 监视属性的简写形式：当被监视的属性的配置内容只有 handler 时才可以使用简写形式
+        - 方式一 watch: { 要监视属性(newValue, oldValue){ xxx } }
+        - 方式二 vm.$watch(要监视属性的字符串, function(newValue, oldValue){ xxx })
+      4. watch 和 computed 的区别
+				- computed能完成的功能，watch 都可以完成。
+				- 能完成的功能，computed 不一定能完成，例如：watch 可以进行异步操作。
+				- 注意事项
+          - 所有被 Vue 管理的函数，最好写成普通函数，这样 this 的指向才是 vm 或 组件实例对象。
+					- 所有不被 Vue 所管理的函数（定时器的回调函数、ajax 的回调函数等、Promise 的回调函数），最好写成箭头函数，这样 this 的
+          指向才是 vm 或 组件实例对象。
+   -->
+</head>
+
+<body>
+  <!-- 监视属性实现天气案例 -->
+  <div id="rooter">
+    <h1>今天天气很{{weather}}</h1>
+    <button @click="changeWeather">切换天气</button>
+    <hr>
+    空气质量 <input type="text" v-model="details.airQualityIndex"> <br>
+    当日温度 <input type="text" v-model="details.temperature">
+    <hr>
+    <h1>今日运势: {{luck}}</h1>
+    <button @click="randomLuck">改变运势</button>
+  </div>
+
+  <script>
+    const vm = new Vue({
+      el: '#rooter',
+      data: { // 数据
+        isHot: true,
+        details: {
+          airQualityIndex: 49,
+          temperature: 38
+        },
+        isLuck: true
+      },
+      computed: { // 计算属性
+        weather() {
+          return this.isHot ? "炎热" : "凉爽";
+        },
+        luck() {
+          return this.isLuck ? "吉" : "凶";
+        }
+      },
+      methods: { // 方法
+        changeWeather() {
+          this.isHot = !this.isHot
+        },
+        randomLuck() {
+          Math.random() > 0.5 ? this.isLuck = true : this.isLuck = false;
+        }
+      },
+      watch: { // 监视属性：方式一
+        isHot: {
+          immediate: true, // 表示初始化时，handler 立即调用；为 false 则表示，当监视属性改变时，handler 再调用
+          handler(newValue, oldValue) {
+            console.log(`isHot 属性发生变化，[${oldValue}] ==> [${newValue}]`);
+          }
+        },
+        details: {
+          deep: true, // 开启深度监视，监视多级结构中所有属性的变化
+          handler(newValue, oldValue) {
+            console.log(`details 属性发生变化，[aqi=${oldValue.airQualityIndex},tem=${oldValue.temperature}] ==> [aqi=${newValue.airQualityIndex},tem=${newValue.temperature}]`);
+          }
+        },
+        "details.temperature": { // 监视多级结构中某个属性的变化
+          handler(newValue, oldValue) {
+            console.log(`温度发生变化，${oldValue}度到${newValue}度`);
+          }
+        },
+        luck(newValue, oldValue) { // 监视属性的简写形式一
+          if (oldValue === '凶' && newValue === '吉') {
+            console.log("逢凶化吉");
+          } else {
+            console.log("吉去凶来");
+          }
+        }
+      }
+    });
+
+    vm.$watch('weather', { // 监视属性：方式二
+      immediate: true,
+      handler(newValue, oldValue) {
+        console.log(`weather 属性发生变化 [${oldValue}] ==> [${newValue}]`);
+      }
+    });
+
+    vm.$watch('isLuck', function (newValue, oldValue) { // 监视属性的简写形式二
+      console.log('吉凶之兆改变了');
+    })
+  </script>
+
+  <!-- 监视属性实现姓名案例 -->
+  <div id="root">
+    姓 <input type="text" v-model="firstName"> <br>
+    名 <input type="text" v-model="lastName"> <br>
+    全名 <span>{{fullName}}</span>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#root',
+      data: {
+        firstName: '',
+        lastName: '',
+        fullName: ''
+      },
+      watch: {
+        firstName(value) {
+          setTimeout(() => {
+            this.fullName = value + "-" + this.lastName;
+            console.log(123);
+          }, 1000);
+        },
+        lastName(value) {
+          this.fullName = this.firstName + "-" + value;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

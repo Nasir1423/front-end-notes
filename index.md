@@ -44,3 +44,10 @@
 
 ## axios
 
+| 内容 |                             路径                             |
+| :--: | :----------------------------------------------------------: |
+| 笔记 | [markdown 版本](./6-axios/axios.md) [pdf 版本](./6-axios/axios.pdf)  [html版本](./6-axios/axios.html) |
+| 代码 |                 [code demo](./6-axios/CODES)                 |
+
+## vue
+

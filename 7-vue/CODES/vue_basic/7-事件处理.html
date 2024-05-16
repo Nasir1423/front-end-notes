@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件处理</title>
+  <script src="../js/vue.js"></script>
+  <style>
+    * {
+      margin: 20px 8px;
+    }
+
+    .outer {
+      width: 300px;
+      height: 150px;
+      background-color: beige;
+      padding: 30px;
+    }
+
+    .inner {
+      width: 200px;
+      height: 150px;
+      background-color: aqua;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .inner-btn {
+      width: 130px;
+      height: 40px;
+    }
+
+    ul {
+      width: 400px;
+      height: 600px;
+      background-color: antiquewhite;
+      overflow: scroll;
+    }
+
+    li {
+      width: 300px;
+      height: 200px;
+      margin: 20px;
+      background-color: aqua;
+    }
+  </style>
+  <!-- 
+    小结
+      1. 事件的基本使用
+        - 可以使用 v-on:xxx 或 @xxx 绑定事件，其中 xxx 是事件名
+        - 事件的回调函数需要配置在 options 中的 methods 对象中，最终会被添加到 vm 上
+        - methods 中配置的回调函数不能使用箭头函数，否则 this 会指向 Window
+        - methods 中配置的回调函数都是被 Vue 所管理的函数，(除了箭头函数外) this 的指向是 vm 或组件实例对象
+        - @click="demo" 和 @click="demo($event)" 效果相同，但是后者可以传参，前者默认传入事件对象，后者需要通过 $event 接收事件对象
+      2. 事件修饰符：通过 @xxx.修饰符 的方式在绑定事件的同时修饰事件的触发效果
+        - prevent 阻止事件默认行为（常用），相当于 event.preventDefault()
+        - stop 阻止事件冒泡（常用），相当于 event.stopPropagation()
+        - once 事件只触发一次（常用）
+        - capture 使用事件的捕获模式（默认为事件的冒泡模式）
+          - 事件流之事件冒泡(event bubbling)：事件会从最内层的元素开始发生，一直向上传播，直到 document 对象
+          - 事件流之事件捕获(event capturing)：与事件冒泡相反，事件会从最外层开始发生，直到最具体的元素。
+        - self 只有 event.target 是当前操作的元素时才触发事件
+        - passive 事件的默认行为立即执行，无需等待回调函数执行完毕
+          - 一般情况下是：事件触发 => 回调执行 => 事件的默认行为执行
+          - 使用该修饰符后：事件触发 => 事件的默认行为执行 => 回调执行
+          - 但是并非所有事件默认情况下回调都是在默认行为前执行的，如 scroll 事件
+        - 注意：修饰符可以连续使用，如 @click.stop.prevent 表示绑定点击事件，同时阻止冒泡和默认行为
+      3. 键盘事件：Vue 中通过 @keydown 或 @keydown 绑定键盘事件，也可以通过 @keydown.别名/键码/键值/自定义键名 的方式，绑定特定按键事件
+        - Vue 中提供的按键别名
+          - enter 回车
+          - delete 删除（包括 Delete 键和 Backspace 键）
+          - esc 退出
+          - space 空格
+          - tab 制表符（必须搭配 keydown 事件使用，因为 tab 有更改焦点的功能）
+          - up 上
+          - down 下
+          - left 左
+          - right 右
+        - 如果使用按键的键码 (key) 去给指定的按键绑定事件，对于多个单词的键码，需要转换为短横线命名的形式 (kebab-case)，例如 CapsLock ==> caps-lock
+        - 一般不推荐使用键值 (keyCode) 去给指定的按键绑定事件，已经从 Web 标准中废弃
+        - 我们可以使用 Vue.config.keyCodes.自定义键名 = 键码 的方式定制按键别名
+        - 系统修饰键 (ctrl, alt, shift, meta) 用法特殊
+          - 配合 keyup 使用：按下修饰键同时，再按下其他键，随后释放其他键，事件才被触发
+          - 配合 keydown 使用：正常触发事件
+          - 注：meta 即 win 键
+        - 注意：可以为组合键绑定事件，如 @keydown.ctrl.y 表示同时按下 ctrl + y 时才触发事件
+   -->
+</head>
+
+<body>
+  <!-- 事件的基本使用 -->
+  <div id="root">
+    <h1>Welcome to {{country}}</h1>
+    <button v-on:click="showInfo">点击显示提示信息——不传参</button>
+    <button @click="showInfo($event, 666)">点击显示提示信息——传参</button>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#root",
+      data: {
+        country: "China"
+      },
+      methods: {
+        showInfo(event, number) {
+          console.log(event); // PointerEvent
+          console.log(event.target); // <button>点击显示提示信息——不传参</button>
+          console.log(event.target.nodeName); // BUTTON
+          console.log(event.target.tagName); // BUTTON
+          console.log(event.target.innerText); // 点击显示提示信息——不传参
+          console.log(number); // 666
+          console.log(this); // vm
+          number ? alert(`Have ${number} good days`) : alert('have a good day');
+        }
+      }
+    })
+  </script>
+
+  <hr>
+
+  <!-- 事件修饰符 -->
+  <div id="rooter">
+    <h1>Hello {{name}}</h1>
+    <!-- prevent 阻止事件的默认行为：下例点击超链接后不跳转 -->
+    <p><a href="https://www.baidu.com" @click.prevent="showDetails($event, 178, 78)">点击显示 {{name}} 详细信息——prevent</a></p>
+    <!-- stop 阻止事件冒泡：下例点击 button 后事件不会继续冒泡 -->
+    <div class="outer" @click="showEventFlowInfo">
+      <p class="inner" @click="showEventFlowInfo">
+        <button class="inner-btn" @click.stop="showEventFlowInfo">点击显示事件触发信息——stop</button>
+      </p>
+    </div>
+    <!-- once 事件只触发一次：下例点击 button 后事件只触发一次 -->
+    <button @click.once="showGreeting">点击显示欢迎信息——once</button>
+    <!-- capture 使用事件的捕获模式：下例点击任意元素后，按照事件流的捕获模式处理事件 -->
+    <div class="outer" @click.capture="showEventFlowInfo">
+      <p class="inner" @click.capture="showEventFlowInfo">
+        <button class="inner-btn" @click.capture="showEventFlowInfo">点击显示事件触发信息——capture</button>
+      </p>
+    </div>
+    <!-- self 只有 event.target 是当前元素时才触发事件：只有点击 div 时才会触发对应事件，冒泡或捕获到 div 则不会处理对应事件 -->
+    <div class="outer" @click.self="showEventFlowInfo">
+      <p class="inner" @click="showEventFlowInfo">
+        <button class="inner-btn" @click="showEventFlowInfo">点击显示事件触发信息——self</button>
+      </p>
+    </div>
+    <!-- passive 事件的默认行为立即执行，无需等待事件回调执行完毕 -->
+    <ul @wheel.passive="generateNumbers">
+      <li>弃我去者昨日之日不可留</li>
+      <li>乱我心者今日之日多烦忧</li>
+      <li>抽刀断水水更流</li>
+      <li>举杯消愁愁更愁</li>
+      <li>人生在世不称意</li>
+      <li>明朝散发弄扁舟</li>
+    </ul>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#rooter',
+      data: {
+        name: 'chuanYiTu'
+      },
+      methods: {
+        showDetails(event, height, weight) {
+          alert(`${this.name} is ${height} cm tall and ${weight} kg weight`);
+        },
+
+        showEventFlowInfo(event) {
+          alert(`现在触发的是 ${event.currentTarget.tagName} 上的事件`);
+        },
+
+        showGreeting(event) {
+          alert('HAVE A GOOD DAY TODAY');
+        },
+
+        generateNumbers(event) {
+          for (let i = 0; i < 10000; i++) {
+            console.log('#');
+          }
+          console.log('tired out');
+        }
+      }
+    })
+  </script>
+
+  <hr>
+
+  <!-- 键盘事件 -->
+  <div id="r">
+    <h1>学习: {{msg}}</h1>
+    <input type="text" placeholder="键下获取键值信息" @keydown="showKeyInfo"><br>
+    <!-- 按键别名绑定 keydown 事件 -->
+    <input type="text" placeholder="键下回车提示信息" @keydown.enter="showEnterInfo"><br>
+    <!-- 按键键值绑定 keydown 事件 -->
+    <input type="text" placeholder="键下回车提示信息" @keydown.Enter="showEnterInfo"><br>
+    <!-- 按键键码绑定 keydown 事件 -->
+    <input type="text" placeholder="键下回车提示信息" @keydown.13="showEnterInfo"><br>
+    <!-- 自定义键名绑定 keydown 事件 -->
+    <input type="text" placeholder="键下回车提示信息" @keydown.huiche="showEnterInfo"><br>
+    <!-- 组合键 ctrl + y 绑定 keydown 事件 -->
+    <input type="text" placeholder="键下 ctrl+y 提示信息" @keydown.ctrl.y="showEnterInfo"><br>
+  </div>
+
+  <script>
+    Vue.config.keyCodes.huiche = 13;
+
+    new Vue({
+      el: '#r',
+      data: {
+        msg: "键盘事件"
+      },
+      methods: {
+        showKeyInfo(event) {
+          console.log(`key=${event.key}, code=${event.keyCode}`);
+        },
+
+        showEnterInfo(event) {
+          console.log(`成功按下了回车键，信息 [${event.target.value}] 已提交`);
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自定义指令</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结：自定义指令
+    1. 局部指令语法
+      - 对象式 new Vue({ directives: {指令名: 配置对象} })
+      - 函数式 new Vue({ directives: {指令名: 回调函数} })
+    2. 全局指令语法
+      - 对象式 Vue.directive(指令名, 配置对象)
+      - 函数式 Vue.directive(指令名, 回调函数)
+    3. 配置对象中指定的三个回调函数
+      - bind：指令与元素成功绑定时调用
+      - inserted：指令所在元素被插入页面时调用
+      - update：指令所在模板结构被重新解析时调用
+    4. 函数式定义的指令对应的回调函数的调用时机
+      - 指令与元素成功绑定时 (注：此时指令与元素仅在内存中建立关系，元素尚未呈现在页面上) 
+      - 指令所在的模板被重新解析时 (注：data 中的数据一旦改变，模板便会重新解析)
+    5. 注意事项
+      - 指令定义时不加 v-，但使用时要加 v-
+      - 指令名如果是多个单词，要使用 kebab-case 命名方式 (如：)，不要用 camelCase 命名方式 (如：)
+      - 所有指令对应的回调函数中的 this 都是 window
+   -->
+</head>
+
+<body>
+  <div id="root">
+    <h2>自定义指令的使用</h2>
+    <h3>当前 n=<span v-text="n"></span></h3>
+    <h3>放大 10 倍后 n=<span v-magnify10="n"></span></h3>
+    <h3 v-bgcolor:yellow>自动同步 n 值，且默认获取焦点 <input type="text" v-focus-model:value="n"></h3>
+    <h3>文字大小由 n 指定 <span v-fontsize="n">你好，世界</span></h3>
+    <button @click="n++">点击 n 加 1</button>
+  </div>
+
+  <script>
+    /* v-bgcolor:xxx 指令设置当前元素的背景颜色，xxx 就是对应的背景颜色值*/
+    // 全局指定定义 —— 函数式
+    Vue.directive('bgcolor', function (element, binding) {
+      element.style.backgroundColor = binding.arg
+    });
+
+    /* fontSize="yyy" 指令设置当前元素的文字大小，yyy 就是文字大小像素值 */
+    // 初始情况下文字为红色，字体最小为 16px
+    // 更新过程中，如果给定小于 16，则随机更改文字颜色，只有大于 16 时才更改文字大小
+    Vue.directive('fontsize', {
+      bind(element, binding) {
+        element.style.color = "red"
+      },
+      inserted(element, binding) {
+        if (binding.value < 16) {
+          element.style.fontSize = 16 + "px"
+        } else {
+          element.style.fontSize = binding.value + "px"
+        }
+      },
+      update(element, binding) {
+        if (binding.value < 16) {
+          element.style.color = `rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`
+        } else {
+          element.style.fontSize = binding.value + "px"
+        }
+      }
+
+    })
+
+    const vm = new Vue({
+      el: "#root",
+      data: {
+        n: 1
+      },
+      directives: {
+        /* v-magnify10="yyy" 指令和 v-text 功能类似，但是会把绑定的数值放大 10 倍 */
+        /* 调用时机 
+          1. 指令与元素成功绑定时 (注：此时指令与元素仅在内存中建立关系，元素尚未呈现在页面上) 
+          2. 指令所在的模板被重新解析时 (注：data 中的数据一旦改变，模板便会重新解析) */
+        // 局部指令定义 —— 函数式 (接收两个参数，element 表示使用指令的 DOM 元素，binding 表示指令详细信息，binding.value 最常用，表示指令等号后的值)
+        magnify10(element, binding) {
+          element.innerText = binding.value * 10;
+        },
+        /* v-focus-model:xxx="yyy" 指令和 v-model 功能类似，但是可以让其绑定的 input 元素默认获取焦点 */
+        // 局部指令定义 —— 对象式 (包含三个方法属性，bind、inserted、update，调用时机不同，但都接收 element、binding 这两个参数)
+        "focus-model": {
+          // bind 调用时机：指令与元素成功绑定时
+          bind(element, binding) {
+            element.value = binding.value;
+          },
+          // inserted 调用时机：指令所在元素被插入页面时
+          inserted(element, binding) {
+            element.focus(); // 只有元素在页面中，调用该方法才有效果；在 bind 回调中调用该方法将无任何效果
+            element.oninput = () => vm.n = element.value
+          },
+          // update 调用时机：指令所在的模板被重新解析时
+          update(element, binding) {
+            element.value = binding.value;
+          },
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

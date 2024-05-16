@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>el、data 的两种写法</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结
+      1. el 的两种写法
+        - new Vue 时配置 el 属性
+        - 创建 Vue 实例后，通过 vm.$mount 指定 el 的值 (mount 有挂载的意思)
+      2. data 的两种写法
+        - 对象式
+        - 函数式 (学习到组件后，data 必须使用函数式指定)
+      3. 注意：Vue 管理的函数，一定不要写箭头函数，否则 this 指向 Window 而不是 Vue 实例
+   -->
+</head>
+
+<body>
+  <div id="root">
+    <h1>Hello, {{name}}</h1>
+  </div>
+
+  <script>
+    const vm = new Vue({
+      // el 的第一种写法
+      // el: '#root',
+
+      // data 的第一种写法：对象式
+      // data: {
+      //   name: "World"
+      // },
+      
+      // data 的第二种写法：函数式
+      data() {
+        console.log(this); // 这里的 this 指向 Vue 实例
+        return {
+          name: 'World'
+        }
+      }
+    });
+
+    // el 的第二种写法
+    vm.$mount('#root');
+  </script>
+</body>
+
+</html>

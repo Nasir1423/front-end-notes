@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>对象原型</title>
+  <!-- 
+    - 原型是 JavaScript 对象相互继承特性的机制
+   -->
+
+</head>
+
+<body>
+  <!-- 
+    1. 原型链
+      - JavaScript 中所有的对象都有一个内置属性，称为它的 prototype（原型）。它本身是一个对象，故原型对象也会有它自己的原型，逐渐构
+      成了原型链。原型链终止于拥有 null 作为其原型的对象上。
+      - 指向对象原型的属性并不是 prototype。它的名字不是标准的，但实际上所有浏览器都使用 __proto__。访问对象原型的标准方法是
+      Object.getPrototypeOf()。
+      - 当你试图访问一个对象的属性时：如果在对象本身中找不到该属性，就会在原型中搜索该属性。如果仍然找不到该属性，那么就搜索原型的原
+      型，以此类推，直到找到该属性，或者到达链的末端，在这种情况下，返回 undefined。
+      - 有个对象叫 Object.prototype，它是最基础的原型，所有对象默认都拥有它。Object.prototype 的原型是 null，所以它位于原型链的终点.
+   -->
+  <script>
+    // const myObject = {
+    //   city: "Madrid",
+    //   greet() {
+    //     console.log(`来自 ${this.city} 的问候`);
+    //   },
+    // };
+
+    /* 访问对象的原型（prototype） */
+    // console.log(myObject.__proto__); // 不标准的方法 // Object { … }
+    // console.log(Object.getPrototypeOf(myObject)); // 标准方法 // Object { … }
+    // console.log(myObject.__proto__ === Object.getPrototypeOf(myObject)); // true
+
+    /* 访问最基础的原型（Object.prototype） */
+    // console.log(Object.prototype); // Object { … }
+    // console.log(Object.prototype === Object.getPrototypeOf(myObject)); // true
+
+    /* myObject 的原型链是 myObject => Object.prototype ==> null */
+  </script>
+
+  <script>
+    // const myDate = new Date();
+    // let object = myDate;
+
+    // do {
+    //   object = Object.getPrototypeOf(object);
+    //   console.log(object);
+    // } while (object);
+
+    /* Date 对象的原型链是 myDate ==> Date.prototype ==> Object.prototype ==> null */
+  </script>
+
+  <!-- 
+    2. 设置原型：在 JavaScript 中，有多种设置对象原型的方法，这里我们将介绍两种：Object.create() 和构造函数。
+      - Object.create() 方法创建一个新的对象，并允许你指定一个将被用作新对象原型的对象。
+      - 在 JavaScript 中，所有的函数都有一个名为 prototype 的属性。当你调用一个函数作为构造函数时，这个属性被设置为新构造对象的原
+      型（按照惯例，在名为 __proto__ 的属性中）。
+   -->
+  <script>
+    const personPrototype = {
+      greet() {
+        console.log("hello!");
+      },
+    };
+
+    const carl = Object.create(personPrototype);
+    carl.greet(); // hello!
+  </script>
+
+  <script>
+    const personPrototype2 = {
+      greet() {
+        console.log(`你好，我的名字是 ${this.name}！`);
+      },
+    };
+
+    function Person(name) {
+      this.name = name;
+    }
+
+    Object.assign(Person.prototype, personPrototype2);
+    const reuben = new Person("Reuben");
+    reuben.greet(); // 你好，我的名字是 Reuben！
+
+  </script>
+</body>
+
+</html>

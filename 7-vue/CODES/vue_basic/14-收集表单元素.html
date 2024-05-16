@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>收集表单元素</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结：收集表单数据
+      若：<input type="text"/>，则 v-model 收集的是 value 值，用户输入的就是 value 值。
+      若：<input type="radio"/>，则 v-model 收集的是 value 值，且要给标签配置 value 值。
+      若：<input type="checkbox"/>
+        - 没有配置 input 的 value 属性，那么收集的就是 checked（勾选 or 未勾选，是布尔值）
+        - 配置 input 的 value 属性:
+          (1) v-model 的初始值是非数组，那么收集的就是 checked（勾选 or 未勾选，是布尔值）
+          (2) v-model 的初始值是数组，那么收集的的就是 value 组成的数组
+      备注：v-model的三个修饰符：
+        - lazy：失去焦点再收集数据
+        - number：输入字符串转为有效的数字
+        - trim：输入首尾空格过滤
+   -->
+</head>
+
+<body>
+  <h2>个人信息收集表</h2>
+  <div id="root">
+    <form @submit.prevent="logFormDetails">
+      <!-- .trim 修饰符去除用户输入数据的前后空格，然后再存储到 data 中 -->
+      账号: <input type="text" name="account" v-model.trim="account"> <br><br>
+      密码: <input type="password" name="password" v-model="password"> <br><br>
+      <!-- type="number" 和 .number 配合使用，前者约束用户输入数字，后者将用户输入的数字在 data 中以 Number 数据类型存储 -->
+      年龄: <input type="number" name="age" v-model.number="age"> <br><br>
+      性别:
+      <!-- 单选框使用 v-model 和 data 中的数据双向绑定的同时，也必须使用 value 指定选项的值，否则 data 中的数据始终为 null -->
+      男<input type="radio" name="gender" value="male" v-model="gender">
+      女<input type="radio" name="gender" value="female" v-model="gender"> <br><br>
+      爱好:
+      <!-- 复选框使用 v-model 和 data 中的数据双向绑定的同时，也必须使用 value 指定选项的值，否则 data 中的数据取值为 true 或 false，表示选中或未选中 -->
+      <!-- 同时，data 中的数据的数据类型必须是一个数组，用于存储复选框多个选项的 value 值 -->
+      足球<input type="checkbox" name="hobbies" value="soccer" v-model="hobbies">
+      游泳<input type="checkbox" name="hobbies" value="swimming" v-model="hobbies">
+      跑步<input type="checkbox" name="hobbies" value="running" v-model="hobbies"> <br><br>
+      意向工作地点:
+      <select name="address" v-model="address">
+        <option value="sx">陕西</option>
+        <option value="bj">北京</option>
+        <option value="hz">杭州</option>
+        <option value="tj">天津</option>
+        <option value="other">其他</option>
+      </select> <br><br>
+      其他信息:
+      <!-- .lazy 修饰符在当前输入框失去焦点后，再将数据存储到 data 中 -->
+      <textarea name="otherInfo" v-model.lazy.trim="otherInfo"></textarea> <br><br>
+      <!-- 如果复选框不指定 value，那么当选中时，data 中双向绑定的数据为 true，未选中则为 false -->
+      <input type="checkbox" name="agree" v-model="agree">阅读并接受<a href="javascript:;">用户协议</a>
+      <button type="submit">提交</button>
+    </form>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#root',
+      data: {
+        account: "",
+        password: "",
+        age: "",
+        gender: "",
+        hobbies: [],
+        address: "",
+        otherInfo: "",
+        agree: false
+      },
+      methods: {
+        logFormDetails() {
+          console.log(JSON.stringify(this._data));
+          /* 也可以将用户数据作为一个对象 userInfo 存储在 data 中，然后使用 JSON.stringify(this.userInfo) */
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

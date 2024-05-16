@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link crossorigin="anonymous" href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="page-header">基本使用</h2>
+        <button class="btn btn-primary"> 发送 GET 请求 </button>
+        <button type="button" class="btn btn-warning"> 发送 POST 请求 </button>
+        <button class="btn btn-success"> 发送 PATCH 请求 </button>
+        <button class="btn btn-danger"> 发送 DELETE 请求 </button>
+    </div>
+    <script>
+        const btns = document.querySelectorAll('.btn');
+
+        // 默认配置
+        axios.defaults.baseURL = 'http://localhost:3000';
+        axios.defaults.timeout = 3000;
+
+        // 实例对象
+        const instance = axios.create({
+            baseURL: 'http://localhost:9000',
+            timeout: 2000
+        })
+
+        // GET AJAX 请求 => 获取数据 (RESTful API)
+
+        // GET-1
+        // btns[0].onclick = function () {
+        //     axios({
+        //         method: 'GET', // 请求类型
+        //         url: 'http://localhost:3000/comments/1' // 请求 URL
+        //     }).then(response => {
+        //         console.log(response);
+        //     }).catch(error => {
+        //         console.error(error);
+        //     })
+        // }
+
+        // GET-2
+        // btns[0].onclick = function () {
+        //     axios.request({
+        //         method: 'GET', // 请求类型
+        //         url: '/comments/1' // 请求 URL
+        //     }).then(response => {
+        //         console.log(response.data);
+        //     }).catch(error => {
+        //         console.error(error);
+        //     })
+        // }
+
+        // GET-3
+        // btns[0].onclick = function () {
+        //     axios.get('/comments/1')
+        //         .then(response => {
+        //             console.log(response.data);
+        //         }).catch(error => {
+        //             console.error(error);
+        //         })
+        // }
+
+        // GET-4
+        btns[0].onclick = function () {
+            instance.get('/comments/1')
+                .then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+                    console.error(error);
+                })
+        }
+
+        // POST AJAX 请求 => 新增数据 (RESTful API)
+
+        // POST-1
+        // btns[1].onclick = function () {
+        //     axios({
+        //         method: 'POST', // 请求类型
+        //         url: 'http://localhost:3000/comments', // 请求 URL
+        //         data: { // 请求体
+        //             text: "又是风和日丽的一天",
+        //             postId: 3
+        //         }
+        //     }).then(response => {
+        //         console.log(response);
+        //     }).catch(error => {
+        //         console.error(error);
+        //     })
+        // }
+
+        // POST-2
+        // btns[1].onclick = function () {
+        //     axios.post('/comments',
+        //         { // 请求体
+        //             text: "又是风和日丽的一天123",
+        //             postId: 3
+        //         }).then(response => {
+        //             console.log(response);
+        //         }).catch(error => {
+        //             console.error(error);
+        //         })
+        // }
+
+        // POST-3
+        btns[1].onclick = function () {
+            instance.post('/comments', { // 请求体
+                text: "又是风和日丽的一天qwq",
+                postId: 3
+            }).then(response => {
+                console.log(response);
+            }).catch(error => {
+                console.error(error);
+            })
+        }
+
+        // PUT AJAX 请求 => 更新数据(覆盖式更新) (RESTful API)
+        // PATCH AJAX 请求 =>  (RESTful API)
+
+        // PATCH-1
+        // btns[2].onclick = function () {
+        //     axios({
+        //         method: 'PATCH', // 请求类型
+        //         url: '/comments/1', // 请求 URL
+        //         data: { // 请求体
+        //             text: "关于 post1 的一条评论"
+        //         }
+        //     }).then(response => {
+        //         console.log(response);
+        //     }).catch(error => {
+        //         console.error(error);
+        //     })
+        // }
+
+        // PATCH-2
+        // btns[2].onclick = function () {
+        //     axios.patch('/comments/1',
+        //         { // 请求体
+        //             text: "关于 post1 的一条评论123456"
+        //         }).then(response => {
+        //             console.log(response);
+        //         }).catch(error => {
+        //             console.error(error);
+        //         })
+        // }
+
+        // PATCH-3
+        btns[2].onclick = function () {
+            instance.patch('/comments/1',
+                { // 请求体
+                    text: "qwqwq关于 post1 的一条评论1234561qwqwqwq"
+                }).then(response => {
+                    console.log(response);
+                }).catch(error => {
+                    console.error(error);
+                })
+        }
+
+        // DELETE AJAX 请求 => 删除数据 (RESTful API)
+
+        // DELETE-1
+        // btns[3].onclick = function () {
+        //     axios({
+        //         method: 'DELETE', // 请求类型
+        //         url: 'http://localhost:3000/posts/2', // 请求 URL
+        //     }).then(response => { // 请求体
+        //         console.log(response);
+        //     }).catch(error => {
+        //         console.error(error);
+        //     })
+        // }
+
+        // DELETE-2
+        // btns[3].onclick = function () {
+        //     axios.delete('/posts/2')
+        //         .then(response => { // 请求体
+        //             console.log(response);
+        //         }).catch(error => {
+        //             console.error(error);
+        //         })
+        // }
+
+        // DELETE-3
+        btns[3].onclick = function () {
+            instance.delete('/posts/2')
+                .then(response => { // 请求体
+                    console.log(response);
+                }).catch(error => {
+                    console.error(error);
+                })
+        }
+    </script>
+
+</body>
+
+</html>

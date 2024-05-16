@@ -1,0 +1,49 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "a title",
+      "views": 100
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "qwqwq关于 post1 的一条评论1234561qwqwqwq",
+      "postId": "1"
+    },
+    {
+      "id": "2",
+      "text": "another comment about post 1",
+      "postId": "1"
+    },
+    {
+      "id": "27e7",
+      "text": "又是风和日丽的一天",
+      "postId": 3
+    },
+    {
+      "id": "51d7",
+      "text": "又是风和日丽的一天123",
+      "postId": 3
+    },
+    {
+      "id": "5460",
+      "text": "又是风和日丽的一天123",
+      "postId": 3
+    },
+    {
+      "id": "00a4",
+      "text": "又是风和日丽的一天123",
+      "postId": 3
+    },
+    {
+      "id": "fe04",
+      "text": "又是风和日丽的一天qwq",
+      "postId": 3
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
