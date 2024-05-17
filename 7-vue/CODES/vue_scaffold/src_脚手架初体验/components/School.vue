@@ -1,4 +1,4 @@
-<template lang="en">
+<template>
   <!-- 结构 -->
   <div>
     <h2>Welcome to {{name}}, located in {{position.district}}, {{position.city}}, {{position.province}}</h2>
@@ -23,7 +23,7 @@ export default {
 };
 </script>
 
-<style lang="en" scoped>
+<style scoped>
 /* 样式 */
 h2 {
   background-color: skyblue;

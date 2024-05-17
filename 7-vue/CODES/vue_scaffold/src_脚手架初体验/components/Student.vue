@@ -1,7 +1,7 @@
-<template lang="en">
+<template>
   <!-- 结构 -->
   <div>
-    <h2>Welcome to {{name}}, located in {{position.district}}, {{position.city}}, {{position.province}}</h2>
+    <h2>{{ name }}-{{ age }}-{{ gender }}, student in this school</h2>
   </div>
 </template>
 
@@ -12,20 +12,17 @@
 export default {
   data() {
     return {
-      name: "XDU",
-      position: {
-        province: "Shaanxi",
-        city: "Xi'an",
-        district: "Chang'an",
-      },
+      name: "chuanYiTu",
+      age: 22,
+      gender: "male",
     };
   }
 };
 </script>
 
-<style lang="en" scoped>
+<style scoped>
 /* 样式 */
 h2 {
-  background-color: skyblue;
+  background-color: aqua;
 }
 </style>

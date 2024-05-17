@@ -70,8 +70,10 @@
     /* 
       1. Vue 会使用原始数据 data 创建一个数据监视对象 Observer，用于监视 data 中属性的变化。
       2. Vue 将这个 Observer 实例对象添加到 vm 实例的一个内部属性上（通常是 _$data 或者 _data）
-      3. Vue 通过数据代理（Proxy 或 Object.defineProperty）将 Observer 中的数据添加到 vm 实例上，使得我们可以通过 vm 访问 data 中的属性，而不必直接访问 _$data 或者 _data。
-      注：可以认为 vm 实例拥有一个代理对象，该代理对象通过 Observer 实例连接了原始的数据对象 data。这个代理对象使得我们可以通过 vm 访问 data 中的属性，并且实现数据的响应式更新。
+      3. Vue 通过数据代理（Proxy 或 Object.defineProperty）将 Observer 中的数据添加到 vm 实例上，使得我们可以通过 vm 访问 data
+       中的属性，而不必直接访问 _$data 或者 _data。
+      注：可以认为 vm 实例拥有一个代理对象，该代理对象通过 Observer 实例连接了原始的数据对象 data。这个代理对象使得我们可以通过
+       vm 访问 data 中的属性，并且实现数据的响应式更新。
       注：此时 vm._data.键 === vm.键 的结果为 true
     */
     // 以下是一个不完备的对象数据监测机制的简单实现
