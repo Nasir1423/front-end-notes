@@ -1386,6 +1386,10 @@ $\textbf{\LARGE{其他指令}}$​
   - `SessionStorage` 存储的内容会随着浏览器窗口关闭而消失；但 `LocalStorage` 存储的内容，需要手动清除（如调用上述 API 或清空浏览器缓存）才会消失。
   - `xxxxxStorage.getItem(xxx)` 如果 xxx 对应的 value 获取不到，那么 `getItem` 的返回值是 null，此时`JSON.parse(null)`的结果依然是 null。
 
+### 3.9 组件自定义事件
+
+
+
 ## 4. Vue-router
 
 ## 5. Vuex
