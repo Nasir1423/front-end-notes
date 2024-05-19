@@ -2,7 +2,7 @@
   <div id="root">
     <div class="todo-container">
       <div class="todo-wrap">
-        <TodoInput :addTodoBefore="addTodoBefore"></TodoInput>
+        <TodoInput @addTodoBefore="addTodoBefore"></TodoInput>
         <TodoList
           :todos="todos"
           :modifyTodoState="modifyTodoState"
@@ -11,8 +11,8 @@
         <TodoFooter
           :done="done"
           :all="all"
-          :modifyAllState="modifyAllState"
-          :removeDoneTodos="removeDoneTodos"
+          @modifyAllState="modifyAllState"
+          @removeDoneTodos="removeDoneTodos"
         ></TodoFooter>
       </div>
     </div>
@@ -27,42 +27,34 @@ import TodoFooter from "./components/TodoFooter.vue";
 export default {
   name: "App",
   components: { TodoInput, TodoList, TodoFooter },
+  /* 事项列表 */
   data() {
-    return {
-      /* 事项数据 —— 状态提升 */
-      todos: JSON.parse(window.localStorage.getItem("todos")) || [],
-    };
+    return { todos: JSON.parse(window.localStorage.getItem("todos")) || [] };
   },
   computed: {
-    // 已完成的事项数量
+    /* 已完成事项数量 */
     done() {
-      // let count = 0;
-      // this.todos.forEach((todo) => {
-      //   if (todo.done) count++;
-      // });
-      // return count;
       return this.todos.reduce((pre, current) => {
         return pre + (current.done ? 1 : 0);
       }, 0);
     },
-    // 事项总数
+    /* 事项总数 */
     all() {
       return this.todos.length;
     },
   },
   methods: {
-    /* 函数对象传给子组件，从而实现子组件向父组件的数据传输 */
-    // 向事项数据中新增一个事项
+    /* 从头添加事项 */
     addTodoBefore(todoObj) {
       this.todos.unshift(todoObj);
     },
-    // 修改事项数据中指定 id 的事项的状态
+    /* 修改指定 id 事项状态 */
     modifyTodoState(id) {
       this.todos.forEach((todo) => {
         if (todo.id === id) todo.done = !todo.done;
       });
     },
-    // 删除事项数据中指定 id 的事项
+    /* 删除指定 id 事项 */
     removeTodo(id) {
       if (confirm("确认删除该事项吗?")) {
         this.todos = this.todos.filter((todo) => {
@@ -70,19 +62,16 @@ export default {
         });
       }
     },
-    // 整体修改事项数据中所有事项的状态
+    /* 修改所有事项状态为 state */
     modifyAllState(state) {
       this.todos.forEach((todo) => {
         todo.done = state;
       });
     },
-    // 删除所有已完成的事项
+    /* 删除所有已完成事项 */
     removeDoneTodos() {
       if (this.done === 0) return;
       if (confirm("确认删除所有已完成事项吗?")) {
-        // this.todos = this.todos.filter((todo) => {
-        //   if (!todo.done) return true;
-        // });
         this.todos = this.todos.filter((todo) => {
           return !todo.done;
         });
@@ -90,6 +79,7 @@ export default {
     },
   },
   watch: {
+    /* 监视事项列表 */
     todos: {
       deep: true,
       handler(val) {

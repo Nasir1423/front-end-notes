@@ -1,0 +1,177 @@
+<template>
+  <div id="root">
+    <div class="todo-container">
+      <div class="todo-wrap">
+        <TodoInput></TodoInput>
+        <TodoList :todos="todos"></TodoList>
+        <TodoFooter :done="done" :all="all"></TodoFooter>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import TodoInput from "./components/TodoInput.vue";
+import TodoList from "./components/TodoList.vue";
+import TodoFooter from "./components/TodoFooter.vue";
+
+export default {
+  name: "App",
+  components: { TodoInput, TodoList, TodoFooter },
+  /* 事项列表 */
+  data() {
+    return { todos: JSON.parse(window.localStorage.getItem("todos")) || [] };
+  },
+  computed: {
+    /* 已完成事项数量 */
+    done() {
+      return this.todos.reduce((pre, current) => {
+        return pre + (current.done ? 1 : 0);
+      }, 0);
+    },
+    /* 事项总数 */
+    all() {
+      return this.todos.length;
+    },
+  },
+  watch: {
+    /* 监视事项列表 */
+    todos: {
+      deep: true,
+      handler(todos) {
+        const newTodos = JSON.parse(JSON.stringify(todos));
+        newTodos.forEach((todo) => {
+          if (todo.hasOwnProperty("isEdit")) {
+            todo.isEdit = false;
+          }
+        });
+        window.localStorage.setItem("todos", JSON.stringify(newTodos));
+      },
+    },
+  },
+  mounted() {
+    /* TodoInput */
+    /* 从头添加事项 */
+    this.$bus.$on("addTodoBefore", (todoObj) => {
+      this.todos.unshift(todoObj);
+    });
+    /* TodoList */
+    /* 修改指定 id 事项状态 */
+    this.$bus.$on("modifyTodoState", (id) => {
+      this.todos.forEach((todo) => {
+        if (todo.id === id) todo.done = !todo.done;
+      });
+    });
+    /* 删除指定 id 事项 */
+    this.$bus.$on("removeTodo", (id) => {
+      if (confirm("确认删除该事项吗?")) {
+        this.todos = this.todos.filter((todo) => {
+          return todo.id !== id;
+        });
+      }
+    });
+    /* 给指定 id 事项修改 isEdit 属性，如果没有则增加 isEdit 属性 */
+    this.$bus.$on("alterEditState", (id, isEdit) => {
+      this.todos.forEach((todo) => {
+        if (todo.id === id) {
+          if (todo.hasOwnProperty("isEdit")) {
+            todo.isEdit = isEdit;
+          } else {
+            this.$set(todo, "isEdit", isEdit);
+          }
+        }
+      });
+    });
+    /* 更新指定 id 事项的 name 字段 */
+    this.$bus.$on("updateTodo", (id, name) => {
+      this.todos.forEach((todo) => {
+        if (todo.id === id) {
+          todo.name = name;
+        }
+      });
+    });
+    /* TodoFooter */
+    /* 修改所有事项状态为 state */
+    this.$bus.$on("modifyAllState", (state) => {
+      this.todos.forEach((todo) => {
+        todo.done = state;
+      });
+    });
+    /* 删除所有已完成事项 */
+    this.$bus.$on("removeDoneTodos", () => {
+      if (this.done === 0) return;
+      if (confirm("确认删除所有已完成事项吗?")) {
+        this.todos = this.todos.filter((todo) => {
+          return !todo.done;
+        });
+      }
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off([
+      "addTodoBefore",
+      "modifyTodoState",
+      "removeTodo",
+      "modifyAllState",
+      "removeDoneTodos",
+      "addEditState",
+    ]);
+  },
+};
+</script>
+
+<style>
+body {
+  background: #fff;
+}
+
+.btn {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #da4f49;
+  border: 1px solid #bd362f;
+}
+
+.btn-danger:hover {
+  color: #fff;
+  background-color: #bd362f;
+}
+
+.btn-edit {
+  color: #fff;
+  background-color: #49b7d8;
+  border: 1px solid #4da5bf;
+}
+
+.btn-edit:hover {
+  color: #fff;
+  background-color: #4da5bf;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+</style>

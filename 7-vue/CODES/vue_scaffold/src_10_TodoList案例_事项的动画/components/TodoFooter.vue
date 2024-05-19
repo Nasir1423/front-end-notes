@@ -6,24 +6,27 @@
     <span>
       <span>已完成{{ done }}</span> / 全部{{ all }}
     </span>
-    <button class="btn btn-danger" @click="removeDoneTodos">
-      清除已完成任务
-    </button>
+    <button class="btn btn-danger" @click="removeDone">清除已完成任务</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "TodoFooter",
-  props: ["done", "all", "modifyAllState", "removeDoneTodos"],
+  props: ["done", "all"],
   computed: {
     isChecked: {
       set(val) {
-        this.modifyAllState(val);
+        this.$bus.$emit("modifyAllState", val);
       },
       get() {
         return this.done === this.all && this.all > 0;
       },
+    },
+  },
+  methods: {
+    removeDone() {
+      this.$bus.$emit("removeDoneTodos");
     },
   },
 };

@@ -19,12 +19,11 @@ export default {
   methods: {
     addTodo() {
       if (!this.name) return alert("不能新建内容为空的事项");
-      const todo = { id: nanoid(), name: this.name, done: false };
-      this.addTodoBefore(todo);
+      const todoObj = { id: nanoid(), name: this.name, done: false };
+      this.$bus.$emit("addTodoBefore", todoObj); // 触发全局事件总线上的自定义事件，并传递参数
       this.name = "";
     },
   },
-  props: ["addTodoBefore"],
 };
 </script>
 

@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "paths": {
       "@/*": [
-        "src/*"
+        "src_5_全局事件总线/*"
       ]
     },
     "lib": [
