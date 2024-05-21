@@ -12,7 +12,6 @@ let LedgerSchema = new mongoose.Schema({
     },
     "amount": Number,
     "remarks": String
-
 });
 
 let LedgerModel = mongoose.model('ledger', LedgerSchema);

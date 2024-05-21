@@ -480,7 +480,7 @@
         - **逆序添加、逆序删除等破坏顺序操作：**会导致没有必要的真实 DOM 更新，降低性能。例如，逆序操作会导致所有元素都被重新渲染，即使大部分元素的内容没有改变。
           
         - **包含输入类的 DOM：**使用 `index` 作为 `key` 可能导致 DOM 更新错误。例如，在表单输入元素中，用户的输入可能会被意外重置或错误应用到其他元素。
-        
+     
     - **开发中如何选择 `key`**
    - **最佳选择：** 使用每条数据的唯一标识作为 `key`，例如 id、手机号、身份证号、学号等唯一值。
      
@@ -1690,13 +1690,466 @@ $\textbf{\LARGE{其他指令}}$​
 
 ### 4.2 [github 搜索案例](.\CODES\vue_ajax\src_2_github搜索案例)
 
-### 4.3 vue-resource（发送 Ajax 请求的又一方式）
+### 4.3 vue-resource 插件（发送 Ajax 请求）
+
+发送 Ajax 请求主要有以下五种方式，
+
+- **xhr**：原生 Ajax 请求发送方式（内置）
+- **jQuery**：封装了对 DOM 的操作，以及 Ajax 请求的发送
+- **axios**：封装了 Ajax 请求的发送，返回的是一个 Promise 对象（Vue 官方推荐使用）
+- **fetch**：也是一个内置的发送 Ajax 请求的方式，但是不常用，因为 fetch 返回的是一个两层 Promise 对象，并且存在其他问题
+- **vue-resource**：vue1.0 时期使用的一个插件，封装了 Ajax 请求的发送操作（官方不再维护）
+
+**当我们需要发送 Ajax 请求时，推荐使用 axios**，这里简单介绍一下使用 **vue-resource** 插件发送 Ajax 请求的方式
+
+- STEP1 下载：`npm i vue-resource`
+
+- STEP2 引入（main.js 中）：`import vueResource from "vue-resource"`
+
+- STEP3 使用（main.js 中）：`Vue.use(vueResource)`
+
+- STEP4 发送请求（对应的组件中）
+
+  ```js
+  this.$http.get(url[, options])
+      .then(response => {
+      	...
+  	}).catch(error => {
+      	...
+  	})
+  ```
+
+  > 注：当使用 vue-resource 插件后，Vue 实例和组件实例对象身上便多了一个 `$http` 属性，其用法相当于 axios，都会返回一个 Promise 对象
+
+### 4.4 插槽
+
+- **定义**：插槽是一种**组建间通信的方式**（**父组件 ==> 子组件**），可以让**父组件向子组件指定位置插入 html 结构**。可以将插槽理解为“**挖坑填土**”，子组件中“挖一个坑”（`slot` 标签），父组件可以使用 html 结构“填充”双标签形式的子组件的标签体，此时子组件中的这个“坑”就被父组件填充的 html 结构替换了。
+
+- **分类**：**默认插槽、具名插槽、作用域插槽**
+
+- [**默认插槽**](.\CODES\vue_ajax\src_3_默认插槽)
+
+  - **“挖坑”（子组件中）**：使用 `slot` 标签定义一个插槽，当父组件用 html 结构填充子组件标签体后，子组件中的 `slot` 标签被替换为了该 html 结构；否则，`slot` 标签会被替换为其中定义的默认内容。
+
+    ```vue
+    ......
+    <!-- 定义一个默认插槽 -->
+    <slot>这里是默认内容</slot>
+    ......
+    ```
+
+  - **“填土”（父组件中）**
+
+    ```vue
+    <子组件名>
+        HTML 结构
+    </子组件名>
+    ```
+
+  - 注意事项：如果子组件中定义了多个默认插槽，则父组件会把每个插槽都视作一个“坑”，将子组件标签体中的填充的 HTML 结构同样的替换每一个默认插槽
+
+- [**具名插槽**](.\CODES\vue_ajax\src_4_具名插槽)
+
+  - **“挖坑”（子组件中**）：使用带 `name` 属性的 `slot` 标签定义一个具名插槽，子组件的 `slot` 标签只会被父组件中通过 `slot` 属性或 `v-slot` 属性（后者仅限 `template` 标签使用）标记（标记值必须与插槽名相同）的 HTML 结构替换；否则，`slot` 标签会被替换为其中定义的默认内容
+
+    ```vue
+    ......
+    <!-- 定义一个名为 center 的具名插槽 -->
+    <slot name="center">我是一些默认值，当使用者没有传递具体结构时，我会出现1</slot>
+    <!-- 定义一个名为 footer 的具名插槽 -->
+    <slot name="footer">我是一些默认值，当使用者没有传递具体结构时，我会出现2</slot>
+    ......
+    ```
+
+  - **“填土”（父组件中）**
+
+    ```vue
+    <!-- 方式一：普通标签 + slot="xxx" -->
+    <子组件名>
+        <!-- img 标签填充子组件中名为 center 的具名插槽 -->
+        <img slot="center" src="xxx" />
+        <!-- img 标签填充子组件中名为 footer 的具名插槽 -->
+        <a slot="footer" href="xxx">点击获取更多</a>
+    </子组件名>
+    ```
+
+    ```vue
+    <!-- 方式二：template 标签 + v-slot:xxx/slot="xxx" -->
+    <子组件名>
+        <!-- template 标签其中的内容 (不包括 template) 填充子组件中名为 center 的具名插槽 -->
+        <template slot="center">
+        	<video controls src="xxx"></video>
+        </template>
+        <!-- template 标签其中的内容 (不包括 template) 填充子组件中名为 footer 的具名插槽 -->
+        <template v-slot:footer>
+            <div class="foot">
+                <a href="xxx">经典</a>
+                <a href="xxx">热门</a>
+                <a href="xxx">推荐</a>
+            </div>
+            <h4>Welcome</h4>
+        </template>
+    </子组件名>
+    ```
+
+  - 注意事项
+
+    - 具名插槽更像“人回家”，有不同的“家”（具名插槽），但只有指定了“居住地址”（name）的 “人”（HTML 结构）才能回到自己的“家”中。
+    - 此外，只有 `template` 标签中才可以使用 `v-slot:xxx` 的方式指定插槽名，对于其他标签，只能通过 `slot=xxx` 的方式指定插槽名。
+    - `template` 标签最后不会被渲染到页面中
+
+- [**作用域插槽**](.\CODES\vue_ajax\src_5_作用域插槽)：数据存储在子组件中，但是父组件给子组件标签体填充的 HTML 结构要访问子组件数据时，就要使用作用域插槽。
+
+  - **“挖坑”（子组件中**）：通过给 `slot` 标签设置 `属性名="属性值"` 的方式，可以向外（父组件填充的该组件标签体的 HTML 结构）暴露出一个对象，对象的键就是设置的属性名，对象的值就是设置的属性值。父组件中填充的 HTML 结构中要访问到这个暴露的对象，就要包裹在一个 `template` 标签中，并且在 `template` 标签中使用 `scope=xxx` 或 `slot-scope=xxx` 的方式访问到这个对象，`xxx` 此时就是这个暴露的对象，此时可以在 `template` 标签中的所有地方访问到这个对象。
+
+    ```vue
+    <template>
+        <div>
+            <!-- 定义了一个作用域插槽，父组件在该组件对应的标签体中填充的 HTML 结构可以访问该插槽暴露的对象 { games: ['红色警戒','穿越火线','劲舞团','超级玛丽'], title: "游戏", msg: "hello"} -->
+            <slot :games="games" :title="title" msg="hello" ></slot>
+        </div>
+    </template>
+    
+    <script>
+        export default {
+            name:'Category',
+            // 数据在子组件自身，但是需要被父组件填充在子组件标签体中的内容所访问
+            data() {
+                return { games:['红色警戒','穿越火线','劲舞团','超级玛丽'], title: "游戏" }
+            },
+        }
+    </script>
+    ```
+
+  - **“填土”（父组件中）**
+
+    ```vue
+    <!-- 方式一：template 标签 + scope="xxx" -->
+    <子组件名>
+        <!-- 此时 gamesObject = { games: ['红色警戒','穿越火线','劲舞团','超级玛丽'], title: "游戏", msg: "hello"} -->
+        <template scope="gamesObject">
+            <ul>
+                <li v-for="(game,index) in gamesObject.games" :key="index">{{g}}</li>
+            </ul>
+        </template>
+    </子组件名>
+    ```
+
+    ```vue
+    <!-- 方式二：template 标签 + scope="xxx" + 解构赋值 -->
+    <子组件名>
+        <!-- 此时 games: ['红色警戒','穿越火线','劲舞团','超级玛丽'] -->
+        <template scope="{games}">
+            <ol>
+                <li style="color:red" v-for="(g,index) in games" :key="index">{{g}}</li>
+            </ol>
+        </template>
+    </子组件名>
+    ```
+
+    ```vue
+    <!-- 方式二：template 标签 + slot-scope="xxx" + 解构赋值 -->
+    <子组件名>
+        <!-- 此时 games: ['红色警戒','穿越火线','劲舞团','超级玛丽'] -->
+        <template slot-scope="{games}">
+            <h4 v-for="(g,index) in games" :key="index">{{g}}</h4>
+        </template>
+    </子组件名>
+    ```
+
+  - 注意事项
+    - 作用域插槽也可以设置 `name` 属性，此时的插槽是**作用域＆具名插槽**
+    - 可以用 ES6 解构赋值获取作用域插槽向外暴露的数据的部分内容
+
+## 5. Vuex
+
+### 5.1 Vuex 介绍
+
+1. **定义**：[Vuex ](https://github.com/vuejs/vuex)是一个 **Vue 插件**，用于在 Vue 中实现**集中式状态/数据管理**（读/写）。Vuex 也是一种**组建间通信**的方式，适用于**任意组件间通信**。
+2. **使用场景**：多个组件需要**共享**数据时。
+
+<img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/image-20240521125409333.png" alt="image-20240521125409333" style="width:70%;" />
+
+<img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/image-20240521125557685.png" alt="image-20240521125557685" style="width:70%;" />
+
+### 5.2 Vuex 的基本原理
+
+<img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/image-20240521131205317.png" alt="image-20240521131205317" style="width:70%;" />
+
+> 注意：**Vuex 主要包括 Actions、Mutations、State 三个部分**，这三个部分都是对象 `{}`，且被 `store` **统一管理**。此外，有时候 Vue Component 也可以略过 `Dispatch`，而直接 `Commit`。
+
+### 5.3 搭建 Vuex 环境
+
+- STEP1：安装 `vuex`
+
+  ```powershell
+  npm install vuex@3
+  ```
+
+  > 兼容性注意：vue2 对应安装 vuex3 版本，vue3 对应安装 vuex4 版本，因为这里使用的是 vue2，故而需要安装 vuex3 版本，否则会因为不兼容而报错
+
+- STEP2：在 `src/store/index.js` 中创建 `store` 并默认暴露
+
+  ```js
+  import Vue from 'vue'
+  import Vuex from 'vuex'
+  
+  Vue.use(Vuex); // 只有使用插件 Vuex 后才可以创建 store 对象，否则会报错
+  
+  const actions = {}; // 用于响应组件中用户的动作
+  const mutations = {}; // 用于修改 state 中的数据
+  const state = {}; // 保存具体的数据
+  
+  /* 创建并暴露 Vuex 中的 store 对象 */
+  export default new Vuex.Store({ actions, mutations, state });
+  ```
+
+- STEP3：在 `main.js` 中引入 `store`，并传入 Vue 实例的配置中
+
+  ```js
+  import Vue from 'vue'
+  import App from './App.vue'
+  import store from './store' // 当导入路径为一个文件夹时，则会自动导入对应文件夹下的 index.js 文件
+  
+  Vue.config.productionTip = false
+  
+  new Vue({
+    render: h => h(App),
+    /* 当使用 Vue.use(Vuex) 后，创建 Vue 实例时可以传入一个 store 配置项，
+    并且之后在 Vue 实例和组件实例对象身上出现 $store 属性 */
+    store
+  }).$mount('#app')
+  ```
+
+  > 脚手架中 import 使用的注意：Vue-cli 在解析文件时，会**先将所有的 import 语句汇总到最上边再依次执行**，因此一个文件中，import 语句是最先执行的，而无论其位置如何。因此，必须在 `src/store/index.js` 中引入 Vue 并执行 Vue.use(Vuex)，如果在 `main.js` 中进行的话就会报错，因为 `import store from 'src/store'` 先执行，此时还没有 `Vue.use(Vuex)`  故会报错。
+
+### 5.4 基本使用
+
+1. **介绍**：根据 [Vuex 的基本原理图](###52 Vuex 的基本原理) 可知，Vuex 通过 `actions`、`mutations`、`state` 三个对象实现**共享数据的操作与管理**。
+
+   - 其中 `actions` 对象中存储用户的动作，`mutations` 对象中存储数据的操作，`state` 对象中存储要共享的数据。
+
+   - Vue 实例通过 `store` 配置传入一个 `Vuex.Store(options)` 对象，其中 `options = { actions, mutations, state }`，然后 Vue 实例和组件实例对象中都会有一个 `$store` 对象。
+
+   - 借助 `$store` 对象，组件实例对象可以对数据进行操作与管理，标准流程为
+     - **VueComponent ==> Actions**：`this.$store.dispatch("动作名", 数据)`
+     - **Actions ==> Mutations**：`context.commit("操作名", 数据)`
+     - **Mutations ==> State**：`state.属性名 = xxx` 等，直接对共享数据进行操作
+
+2. **语法**
+
+   - **组件实例对象发出动作**：通过 `$store` 对象的 `dispatch` 实现，接收两个参数，第一个表示动作名，第二个表示数据值。
+
+     > 组件实例对象也可以通过 `$store.state.共享数据名` 的方式访问到共享数据
+
+   - **actions**：对象，其中可以定义一系列**动作**，不同动作的取值为一个**回调函数**，接收两个参数 `context` 和 `value`。`context` 可以使用 `commit` 方法触发对应操作的回调，并将 `value`  传入。
+
+     > actions 中的动作对应的回调函数中可以实现定时器、发送 AJAX 请求等操作
+
+     ```js
+     const actions = {
+         动作名(context, value){
+             ...
+             context.commit("操作名", value);
+             ...
+         }
+     }
+     ```
+
+   - **mutations**：对象，其中可以定义一系列**操作**，不同操作的取值为一个**回调函数**，接收两个参数 `state` 和 `value`；通过 `state` 可以直接修改所有共享数据。
+
+     ```js
+     const mutations = {
+         操作名(state, value){
+             ...
+             state.共享数据名，这里对共享数据进行一系列操作
+             ...
+         }
+     }
+     ```
+
+   - **state**：对象，存储着所有**共享数据**。Vuex 最终会对其中的数据进行响应式处理。
+
+     ```js
+     const state = {
+         xxxxxx
+         共享数据名: 值,
+         xxxxxx
+     }
+     ```
+
+3. **注意事项**
+
+   - 一般而言，**动作名以小写形式命名，操作名以大写形式命名**
+   - 组件实例对象中，也可以**通过 `$store.state.共享数据名` 的方式访问和修改共享数据**（不建议修改，此时开发者工具会失效）
+   - 如果没有网络请求或其他业务逻辑，组件实例对象也**可以略过 actions，直接使用 `$store.commit("操作名", 数据)` 提交数据修改操作**，此时对应操作的回调函数会执行，修改共享数据
+   - 动作的回调函数中的 `context` 参数不仅可以调用 `commit` 执行对应的操作的回调，从而修改共享数据，也可以调用 `dispatch` 执行对应的动作的回调，从而降低代码的复杂程度。
+
+### 5.5 getters 配置项
+
+- **定义**：`getters` 是一个创建 `store` 对象时传入的**非必要的配置项**，可以对 `state` 中的数据进行**加工**。可以将 `state` 类比 `data`，`getters` 类比 `computed`。`getters` 也是一个对象，其中定义了一系列加工后的数据，不同数据的取值为一个回调函数的返回值，每个回调函数接收一个 `state` 参数，可以藉此访问到共享数据，回调返回值就是加工后的数据值。
+
+- **语法**
+
+  - **`getters` 定义**
+
+    ```js
+    const getters = {
+        数据名(state){
+            /* 这里可以对 state 中的共享数据进行操作 */
+            return 数据值
+        }
+    }
+    ```
+
+  - **`getters` 用于创建 `store` 对象**
+
+    ```js
+    export default new Vuex.Store({
+        actions, // 必要
+        mutations, // 必要
+        state, // 必要
+        getters
+    })
+    ```
+
+  - **`getters` 中数据的访问**：组件实例对象中，可以通过 `$store.getters.加工数据名` 的方式访问到 `getters` 中定义的加工后的数据
+
+### 5.6 四个 Map 方法
+
+当我们想要在组件实例对象中访问到 `state` 中的共享数据、访问到 `getters` 中加工后的数据、发送一个 `action` 或者一个提交 `commit` 时，常常需要使用以下语法
+
+```js
+this.$store.state.numer; // state 中定义的共享数据 number
+this.$store.getters.bigNumber; // getter 中定义的加工数据 bigNumber
+this.$store.dispatch("increasement", 2); // 发送一个名为 increasement 的动作，触发该动作的回调函数，并将 2 作为参数传入
+this.$store.commit("INCREASEMENT", 2); // 发送一个名为 INCREASEMENT 的操作，触发该操作的回调函数，并将 2 作为参数传入
+```
+
+显然，使用上述方式访问数据或调用方法比较复杂，在 Vue 中我们可以利用 `computed` 或 `methods` 配置项来解决上述问题，如
+
+```js
+...
+computed:{
+    number(){
+        return this.$store.state.numer; 
+    },
+    bigNumber(){
+        return this.$store.getters.bigNumber; 
+    }
+},
+methods:{
+    increasement(value){
+        this.$store.dispatch("increasement", value); 
+    },
+    INCREASEMENT(value){
+        this.$store.commit("INCREASEMENT", value); 
+    }
+}
+...
+```
+
+此时我们就可以在 Vue 模板中使用 `number`、`bigNumber`、`increasement(2)`、`INCREASEMENT(2)` 的方式访问数据或调用方法。但是，此时 Vue 组件中的代码量增大，不利于维护，Vuex 为我们提供了四个 `mapXxx` 的方法，用于实现自动生成 `computed` 和 `methods` 中的代码，使程序的编写更加简洁。在此之前，我们需要使用以下方式将这四个方法从 Vuex 中导入。
+
+```js
+import {mapState, mapGetters, mapMutations, mapActions} from "vex"
+```
+
+- `mapState` 方法：用于将 `state` 数据映射为计算属性。
+
+  - **对象写法**：可以指定计算属性名
+
+    ```js
+    computed:{
+        ...mapState({qiuhe: "sum", xuexiao: "school", kemu: "subject"});
+        /* 这里对象的键名为计算属性名，键值为 state 中的共享数据名 */
+        /* 我们可以在 Vue 模板中访问到 qiuhe、xuexiao、kemu 等计算属性 */
+    }
+    ```
+
+    > `mapState` 方法的返回值为一个对象，因此我们需要**使用扩展运算符 `...` 将对象拆解**成键值对的形式，这样才符合语法。下边的所有的 `mapXxx` 方法都要使用扩展运算符处理，否则会报错。
+
+  - **数组写法**：不可以指定计算属性名，计算属性和 `state` 中的数据必须同名
+
+    ```js
+    computed:{
+        ...mapState(["sum", "school", "subject"]);
+        /* 这里的元素值既表示 state 中的共享数据名，也表示计算属性名 */
+        /* 我们可以在 Vue 模板中访问到 sum、school、subject 等计算属性 */
+    }
+    ```
+
+- `mapGetters` 方法：用于将 `getters` 数据映射为计算属性。
+
+  - **对象写法**：可以指定计算属性名
+
+    ```JS
+    computed:{
+        ...mapGetters({dahe: "bigSum"});
+        /* 与 mapState 的对象写法一样 */
+    }
+    ```
+
+  - **数组写法**：不可以指定计算属性名，计算属性和 `getters` 中的数据必须同名
+
+    ```js
+    computed:{
+        ...mapGetters(["bigSum"]);
+        /* 与 mapState 的数组写法一样 */
+    }
+    ```
+
+- `mapActions` 方法：用于生成与 `actions` 对话的方法，每个方法中内置了 `$store.dispatch("动作名", value)`。
+
+  - **对象写法**：可以指定方法名
+
+    ```js
+    methods:{
+    	...mapActions({jia: "increasement"});
+    	/* 这里对象的键名为方法名，键值为 actions 中定义的动作回调名 */
+        /* 我们可以在 Vue 模板中调用 jia 等方法 */
+    }
+    ```
+
+    > `mapActions` 包装的方法需要接收一个参数 `value`，作为 `dispatch` 方法的第二个参数传入
+
+  - **数组写法**：不可以指定方法名，方法名和 `actions` 中对应的动作回调同名
+
+    ```js
+    methods:{
+    	...mapActions(["increasement"]);
+        /* 这里的元素值既表示 actions 中定义的动作回调名，也表示方法 */
+        /* 我们可以在 Vue 模板中调用 increasement 等方法 */
+    }
+    ```
+
+- `mapMutations` 方法：用于生成与 `mutations` 对话的方法，每个方法中内置了 `$store.commit("操作名", value)`
+
+  - **对象写法**：可以指定方法名
+
+    ```js
+    methods:{
+    	...mapMutations({jia: "INCREASEMENT"});
+    	 /* 与 mapActions 的对象写法一样 */
+    }
+    ```
+
+    > `mapMutations` 包装的方法需要接收一个参数 `value`，作为 `commit` 方法的第二个参数传入
+
+  - **数组写法**：不可以指定方法名，方法名和 `mutations` 中对应的操作回调同名
+
+    ```js
+    methods:{
+    	...mapMutations(["INCREASEMENT"]);
+        /* 与 mapActions 的数组写法一样 */
+    }
+    ```
+
+### 5.7 Vuex 模块化
 
 
 
-## 5. Vue-router
-
-## 6. Vuex
+## 6. Vue-router
 
 ## 7. element-ui
 
