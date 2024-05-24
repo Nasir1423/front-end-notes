@@ -2147,11 +2147,834 @@ import {mapState, mapGetters, mapMutations, mapActions} from "vex"
 
 ### 5.7 Vuex 模块化
 
+#### 模块化的实现
 
+Vuex 模块化，就是将 `src/store/index.js` 中定义的 `store` 对象中的 `actions`、`mutations`、`state` 等中的内容根据类别拆分开，使其更加好维护。假设未模块化前，`src/store/index.js` 中的业务逻辑可以分为：人员相关、统计相关，二者相互冗杂如下。
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex);
+
+const actions = {
+  incr_d(context, value) { // 统计相关
+    context.commit("INCR_D", value);
+  },
+  decr_d(context, value) { // 统计相关
+    context.commit("DECR_D", value);
+  },
+  add_person(context, value) { // 人员相关
+      context.commit("addPerson");
+  }
+};
+
+const mutations = {
+  INCR_D(state, value) { // 统计相关
+    state.sum += value;
+  },
+  DECR_D(state, value) { // 统计相关
+    state.sum -= value;
+  },
+  ADD_PERSON(state, value) { // 人员相关
+    state.personList.unshift(value);
+  }
+};
+
+const state = {
+  sum: 0, // 统计相关
+  personList: [] // 人员相关
+};
+
+
+const getters = {
+  sumMultipliedBy10(state) { // 统计相关
+    return state.sum * 10
+  },
+  personListFormatted(state) { // 人员相关
+    formattedList = []
+    state.forEach( person =>{
+      formattedList.push(`${person.name}-${person.gender}-${person.age}`)
+    } )
+	return formattedList
+  }
+}
+
+
+export default new Vuex.Store({ actions, mutations, state, getters });
+```
+
+Vuex 支持将负责不同逻辑的 `actions`、`mutations`、`state` 作为一个新的配置对象，然后将多个配置对象作为 `modules` 配置项的值中，创建 `store`，从而实现模块化。
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex);
+
+// 与统计相关的配置（包含 actions、mutations、state、getters 等）
+const countOption = {
+    namespaced: true, // 开启命名空间（不开启的话，则无法正常实现模块化）
+    actions: {
+        incr_d(context, value) { // 统计相关
+       		context.commit("INCR_D", value);
+        },
+        decr_d(context, value) { // 统计相关
+        	context.commit("DECR_D", value);
+        }
+    },
+    mutations: {
+        INCR_D(state, value) { // 统计相关
+        	state.sum += value;
+        },
+        DECR_D(state, value) { // 统计相关
+        	state.sum -= value;
+        }
+    },
+    state: {
+        sum: 0, // 统计相关
+    },
+    getters: {
+        sumMultipliedBy10(state) { // 统计相关
+        	return state.sum * 10
+        }
+    }
+}
+
+// 与人员相关的配置（包含 actions、mutations、state、getters 等）
+const personOption = {
+    namespace: true, // 必须开启命名空间
+    actions: {
+        add_person(context, value) { // 人员相关
+        	context.commit("addPerson");
+        }
+    },
+    mutations: {
+        ADD_PERSON(state, value) { // 人员相关
+        	state.personList.unshift(value);
+        }
+    },
+    state: {
+        personList: [] // 人员相关
+    },
+    getters: {
+        personListFormatted(state) { // 人员相关
+            formattedList = []
+            state.forEach( person =>{
+            	formattedList.push(`${person.name}-${person.gender}-${person.age}`)
+            } )
+            return formattedList;
+        }
+    }
+}
+
+/* 此时创建 store 传入的对象参数中，设置 modules 的值为多个业务逻辑的配置对象， */
+export default new Vuex.Store({ modules: { countOption, personOption } });
+```
+
+以上代码就实现了基于不同业务逻辑代码的模块化，进一步，可以将 `countOption` 保存在 `src/store/options/count.js` 中，将 `personOption` 保存在 `src/store/options/person.js` 中，然后在 `src/store/index.js` 中引入这两个配置，使得代码逻辑更加清晰。
+
+#### 模块化后的共享数据管理
+
+以下操作必须在模块化的配置对象中开启命名空间：`namespace: true`
+
+- 读取共享数据 `state`
+
+  ```js
+  /* 语法（这里的模块名指的是创建 store 对象时传入的对象参数中的 modules 配置对应的对象中的键名） */
+  this.$store.state.模块名.共享数据名
+  /* 举例 */
+  this.$store.state.countOption.sum
+  this.$store.state.personOption.personList
+  ```
+
+- 读取加工数据 `getters`
+
+  ```js
+  /* 语法 */
+  this.$store.getters["模块名/加工数据名"]
+  /* 举例 */
+  this.$store.getters["countOption/sumMultipliedBy10"]
+  this.$store.getters["personOption/personListFormatted"]
+  ```
+
+- 触发 `actions` 中的回调函数
+
+  ```js
+  /* 语法 */
+  this.$store.dispatch("模块名/动作名");
+  /* 举例 */
+  this.$store.dispatch("countOption/incr_d", 2)
+  this.$store.dispatch("personOption/add_person", {name: "zhangsan", gender: "M", age: 19})
+  ```
+
+- 触发 `mutations` 中的回调函数
+
+  ```js
+  /* 语法 */
+  this.$store.commit("模块名/动作名");
+  /* 举例 */
+  this.$store.commit("countOption/INCR_D", 2)
+  this.$store.commit("personOption/ADD_PERSON", {name: "zhangsan", gender: "M", age: 19})
+  ```
+
+#### 模块化后的 mapXX 方法的使用
+
+以下操作必须在模块化的配置对象中开启命名空间：`namespace: true`
+
+- 读取共享数据 `state`
+
+  ```js
+  /* 语法（这里的模块名指的是创建 store 对象时传入的对象参数中的 modules 配置对应的对象中的键名） */
+  computed: {
+      ...mapState("模块名", 映射对象或数组)
+  }
+  /* 举例 */
+  computed: {
+      ...mapState("countOption", ["sum"]) // 数组写法
+      ...mapState("personOption", {plist: "personList"}) // 对象写法
+  }
+  ```
+
+- 读取加工数据 `getters`
+
+  ```js
+  /* 语法 */
+  computed: {
+      ...mapGetters("模块名", 映射对象或数组)
+  }
+  /* 举例 */
+  computed: {
+      ...mapGetters("countOption", ["sumMultipliedBy10"]) // 数组写法
+      ...mapGetters("personOption", {printlist: "printPersonList"}) // 对象写法
+  }
+  ```
+
+- 触发 `actions` 中的回调函数
+
+  ```js
+  /* 语法 */
+  methods: {
+      ...mapActions("模块名", 映射对象或数组)
+  }
+  /* 举例 */
+  methods: {
+      ...mapActions("countOption", ["incr_d", "decr_d"]) // 数组写法
+      ...mapActions("personOption", {tianjia: "add_person"}) // 对象写法
+  }
+  ```
+
+- 触发 `mutations` 中的回调函数
+
+  ```js
+  /* 语法 */
+  methods: {
+      ...mapMutations("模块名", 映射对象或数组)
+  }
+  /* 举例 */
+  methods: {
+      ...mapMutations("countOption", ["INCR_D", "DECR_D"]) // 数组写法
+      ...mapMutations("personOption", {TIANJIA: "ADD_PERSON"}) // 对象写法
+  }
+  ```
 
 ## 6. Vue-router
 
+### 6.1 Vue-router 介绍
+
+- **路由定义**：一个**路由**（route）就是一组**映射关系**（key-value）。**路由器**（router）用于管理多个路由。
+
+  <img src="https://cdn.jsdelivr.net/gh/Nasir1423/blog-img@main/image-20240522114019449.png" alt="image-20240522114019449" style="width:70%;" />
+
+- **编程中的路由**：路由的 key 是路径，value 是 function 或 component。
+
+  - **后端路由**：value 是 function，用于**处理客户端提交的请求**
+
+    > 服务器接受到一个请求，根据**请求路径**匹配**函数**来处理请求，返回响应数据
+
+  - **前端路由**：value是 component，用于**展示页面内容**
+
+    > 当**浏览器中的路径改**变时，对应的**组件**会渲染在页面上
+
+- **Vue-router**：是 Vue 的一个**插件库**，用于实现**单页 Web 应用**（single page web application, SPA）
+
+  > 单页 Web 应用
+  >
+  > - 整个应用**只有一个完整的页面**（index.html）
+  > - 点击页面中的导航链接**路径会变化**，但是**不会刷新页面**，只会做页面的**局部更新**
+  > - 数据需要通过 `ajax` 请求获取
+
+### 6.2 Vue-router 环境搭建
+
+- STEP1：安装 `vue-router`
+
+  ```cmd
+  npm i vue-router@3
+  ```
+
+  > 兼容性注意：vue2 对应安装 vue-router3 版本，vue3 对应安装 vue-router4 版本
+
+- STEP2：在 `src/router/index.js` 中创建 `router` 并默认暴露（配置一组路由规则）
+
+  ```js
+  import VueRouter from "vue-router"
+  
+  /* 引入路由组件 */
+  import About from "../pages/About"
+  import Home from "../pages/Home"
+  
+  /* 创建并暴露路由器 router 对象，用于管理一组路由规则 */
+  export default new VueRouter({ // 创建并暴露一个路由器对象
+      routes:[  // 配置一组路由规则
+          {
+              path: "/about", // key
+              component: About // value
+          },
+          {
+              path: "/home", // key
+              component: Home // value
+          }
+      ]
+  })
+  ```
+
+  > **组件分为路由组件和一般组件**
+  >
+  > - **路由组件**：存放在 `src/pages/` 文件夹中；组件靠路由规则匹配，由路由器负责渲染
+  > - **一般组件**：存放在 `src/components/` 文件夹中；组件需要使用 `import` 导入，需要使用 `components` 配置项注册，通过组件标签渲染
+
+- STEP3：在 `main.js` 中引入 `router`，并传入 Vue 实例的配置中
+
+  ```js
+  import Vue from "vue"
+  import VueRouter from "vue-router"
+  
+  import App from "./App.vue"
+  import router from "./router" // 导入的是 ./router 文件夹下的 index.js 文件
+  
+  Vue.use(VueRouter)
+  
+  Vue.config.productionTip = false
+  
+  new Vue({
+      render: h => h(App),
+      /* 当使用插件 VueRouter 后，Vue 创建实例时接收一个新的配置 router，取值为路由器对象 */
+      router
+  }).$mount("app")
+  ```
+
+### 6.3 基本使用
+
+- **路由的切换**：`router-link` 标签，用于切换当前路由规则。通过切换路由规则，从而展示不同规则对应的路由组件实例对象。该标签最终被转换为 `a` 标签呈现在网页上。
+
+  ```html
+  <router-link class="类名" active-class="路由匹配时使用的类名" to="路由规则的路径">
+      文字描述
+  </router-link>
+  ```
+
+- **路由组件的展示**：`router-view` 标签，用于展示当前 Vue-router 匹配上的路由规则的路由组件实例对象。
+
+  ```html
+  <router-view></router-view>
+  ```
+
+- **注意事项**
+
+  - **路由组件**通常存放在 `pages` 文件夹，**一般组件**通常存放在 `components` 文件夹
+  - 通过切换路由规则“隐藏”的路由组件**默认被销毁**，需要时再重新挂载。
+  - **每个路由组件都有一个 `$route` 属性**，存储着该组件的**路由规则**。每个路由组件的 `$route` 属性**各不相同**。
+  - 整个应用**只存在一个路由器 `router`**，可以通过路由组件的 `$router` 属性获取到，存放着若干方法。每个路由组件访问到的 `$router` 都**一样**。
+
+### 6.4 嵌套/多级路由
+
+- **路由的配置**：在一级路由中使用 `childern` 配置项配置二级路由规则。`children` 配置项的取值内容为数组，每个元素是一个路由规则。
+
+  > 注意：二级路由的 `path` 配置项不能包含 `/`，即 `/news` 是错误的，`news` 才是正确的。但是一级路由的 `path` 配置项必须包含 `/`！！！
+
+  ```js
+  import VueRouter from "vue-router"
+  
+  /* 路由组件 */
+  import About from "../pages/About.vue"
+  import Home from "../pages/Home.vue"
+  import News from "../pages/News.vue"
+  import Messages from "../pages/Messages.vue"
+  
+  /* 路由器 */
+  export default new VueRouter({
+      /* 配置路由规则 */
+      routes: [
+          {
+              path: "/about",
+              component: About
+          },
+          {
+              path: "/home",
+              component: Home,
+              children: [
+                  {
+                      path: "news",
+                      component: News
+                  }, {
+                      path: "messages",
+                      component: Messages
+                  }
+              ]
+          }
+      ]
+  })
+  ```
+
+- **路由的跳转**：还是使用 `router-link` 标签实现二级路由的跳转，但是 `to` 属性的取值必须是**完整路由路径**，即 `/news` 是错误的，`/home/news` 是正确的。
+
+  ```vue
+  <router-link class="list-group-item" active-class="active" to="/home/news">
+      News
+  </router-link>
+  ```
+
+### 6.5 路由传参（query 参数）
+
+- **父组件给路由组件传参的两种方式**：都是基于 `router-link` 属性的 `to` 标签实现，区别在于传入的数据格式不同
+
+  - **方式一：字符串形式**，传入的内容是一个包含**路由路径+查询字符串**的字符串（不推荐）
+
+    ```html
+    <router-link :to="`/home/message/detail?id=${msg.id}&title=${msg.title}`">
+        {{ msg.title }}
+    </router-link>
+    ```
+
+  - **方式二：对象形式**，传入的内容是一个包含**路由路径+查询字符串对象**的对象
+
+    ```html
+    <router-link
+        :to="{
+            path: '/home/messages/detail',
+            query: {
+              id: msg.id,
+              title: msg.title,
+            },
+        }"
+    >{{ msg.title }}</router-link>
+    ```
+
+- **路由子组件接收父组件传递的参数**：通过路由组件实例对象的 `$route.query` 获取，这是一个解析查询字符串后获得的对象，可以通过 `$route.query.键名` 的方式获取对应的键值
+
+  ```js
+  $route.query.id
+  $route.query.title
+  ```
+
+### 6.6 命名路由
+
+我们可以在定义路由时，通过 `name` 属性给路由起一个名字，然后在使用 `router-link` 标签跳转路由时，以对象的形式设置 `to` 属性，在其中配置 `name` 属性，值为路由的 `name` 属性值，此时不指定 `path` 也可以实现路由的跳转。命名路由的作用是简化跳转。
+
+- **路由命名**（使用 `name 属性`）
+
+  ```js
+  {
+      name: "xiangqing",
+      path: "detail",
+      component: Detail
+  }
+  ```
+
+- **路由跳转**（配置 `name` 属性）
+
+  ```html
+  <router-link
+      :to="{
+          name: 'xiangqing',
+          query: {
+            id: msg.id,
+            title: msg.title,
+          },
+      }"
+  >{{ msg.title }}</router-link>
+  ```
+
+### 6.7 路由传参（params 参数）
+
+路由组件实例对象接收两类参数：`query` 和 `params`。`query` 参数为 `http://www.example.com/search?keyword=phone&price=1000` 中解析出来的 `{keyword: phone, price: 1000}`。`params` 参数为 `http://www.example.com/search/phone/1000` 中解析出来的 `{keyword: phone, price: 1000}`。显然，二者通过路由传递参数的格式并不一样，为了正确解析出 `url` 中的路径部分是路由还是参数，则需要在定义理由时进行声明，如 `/search/:keyword/:price` 表示 `/search` 路由接收两个参数 `keyword` 和 `price`
+
+- **路由中声明要接收的 `params` 参数**：定义路由时，在 `path` 配置中通过占位符声明接收的 `params` 参数
+
+  ```js
+  {
+      name: "xinwen",
+      path: "detail/:id/:title", // 使用占位符声明 params 参数
+      component: Detail
+  }
+  ```
+
+- **父组件给路由组件传参的两种方式**：都是基于 `router-link` 属性的 `to` 标签实现，区别在于传入的数据格式
+
+  - **方式一：字符串形式**，传入的内容是一个包含**路由路径+ `params` 字符串**的字符串
+
+    ```html
+    <router-link :to="`/home/message/detail/${msg.id}/${msg.title}`">
+        {{ msg.title }}
+    </router-link>
+    ```
+
+  - **方式二：对象形式**，传入的内容是一个包含**路由名称+ `params` 对象**的对象
+
+    > 注意：当路由携带 `param` 参数时，如果使用 `to` 的对象写法，则不能使用 `path` 配置项，必须也只能使用 `name` 配置项，配置跳转路由
+
+    ```html
+    <router-link
+        :to="{
+            name: 'xinwen',
+            params: {
+              id: news.id,
+              title: news.title,
+            },
+        }"
+    >{{ news.title }}</router-link>
+    ```
+
+- **路由子组件接收父组件传递的参数**：通过路由组件实例对象的 `$route.params` 获取，这是一个解析 `params` 参数后获得的对象，可以通过 `$route.params.键名` 的方式获取对应的键值
+
+  ```js
+  $route.params.id
+  $route.params.title
+  ```
+
+### 6.8 路由传参（props 配置项）
+
+我们可以在**定义路由规则时，添加 `props` 配置项**，用于**给路由组件传递参数**。路由组件中同样可以通过 `props` 配置项**获取到定义路由规则时提供的数据**。定义路由规则时 `props` 配置项有以下三种写法。
+
+- **语法一**：`props` 的值为**对象**，该对象中所有 `key-value` 最终都会通过路由组件中的 `props` 配置传递给路由组件。
+
+  ```json
+  /* src/router/index.js (定义路由规则) */
+  {
+      name: "xxxx",
+      path: "xxxx",
+      component: XXX,
+      props: {a: 100, b:200} // 此时路由组件中可以通过 props: ["a", "b"] 接受到对应数据
+  }
+  ```
+
+- 语法二：`props` 的值为**布尔值**，为 true 时，表示会把路由收到的所有 `params` 参数通过路由组件中的 `props` 传递给路由组件
+
+  ```json
+  /* src/router/index.js (定义路由规则) */
+  {
+      name: "xxxx",
+      path: "xxxx/:id/:title",
+      component: XXX,
+      props: true// 此时路由组件中可以通过 props: ["id", "title"] 接受到对应 params 的数据
+  }
+  ```
+
+- 语法三：`props` 的值为**函数**，表示将函数返回的对象中的所有 `key-value` 通过路由组件中的 `props` 配置传递给路由组件。该函数接收一个参数，即对应路由组件的 `$route` 属性，其中存储着路由组件的 `params` 参数对象和 `query` 参数对象等信息。
+
+  ```json
+  /* src/router/index.js (定义路由规则) */
+  {
+      name: "xxxx",
+      path: "xxxx",
+      component: XXX,
+      props($route){ // 通过定制化函数返回值，此时路由组件中可以通过 props: ["id", "title"] 接受到对应的 query 的数据
+          return {id: $route.query.id, title: $route.query.title}
+      }
+  }
+  ```
+
+### 6.9 开启浏览器历史记录的 replace 模式
+
+- **浏览器历史记录的写入方式**：`push` 和 `replace`。浏览器的历史记录是存储在一个**栈结构**中的，`push` 的写入方式是指在栈顶**追加**一条历史记录，`replace` 的写入方式是指**替换**掉栈顶的历史记录。`Vue` 中通过 `router-link` 实现路由跳转时，默以为 `push` 的方式向浏览器中写入历史记录。
+
+- **开启 `replace` 历史记录的写入模式**：通过在 `router-link` 中添加一个布尔属性 `replace` 开启。
+
+  ```html
+  <router-link replace to="\xxx\yyy">...</router-link>
+  ```
+
+### 6.10 编程式路由导航
+
+- **定义**：**编程式路由导航**指的是通过**路由组件实例对象的 `$router` 属性**身上的 API 实现路由跳转。编程式路由导航不借助 `router-link` 实现路由跳转。编程式路由导航使得路由跳转更加灵活。
+
+- `router` API
+
+  |          API           |                          参数                           |                         功能                         |
+  | :--------------------: | :-----------------------------------------------------: | :--------------------------------------------------: |
+  |  `$router.push(obj)`   | 对象，和 `router-link` 中 `to` 标签传入的对象的语法相同 |     实现路由跳转，并以 `push` 的方式追加历史记录     |
+  | `$router.replace(obj)` | 对象，和 `router-link` 中 `to` 标签传入的对象的语法相同 |   实现路由跳转，并以 `replace` 的方式替换历史记录    |
+  |  `$router.forward()`   |                          void                           |                     历史记录前进                     |
+  |    `$router.back()`    |                          void                           |                     历史记录后退                     |
+  |   `$router.go(step)`   |                          数值                           | 历史记录前进 `step` 步（正值表示前进，负值表示后退） |
+
+### 6.11 路由组件的缓存
+
+我们知道，当我们切换路由时，被切换走的路由组件实际上被**销毁**了，但是有时候我们不希望某些组件被销毁，如包含输入框的组件，我们希望在切换走后，输入框及其中的内容被保留。这时候就需要**缓存**这个路由组件，使其不走销毁流程。`Vue` 中提供的解决方式是，**在需要缓存的路由组件呈现的 `router-view` 外包裹一个 `keep-alive` 标签**，使得其中呈现的所有或某些路由组件，即使被切换走也不进入销毁流程，等待下次切换回来时直接复用而不用重新创建。
+
+```html
+<!-- 表示所有展示在 router-view 中的路由组件都被缓存，不进入销毁流程 -->
+<keep-alive>
+    <router-view></router-view>
+</keep-alive>
+```
+
+```html
+<!-- 表示特定的路由组件被缓存，不进入销毁流程 (注意：这里的路由组件名是 .vue 文件中的 name 配置的值！) -->
+<keep-alive include="路由组件名">
+    <router-view></router-view>
+</keep-alive>
+<!-- 要缓存多个路由组件，则需要给 include 传入一个数组 -->
+<keep-alive :include="['路由组件名1', '路由组件名2']">
+    <router-view></router-view>
+</keep-alive>
+```
+
+### 6.12 路由组件相关生命周期
+
+- **路由组件独有两个生命周期**，用于捕获路由组件的**激活状态** `active`
+  - `activated` 路由组件**被激活时**触发
+  - `deactivated` 路由组件**失活时**触发
+- **生命周期钩子有哪些？**（11）
+  - **所有组件都有**（9）
+    - `beforeCreate`
+    - `created`
+    - `beforeMount`
+    - `mounted`
+    - `beforeUpdate`
+    - `updated`
+    - `beforeDestroy`
+    - `destroyed`
+    - `nextTick`
+  - **路由组件独有**（2）
+    - `activated`
+    - `deactivated`
+
+### 6.13 路由守卫
+
+- **路由守卫**：Vue 中使用 Vue Router 进行路由导航时，有几种不同的**钩子函数**可以用于控制导航流程，称之为路由守卫，藉此可以实现对**路由的权限控制**。
+
+  - **全局守卫**：`beforeEach`、`afterEach`
+  - **独享守卫**：`beforeEach`
+  - **组件内守卫**：`beforeEach`、`beforeRouteLeave`
+
+- **全局守卫**：`src/router/index.js` 中定义
+
+  - **全局前置守卫** `beforeEach`
+
+    - **调用时机**：页面初始化时执行 ＆ **每次路由切换前**执行
+
+    - **定义位置**：在全局路由配置中定义，即 `src/router/index.js` 中
+
+    - **适用场景**：**权限验证**、数据预加载等
+
+    - **定义语法**
+
+      ```js
+      const router = new VueRouter({ /* 这里是路由器的配置信息 */ });
+      
+      router.beforeEach((to, from, next) => {
+          /* to、from 表示切换前后的路由规则对象，next 是函数，调用后才允许继续导航 */
+          if(to.meta.requiresAuth && !isAuthenticated()) {
+              next('/login'); // 如果需要授权 且 未授权，则重定向到登录页面
+          } else {
+              next(); // 否则，允许继续导航（即切换路由）
+          }
+      })
+      ```
+
+      > 这里检查了路由规则对象的 `meta` 中的信息。`meta` 称之为一个**路由规则的元信息**，是一个对象。可以在定义路由规则时通过 `meta` 配置项来配置路由规则的元信息，如 `meta: {requiresAuth: true}` 则表示该当前的路由切换需要进行身份校验。
+
+  - **全局后置守卫** `afterEach`
+
+    - **调用时机**：**每次路由切换后**执行
+
+    - **定义位置**：在全局路由配置中定义，即 `src/router/index.js` 中
+
+    - **适用场景**：记录页面访问、**设置页面标题**等
+
+    - **定义语法**
+
+      ```js
+      const router = new VueRouter({ /* 这里是路由器的配置信息 */ });
+      
+      router.afterEach((to, from) => {
+          /* to、from 表示切换前后的路由规则对象，没有 next！ */
+          document.title = to.meta.title || "路由守卫" // 修改网页标题
+          
+          // 在导航完成后执行的逻辑
+          console.log(`Navigated to ${to.path} from ${from.path}`);
+      });
+      ```
+
+      > 初始页面的标题最好通过 `public/index.html` 的 `title` 的修改来实现
+
+- **独享守卫** `beforeEnter`：`src/router/index.js` 中定义
+
+  - **调用时机**：在**路由进入前**调用，仅对某个特定路由有效
+
+  - **定义位置**：在定义特定路由规则时，通过 `beforeEnter` 配置项配置
+
+  - **适用场景**：用于进入某个路由前进行**检查或初始化**等操作
+
+  - **定义语法**
+
+    ```js
+    const routes = [
+      {
+        path: '/protected',
+        component: ProtectedComponent,
+        beforeEnter: (to, from, next) => {
+          // 在进入/protected 路由前执行的逻辑
+          if (requiresAuth() && !isAuthenticated()) {
+            next('/login'); // 如果需要授权且未授权，重定向到登录页面
+          } else {
+            next(); // 否则允许导航
+          }
+        }
+      }
+    ];
+    ```
+
+- **组件内守卫**：`src/pages/xxxComponent.vue` 中定义
+
+  - **进入守卫** `beforeRouteEnter`
+
+    - **调用时机**：**通过路由规则进入组件前**执行
+
+    - **定义位置**：路由组件内
+
+    - **适用场景**：**初始化操作**
+
+    - **定义语法**
+
+      ```js
+      export default {
+        name: 'MyComponent',
+        beforeRouteEnter(to, from, next) {
+          // 在路由进入前执行的逻辑 (这里的 this 还不能访问组件实例，因为此时组件实例对象还没有创建)
+          next(vm => {
+            // 这里可以访问组件实例 `vm`
+            vm.initialize();
+          });
+        }
+      };
+      ```
+
+  - **离开守卫** `beforeRouteLeave`
+
+    - **调用时机**：**通过路由规则离开组件前**执行
+
+    - **定义位置**：路由组件内
+
+    - **适用场景**：用于**提示用户保存更改或防止意外离开**
+
+    - **定义语法**
+
+      ```js
+      export default {
+        name: 'MyComponent',
+        beforeRouteLeave(to, from, next) {
+          // 在导航离开组件路由时执行的逻辑
+          if (this.hasUnsavedChanges()) {
+            const answer = window.confirm('You have unsaved changes. Do you really want to leave?');
+            if (answer) {
+              next();
+            } else {
+              next(false);
+            }
+          } else {
+            next();
+          }
+        }
+      };
+      ```
+
+### 6.14 路由器的两种工作模式
+
+- **路由器有两种工作模式**：`hash` 模式、`history` 模式。默认情况下路由器使用 `hash` 工作模式，可以在定义路由器时，使用 `mode` 配置项配置路由器的工作模式。
+
+  ```js
+  import Vue from 'vue';
+  import Router from 'vue-router';
+  import Home from '../views/Home.vue'; // 引入你的路由组件
+  
+  // 定义路由
+  const routes = [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
+    },
+    // 更多路由...
+  ];
+  
+  // 创建一个路由器实例
+  const router = new Router({
+    // 设置路由器模式为 history
+    mode: 'history',
+    routes // （缩写）相当于 routes: routes
+  });
+  
+  export default router;
+  ```
+
+- **`hash` 工作模式**
+
+  - **什么是 URL 中的 `hash` 值？**URL 中 # 及其后边的所有内容称之为 `hash` 值。如，对于 `http://www.example.com/search/#/cat/18` 中，`#/cat/18` 就是 `hash` 值。
+  - **`hash` 值的特点是什么？**`hash` 值不会包含在 HTTP 请求中，即 `hash` 值不会通过浏览器传给服务器。如，对于 `http://www.example.com/search/#/cat/18` 中，`http://www.example/com/search/` 是实际上传递给服务器的路径。
+  - **`hash` 模式的优点**：兼容性好
+  - **`hash` 模式的缺点**
+    - 浏览器的 URL 中携带 # 符号，不美观
+    - 带有 # 的 URL 可能会被收集 app 识别为不合法的地址
+
+- **`history` 工作模式**
+
+  - **什么是 `history` 工作模式？**与 `hash` 工作模式相比，`history` 工作模式不会使用 # 将前端路由与真正传递给服务端的请求路径分隔开。`history` 工作模式下的 URL 会将后端路由和前端路由都通过 `/` 符号连接起来。
+
+  - **`hsitory` 工作模式的优点**
+
+    - URL 干净美观
+
+  - **`history` 工作模式的缺点**
+
+    - 与 `hash` 工作模式相比，兼容性略差
+
+    - 前端网页部署上线后，需要后端人员支持。因为服务器收到的路径包含前端路由，直接进行后端路由匹配会导致 404 的问题。后端人员需要使用正则匹配等方式将收到的请求路径中的前端路由过滤，解决服务端 404 响应问题。
+
+      > Node.js 中可以使用 `connect-history-api-fallback` 这个中间件解决 `history` 的这个问题
+
+### 6.15 一个简单的项目上线流程
+
+假设现在脚手架环境中已经完成了项目，此时首先需要使用 `npm run build` 将 Vue 项目打包为 `HTML`、`CSS`、`JavaScript` 文件，然后部署到服务器上。
+
+- 将打包好的文件保存在服务器的静态资源目录下，如 `static` 或 `public` 中
+
+  > 建议将 HTML 文件命名为 `index.html`，此时服务器 `/` 对应的路径下显示的就是 `index.html`
+
+- 使用 Node.js + Express 实现项目的上线，代码示例如下
+
+  ```javascript
+  const express = require("express"); // Express 框架
+  const history = require("connect-history-api-fallback"); // 用于解决 history 工作模式问题的中间件
+  
+  const app = express(); // 创建应用对象
+  
+  app.use(history()); // 使用中间件，解决 history 工作模式带来的问题
+  app.use(express.static(__dirname + "/static")); // 设置静态资源目录
+  
+  app.get("/hello", (req, res) => {
+      res.send("<h1>欢迎来到该项目</h1>")
+  })
+  
+  app.listen(5000, (err) => {
+      if(!err) console.log("服务器启动成功，项目以部署完成")
+  })
+  ```
+
 ## 7. element-ui
+
+
 
 ## 8. Vue3
 
