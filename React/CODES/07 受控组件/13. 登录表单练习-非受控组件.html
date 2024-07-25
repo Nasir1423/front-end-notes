@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>13. 登录表单练习-非受控组件</title>
+    <!-- React 核心库。此时全局有 React 对象。 -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- 用于支持 React 操作 DOM 的扩展库。此时全局有 ReactDOM 对象。 -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- babel，除了可以将 JS 代码从 ES6 转为 ES5 之外，这里还可以将 JSX 代码转换为 JS 代码 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <!-- 准备好一个容器 -->
+    <div id="root"></div>
+    <!-- 这里一定要写 text/babel，表示 script 中的代码为 JSX 代码，需要解析为 JS 代码 -->
+    <script type="text/babel">
+        class Login extends React.Component {
+            handleSubmit = (event) => {
+                event.preventDefault();
+                const username = this.username.value;
+                const password = this.password.value;
+                alert(`username=${username}&password=${password}`)
+            }
+
+            render() {
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        用户名 <input type="text" ref={currentNode => this.username = currentNode} name="username" /> <br />
+                        密码 <input type="password" ref={currentNode => this.password = currentNode} name="password" /> <br />
+                        <button>登录</button>
+                    </form>
+                )
+            }
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Login />)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>12. 事件响应练习-createRef refs</title>
+    <!-- React 核心库。此时全局有 React 对象。 -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- 用于支持 React 操作 DOM 的扩展库。此时全局有 ReactDOM 对象。 -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- babel，除了可以将 JS 代码从 ES6 转为 ES5 之外，这里还可以将 JSX 代码转换为 JS 代码 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- React.createRef() 创建一个容器，用于存储 ref 所标识的 DOM 节点。
+        一个容器只能存储一个 DOM 节点。
+        1. 创建容器 const container = React.createRef()
+        2. 表示 DOM 节点将其存储到容器中 <MyComponent ref={container} /> 
+        3. 使用 DOM 节点 container.current -->
+</head>
+
+<body>
+    <!-- 准备好一个容器 -->
+    <div id="root"></div>
+    <!-- 这里一定要写 text/babel，表示 script 中的代码为 JSX 代码，需要解析为 JS 代码 -->
+    <script type="text/babel">
+        class Demo extends React.Component {
+            container1 = React.createRef();
+            container2 = React.createRef();
+
+            handleClick = () => {
+                alert(this.container1.current.value);
+            }
+
+            handleBlur = () => {
+                alert(this.container2.current.value);
+            }
+
+            render() {
+                return (
+                    <>
+                        <input ref={this.container1} type="text" placeholder="点击按钮提示数据" />
+                        <button onClick={this.handleClick}>点我提示左侧数据</button>
+                        <input ref={this.container2} onBlur={this.handleBlur} type="text" placeholder="失去焦点提示数据" />
+                    </>
+                )
+
+            }
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Demo />)
+    </script>
+</body>
+
+</html>

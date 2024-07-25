@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>6. 信息打印练习-props</title>
+    <!-- React 核心库。此时全局有 React 对象。 -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- 用于支持 React 操作 DOM 的扩展库。此时全局有 ReactDOM 对象。 -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- babel，除了可以将 JS 代码从 ES6 转为 ES5 之外，这里还可以将 JSX 代码转换为 JS 代码 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <!-- 准备好一个容器 -->
+    <div id="root1"></div>
+    <div id="root2"></div>
+    <!-- 这里一定要写 text/babel，表示 script 中的代码为 JSX 代码，需要解析为 JS 代码 -->
+    <script type="text/babel">
+        class Person extends React.Component {
+            render() {
+                const { name, gender, age } = this.props;
+                return (
+                    <ul>
+                        <li>姓名：{name}</li>
+                        <li>性别：{gender}</li>
+                        <li>年龄：{age}</li>
+                    </ul>
+                )
+            }
+        }
+
+        // props 的基本使用，注意 props 是只读的
+        ReactDOM.render(<Person name="Tom" gender="女" age="18" />, document.getElementById('root1'));
+
+        // props 的批量传递
+        const jack = { name: "Jack", gender: "男", age: 17 };
+        ReactDOM.render(<Person {...jack} />, document.getElementById('root2'));
+
+    </script>
+</body>
+
+</html>

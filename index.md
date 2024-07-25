@@ -13,8 +13,8 @@
 
 | 内容  |                                                                 路径                                                                 |
 | :---: | :----------------------------------------------------------------------------------------------------------------------------------: |
-| 笔记  | [markdown 版本](./2-JavaScript/JavaScript.md)  [pdf 版本](./2-JavaScript/JavaScript.pdf)  [html版本](./2-JavaScript/JavaScript.html) |
 | 代码  |                                                  [code demo](./2-JavaScript/CODES)                                                   |
+| 笔记  | [markdown 版本](./2-JavaScript/JavaScript.md)  [pdf 版本](./2-JavaScript/JavaScript.pdf)  [html版本](./2-JavaScript/JavaScript.html) |
 | 案例  |                                             [贪吃蛇](./2-JavaScript/CODES/练习：贪吃蛇)                                              |
 
 > JavaScript 部分的详细笔记见每个 demo 里边的注释内容
@@ -55,3 +55,5 @@
 | :--: | :----------------------------------------------------------: |
 | 笔记 | [markdown 版本](./7-vue/vue.md) [pdf 版本](./7-vue/vue.pdf)  [html版本](./7-vue/vue.html) |
 | 代码 |                  [code demo](./7-vue/CODES)                  |
+
+## ...

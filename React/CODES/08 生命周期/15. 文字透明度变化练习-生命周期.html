@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>15. 文字透明度变化练习-生命周期</title>
+    <!-- React 核心库。此时全局有 React 对象。 -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- 用于支持 React 操作 DOM 的扩展库。此时全局有 ReactDOM 对象。 -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- babel，除了可以将 JS 代码从 ES6 转为 ES5 之外，这里还可以将 JSX 代码转换为 JS 代码 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <!-- 准备好一个容器 -->
+    <div id="root"></div>
+    <!-- 这里一定要写 text/babel，表示 script 中的代码为 JSX 代码，需要解析为 JS 代码 -->
+    <script type="text/babel">
+        class GradientText extends React.Component {
+            state = { opacity: 1 }
+
+            UNSAFE_componentWillMount(){
+                console.log("组件马上就挂载");
+            }
+
+            componentDidMount() {
+                console.log("组件挂载完毕了");
+                this.timer = setInterval(() => {
+                    let { opacity } = this.state;
+                    opacity = (opacity + 0.05) % 1;
+                    this.setState({ opacity })
+                }, 100);
+            }
+
+            componentWillUnmount() {
+                console.log("组件马上就卸载");
+                clearInterval(this.timer);
+            }
+
+            handleDestroy = ()=>{
+                root.unmount(); // 卸载组件
+            }
+
+            render() {
+                console.log("组件经历了一次渲染");
+                return (
+                    <>
+                        <h1 style={{ opacity: this.state.opacity }}>Learning React</h1>
+                        <button onClick={this.handleDestroy}>Stop</button>
+                    </>
+                )
+            }
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<GradientText />)
+    </script>
+</body>
+
+</html>

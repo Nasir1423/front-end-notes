@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>16. 新闻加载不滚动练习-getSnapshotBeforeUpdate</title>
+    <!-- React 核心库。此时全局有 React 对象。 -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- 用于支持 React 操作 DOM 的扩展库。此时全局有 ReactDOM 对象。 -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- babel，除了可以将 JS 代码从 ES6 转为 ES5 之外，这里还可以将 JSX 代码转换为 JS 代码 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <!-- 准备好一个容器 -->
+    <div id="root"></div>
+    <!-- 这里一定要写 text/babel，表示 script 中的代码为 JSX 代码，需要解析为 JS 代码 -->
+    <script type="text/babel">
+        class NewsList extends React.Component {
+            state = { newsArr: [] }
+
+            /* 组件挂载成功 */
+            componentDidMount() {
+                /* 模拟每秒生成一篇新闻 */
+                this.timer = setInterval(() => {
+                    const { newsArr } = this.state;
+                    const news = "新闻" + (newsArr.length + 1);
+                    this.setState({ newsArr: [news, ...newsArr] });
+                }, 1000)
+            }
+
+            /* 组件将要卸载 */
+            componentWillUnmount() {
+                /* 清除定时器 */
+                clearInterval(this.timer);
+            }
+
+            /* 组件更新，已渲染但未提交到页面 */
+            getSnapshotBeforeUpdate(prevProps, prevState) {
+                /* 生成快照(未更新时的 scrollHeight)，避免滚动条滚动 */
+                return { lastScrollHeight: this.newsDOM.scrollHeight };
+            }
+
+            /* 组件更新成功 */
+            componentDidUpdate(prevProps, prevState, snapshot) {
+                /* 
+                    this.newsDOM.scrollHeight 表示更新后的元素内容总高度（包括溢出的不可见内容）
+                    this.newsDOM.scrollTop 表示更新后的元素内容顶部到可视区域顶部的距离，可用于读取或设置滚动条的当前位置
+                */
+                this.newsDOM.scrollTop += this.newsDOM.scrollHeight - snapshot.lastScrollHeight;
+            }
+
+            render() {
+                return (
+                    <ul style={{
+                        width: 100,
+                        height: 200,
+                        backgroundColor: "pink",
+                        overflow: "scroll"
+                    }}
+                        ref={currentNode => this.newsDOM = currentNode} >
+                        {this.state.newsArr.map((news, index) => <li key={index}>{news}</li>)}
+                    </ul>
+                )
+            }
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<NewsList />)
+    </script>
+</body>
+
+</html>

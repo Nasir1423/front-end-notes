@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>10. 事件响应练习-字符串 refs</title>
+    <!-- React 核心库。此时全局有 React 对象。 -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- 用于支持 React 操作 DOM 的扩展库。此时全局有 ReactDOM 对象。 -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- babel，除了可以将 JS 代码从 ES6 转为 ES5 之外，这里还可以将 JSX 代码转换为 JS 代码 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- 由于效率问题，字符串 refs 的方式将被禁用，不被推荐 -->
+</head>
+
+<body>
+    <!-- 准备好一个容器 -->
+    <div id="root"></div>
+    <!-- 这里一定要写 text/babel，表示 script 中的代码为 JSX 代码，需要解析为 JS 代码 -->
+    <script type="text/babel">
+        class Demo extends React.Component {
+            handleClick = () => {
+                const { input1 } = this.refs;
+                alert(input1.value);
+            }
+
+            handleBlur = ()=>{
+                const { input2 } = this.refs;
+                alert(input2.value);
+            }
+
+            render() {
+                return (
+                    <>
+                        <input ref="input1" type="text" placeholder="点击按钮提示数据" />
+                        <button onClick={this.handleClick}>点我提示左侧数据</button>
+                        <input ref="input2" onBlur={this.handleBlur} type="text" placeholder="失去焦点提示数据" />
+                    </>
+                )
+
+            }
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Demo />)
+    </script>
+</body>
+
+</html>

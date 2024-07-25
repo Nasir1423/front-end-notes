@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>11. 事件响应练习-回调 refs</title>
+    <!-- React 核心库。此时全局有 React 对象。 -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <!-- 用于支持 React 操作 DOM 的扩展库。此时全局有 ReactDOM 对象。 -->
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- babel，除了可以将 JS 代码从 ES6 转为 ES5 之外，这里还可以将 JSX 代码转换为 JS 代码 -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!--    如果回调函数是以内联函数的方式定义，则 render 再次调用时，其会执行两次。
+            第一次传入参数为 null，第二次传入参数为 DOM 元素。
+            这是因为每次渲染需要创建一个新的函数实例，因此 React 需要先传入 null 清空旧的 ref，再传入 DOM 元素设置新的 ref。
+            如果回调函数是实例对象上的函数，则不会出现这种问题，即只会在首次组件渲染时执行一次。
+            总而言之，内联函数形式的回调执行 1 + 2n 次，实例函数形式的回调执行 1 次。 -->
+</head>
+
+<body>
+    <!-- 准备好一个容器 -->
+    <div id="root"></div>
+    <!-- 这里一定要写 text/babel，表示 script 中的代码为 JSX 代码，需要解析为 JS 代码 -->
+    <script type="text/babel">
+        class Demo extends React.Component {
+            state = { isHot: true }
+
+            handleClick = () => {
+                alert(this.input1.value);
+            }
+
+            handleBlur = () => {
+                alert(this.input2.value);
+            }
+
+            saveInput1 = (currentNode) => {
+                this.input1 = currentNode;
+                console.log("@Input1Ref", currentNode);
+            }
+
+            changeIsHot = () => {
+                const { isHot } = this.state;
+                this.setState({ isHot: !isHot });
+            }
+
+            render() {
+                return (
+                    <>
+                        <h2 onClick={this.changeIsHot}>今天天气真{this.state.isHot ? "炎热" : "凉爽"}</h2>
+                        <input ref={this.saveInput1} type="text" placeholder="点击按钮提示数据" />
+                        <button onClick={this.handleClick}>点我提示左侧数据</button>
+                        <input
+                            ref={currentNode => { this.input2 = currentNode; console.log("@Input2Ref", currentNode) }}
+                            onBlur={this.handleBlur}
+                            type="text"
+                            placeholder="失去焦点提示数据" />
+                    </>
+                )
+
+            }
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Demo />)
+    </script>
+</body>
+
+</html>
