@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>文本属性</title>
+	<style>
+		.outer1 {
+			height: 400px;
+			background-color: black;
+			line-height: 400px;
+			text-align: center;
+			font-family: 楷体;
+			font-size: 80px;
+			font-weight: bold;
+
+		}
+
+		.inner1 {
+			text-shadow: 0px 0px 15px red;
+			color: white;
+
+		}
+
+		.outer2 {
+			height: 400px;
+			background-color: white;
+			line-height: 400px;
+			text-align: center;
+			font-family: 楷体;
+			font-size: 80px;
+			font-weight: bold;
+
+		}
+
+		.inner2 {
+			text-shadow: 0px 0px 5px black;
+			color: white;
+
+		}
+
+		.outer3 {
+			height: 400px;
+			background-color: white;
+			line-height: 400px;
+			text-align: center;
+			font-size: 80px;
+			font-weight: bold;
+
+		}
+
+		.inner3 {
+			-webkit-text-stroke: red 3px;
+			color: transparent;
+
+		}
+	</style>
+</head>
+
+<body>
+	<h2>使用 text-shadow 实现光晕艺术字效果</h2>
+	<div class="outer1">
+		<div class="inner1">你好世界</div>
+	</div>
+	<div class="outer2">
+		<div class="inner2">你好世界</div>
+	</div>
+	<h2>使用 text-stroke 实现空心文字效果</h2>
+	<div class="outer3">
+		<div class="inner3">你好世界</div>
+	</div>
+</body>
+
+</html>

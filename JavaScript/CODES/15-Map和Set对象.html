@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map、Set 对象</title>
+    <script>
+        /* 
+            1. Map 介绍
+                - Map 对象用于存储键值对（key-value）结构的数据（键唯一）
+                - Map 对象中的键值对的顺序是添加顺序
+                - Map Vs. Object
+                    - Object 属性名只能是字符串或符号
+                    - Map 键（key）可以是任何类型的值
+            
+            2. Map 的基本使用
+                - 实例创建 const map = new Map()
+                - 实例属性
+                    - map.size 获取 Map 对象中键值对数量
+                - 实例方法
+                    - map.set(key, value) 向 Map 对象中添加键值对
+                    - map.get(key) 根据键（key）获取值（value）
+                    - map.delete(key) 根据键（key）删除对应的键值对
+                    - map.clear() 删除全部键值对
+                    - map.has(key) 检查 Map 对象中是否存在键为指定值的键值对
+                    - map.keys() 返回一个 Map 可迭代对象，每次可以访问一个键
+                    - map.values() 返回一个 Map 可迭代对象，每次可以访问一个值
+                    - map.entries() 返回一个 Map 可迭代对象，每次可以访问一个键值对
+                    - map.forEach((value, key, map) => {}) 接收一个回调函数，用于遍历 Map 对象
+                        - 回调函数接受三个参数 value、key、map
+                        - value、key 是当前遍历的键值对的值和键
+                        - map 是正在遍历的 Map 对象
+                - 说明
+                    - 可以使用数组创建 Map 对象，const map = new Map(arr)
+                    - 可以将 Map 对象转换为数组，const arr = Array.from(map)
+        */
+
+        // const map = new Map([
+        //     [1291031, "张三"],
+        //     [3451031, "李四"],
+        //     [7291231, "王五"],
+        //     [8291221, "刘强"],
+        // ]); // create a Map object
+
+        // 获取键值对数量
+        // let size = map.size;
+        // console.log(size);
+
+        // 给 map 中添加键值对
+        // map.set("5691234","孙武") // add an entry to map
+
+        // 从 map 中根据键读取值
+        // value = map.get(3451031); // get value of an entry with key=3451031
+        // console.log(value); // 李四
+
+        // 从 map 中根据键删除键值对
+        // map.delete(8291221); // delete an entry with key=8291221
+
+        // 删除 map 中的所有键值对
+        // map.clear(); // delete all entries of map
+
+        // 检查 map 中是否存在对应键
+        // bool = map.has(8291221);
+        // console.log(bool); // false
+
+        // 获取键值对、键、值的迭代器
+        // console.log(map.keys());
+        // console.log(map.values());
+        // console.log(map.entries());
+
+        // for(entry of map.entries()){
+        //    // console.log(Array.isArray(entry)); // true，map.entries() 中的每一个键值对是一个数组对象
+
+        //    console.log(`key=${entry[0]}, value=${entry[1]}`);
+        // }
+
+        // for([key, value] of map.entries()){
+        //    // console.log(Array.isArray(entry)); // true，map.entries() 中的每一个键值对是一个数组对象
+
+        //    console.log(`key=${key}, value=${value}`);
+        // }
+
+        // map.forEach(
+        //    (value, key, map) => {
+        //       console.log(`key-value: ${key}-${value}`);
+        //    }
+        // )
+
+        /* 
+            3. Set 介绍
+                - Set 对象表示一个集合，功能与数组类似，不同点在于，Set 中不能存储重复的数据
+
+            4. Set 的基本使用
+                - 实例创建 const set = new Set()
+                - 实例属性
+                    set.size 获取 Set 对象中元素的数量
+                - 实例方法
+                    - set.add(value) 向 Set 对象中添加元素（不可添加已有元素）
+                    - set.clear() 删除 Set 对象中的所有元素
+                    - set.delete(value) 删除 Set 对象中的 value 值
+                    - set.has(value) 检查 Set 对象中是否有 value 值
+                    - set.keys() 等价于 set.values()，返回一个 Set 可迭代对象，每次可以访问一个元素值
+                    - set.entries() 返回一个 Set 可迭代对象，每次可以访问一个两个元素的数组，两个元素值相同
+                    - set.forEach((value1, value2, set) => {}) 接收一个回调函数，用于遍历 Set 对象
+                        - 回调函数接受三个参数 value1、value2、set
+                        - value1=value2 是当前遍历的元素值
+                        - set 是正在遍历的 Set 对象
+                - 说明
+                    - 可以使用数组创建 Set 对象，const set = new Set(arr)
+                    - 可以将 set 对象转换为数组（使用展开运算符），const arr = [...set]
+                    - 可以使用 Set 对数组去重：const arr = [...new Set(arr)]
+            
+            5. Set Vs. Map
+                - Set 的大部分方法和 Map 相同，可以把 Set 的元素看作是键值相同的键值对
+                - Set 还有可以实现集合交并等操作的方法
+                - Map 和 Set 都是可迭代对象，因此都可以使用 for-of 语句遍历，Map 每次遍历的是 entry、Set 遍历的则是 value
+        */
+
+        // const arr = Array.from("Shall I compare thee to a summer's day");
+        // console.log(arr);
+
+        // const set = new Set(arr)
+
+        // set.delete("y")
+        // set.add("Y")
+
+        // set.clear()
+
+        // let bool = set.has(" ");
+        // console.log(bool);
+
+        // console.log(Array.from(set.keys()).join(""))
+        // console.log(Array.from(set.values()).join(""))
+
+        // set.forEach(
+        //     (value1, value2, set) => {
+        //         console.log(`正在遍历元素 ${value1}`)
+        //     })
+
+        // console.log(arr.join(""))
+        // console.log(Array.from(set).join(""))
+
+        // console.log(set)
+
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

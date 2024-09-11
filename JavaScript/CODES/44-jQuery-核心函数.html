@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery 核心函数</title>
+    <!-- 
+        1. 什么是 jQuery 的核心函数
+            - 引入 jQuery 后，我们可以在网页中使用一个新的函数 $/jQuery（两种等效的表示）
+            - 这个新的函数就是 jQuery 的核心函数，jQuery 的所有功能都可以通过该函数来完成的
+        2. 核心函数的两类使用
+            - 作为工具类使用：可直接调用其中封装的属性和方法
+                - $.contains()
+                - $.isArray()
+                - $.isFunction()
+                - $.isNumeric()
+                - ......
+            - 作为函数使用：根据传入参数的不同实现不同的功能
+                - $(函数)
+                    - 功能：传入的函数会在文档加载完毕之后执行
+                    - 等价形式：document.addEventListener('DOMContentLoaded', 函数)
+                - $(选择器)
+                    - 功能：根据选择器字符串去网页中查找元素，返回一个 jQuery 对象
+                    - 等价形式：document.querySelectorAll(选择器)
+                    - 关于 jQuery 对象的命名：建议以 $ 开始，以和其他对象做区分
+                - $(DOM 对象)：将 DOM 对象转换为 jQuery 对象
+                - $(HTML 代码)：根据 HTML 代码创建 jQUery 对象
+        3. 使用说明
+            - 尽量以 var 关键字声明对象，因为 jQuery 处理兼容性的原因
+            - 尽量不要使用箭头函数，也是因为 jQUery 处理兼容性的原因
+     -->
+    <script src="./scripts/jquery-3.7.1.js"></script>
+</head>
+
+<body>
+    <button type="button" id="btn">打印一个随机数</button>
+    <div></div>
+    <script>
+        function sayHello() {
+            console.log('hello world');
+        }
+
+        // 1-作为工具类使用
+
+        var isFunction = $.isFunction(sayHello);
+        console.log(isFunction); // true
+
+        // 2-作为函数使用
+
+        // 2.1-函数作为参数
+        $(sayHello); // 等价表述：jQuery(sayHello);
+
+        // 2.2-选择器字符串作为参数
+        var btn = $('#btn');
+
+        btn.click(function (event) {
+            var div = document.querySelector('div');
+            // 2.3-DOM 对象作为参数
+            var $div = $(div);
+            // 2.4-HTML 代码作为参数
+            var $h1 = $(`<h1>${Math.random()}</h1>`);
+            $div.append($h1);
+        })
+
+
+
+    </script>
+
+</body>
+
+</html>

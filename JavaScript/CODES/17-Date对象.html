@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            1. Date
+                - 介绍
+                    - Date 对象表示单个时刻
+                    - Date 对象封装了一个时间戳，表示据格林威治历自 1970年1月1日0时0分0秒 开始计算的毫秒数
+                    - JavaScript 中所有和时间相关的数据都是由 Date 对象来表示的
+                    - JavaScript 在本地显示的时间采用的是当前地区的标准时间，而不是格林威治时间
+                - 对象的创建
+                    - const date = new Date() 这种方式可以创建当前时间（对象实例化时）的对象
+                    - const date = new Date("YYYY-MM-DDThh:mm:ss") 创建具体时间的对象
+                    - const date = new Date("MM/DD/YYYY hh:mm:ss") 创建具体时间的对象
+                    - const date = new Date(YYYY, MM, DD, hh, mm, ss) 创建具体时间的对象
+                - 静态方法
+                    Date.now() 获取当前的时间戳
+                - 实例方法
+                    date.getFullYear() 获取四位数表示的年份
+                    date.getMonth() 获取当前时间对象的月份（0~11），其中 0 表示一月，以此类推
+                    date.getDate() 获取当前时间对象是本月第几天
+                    date.getDay() 获取当前时间对象是周几（0~6），其中 0 表示周日
+                    date.getTime() 获取当前时间对象存储的时间戳
+            2. 日期的格式化
+                - date.toLocalDateString([locales], [options]) 将时间对象转换为一个本地的字符串（年月日）
+                - date.toLocalTimeString([locales], [options]) 将时间对象转换为一个本地的字符串（时分秒）
+                - date.toLocalString([locales], [options]) 将时间对象转换为一个本地的字符串（年月日时分秒）
+                - 上述方法接受两个参数
+                    - locales 是描述语言和国家信息的字符串，如 zh-CN 表示中文中国、zh-HK 表示中文香港、en-US 表示英文美国
+                    - options 是一个对象，可以在其中通过对属性配置来修改日期显示的格式，如
+                        - dateStyle 设置日期的风格，可选值为：full、long、medium、short
+                        - timeStyle 设置时间的风格，可选值为：full、long、medium、short
+                        - hour12 设置是否使用 12 小时制，可选值为：true、false
+                        - weekday 设置星期的显示方式，可选值为：long、short、narrow
+                        - year 设置年份的显示方式，可选值为：numeric、2-digit
+        */
+    </script>
+
+</body>
+
+</html>

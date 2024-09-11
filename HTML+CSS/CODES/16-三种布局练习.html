@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>三种布局</title>
+	<style>
+		.outer {
+			width: 200px;
+			height: 200px;
+
+			background-color: gray;
+
+			overflow: hidden;
+		}
+
+		.inner {
+			width: 100px;
+			height: 100px;
+
+			background-color: pink;
+
+			margin: 0 auto;
+			/* 实现块元素在块元素中的水平居中 */
+			margin-top: 50px;
+			/* 实现块元素在块元素中的垂直居中（在父元素中搭配 overflow: hidden 使用） */
+
+			text-align: center;
+			/* 实现文本水平对齐 */
+			line-height: 100px;
+			/* 实现（单行）文本的垂直对齐 */
+		}
+
+		.outer2 {
+			width: 200px;
+			height: 200px;
+
+			background-color: gray;
+
+			text-align: center;
+			/* 实现块元素中的行内元素水平居中 */
+			line-height: 200px;
+			/* 实现块元素中的行内元素（单行内容）垂直居中 */
+		}
+
+		.inner2 {
+			background-color: pink;
+		}
+
+		.outer3 {
+			width: 200px;
+			height: 200px;
+
+			background-color: gray;
+
+			font-size: 0px;
+
+			text-align: center;
+			line-height: 200px;
+
+
+		}
+
+		.inner3 {
+			background-color: pink;
+			vertical-align: middle;
+			font-size: 16px;
+		}
+
+		img {
+			width: 50px;
+			vertical-align: middle;
+		}
+
+		.outer4 {
+			width: 200px;
+			height: 200px;
+
+			background-color: gray;
+
+			line-height: 200px;
+
+			font-size: 16px;
+		}
+
+		.inner4 {
+			background-color: pink;
+			vertical-align: middle;
+			font-size: 40px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="outer">
+		<div class="inner">Hello World</div>
+	</div>
+	<br>
+	<div class="outer2">
+		<span class="inner2">Hello World</span>
+	</div>
+	<br>
+	<div class="outer3">
+		<span class="inner3">Hello World</span><img src="./two-levels-up/托马生日图.jpg" alt="生日贺图">
+	</div>
+	<br>
+	<div class="outer4">
+		x <span class="inner4">XXG</span>
+	</div>
+
+</body>
+
+</html>

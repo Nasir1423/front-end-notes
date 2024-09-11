@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>属性选择器</title>
+	<style>
+		[title] {
+			font-family: 华文楷体;
+		}
+
+		[title="interrogative"] {
+			color: pink;
+		}
+
+		[title^="affir"] {
+			color: gray;
+		}
+
+		[title$="tive"] {
+			font-size: 30px;
+		}
+
+		[title*="mativ"] {
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<p title="interrogative">归去来兮，田园将芜胡不归？</p>
+	<p title="interrogative">既自以心为形役，奚惆怅而独悲？ </p>
+	<p title="affirmative">悟已往之不谏，知来者之可追。</p>
+	<p title="affirmative">实迷途其未远，觉今是而昨非。 </p>
+	<p title="affirmative">舟遥遥以轻飏，风飘飘而吹衣。</p>
+	<p title="affirmative">问征夫以前路，恨晨光之熹微。</p>
+</body>
+
+</html>

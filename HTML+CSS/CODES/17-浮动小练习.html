@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>浮动小练习</title>
+	<style>
+		/* 第一种、第二种、第三种布局 */
+		/* .outer {
+			border: 2px black solid;
+			background-color: grey;
+		} */
+
+		/* 第四种布局、第五种布局 */
+		.outer {
+			border: 2px black solid;
+			background-color: grey;
+			width: 500px;
+		}
+
+		/* ************************************* */
+		
+		/* 第一种、第二种、第三种、第四种、第五种布局 */
+		.inner {
+			width: 200px;
+			height: 200px;
+
+			background-color: skyblue;
+
+			border: 2px black solid;
+
+			margin: 10px;
+		}
+
+		/* ************************************** */
+
+		/* 第一种布局 */
+		/* box1 {
+			float: right;
+		} */
+
+		/* 第二种布局 */
+		/* box1 {
+			float: left;
+		} */
+
+		/* 第三种布局、第四种布局 */
+		/* .box1,
+		.box2,
+		.box3 {
+			float: left;
+		} */
+		
+		/* 第五种布局 */
+		.box1,
+		.box2,
+		.box3 {
+			float: left;
+		}
+
+		.box1 {
+			height: 220px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="outer">
+		<div class="inner box1">1</div>
+		<div class="inner box2">2</div>
+		<div class="inner box3">3</div>
+	</div>
+	
+</body>
+</html>

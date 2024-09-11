@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>async/await 发送给 AJAX 请求</title>
+</head>
+
+<body>
+    <h2>async & await 发送给 AJAX 请求</h2>
+    <button id="btn">点击发送给 AJAX 请求</button>
+    <div id="show-details"></div>
+    <script>
+        function sendAJAX(url) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', url);
+                xhr.send();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            resolve(xhr.responseText);
+                        } else {
+                            reject(xhr.status);
+                        }
+                    }
+                }
+            })
+        }
+
+        const btn = document.querySelector('#btn');
+        const div = document.querySelector('#show-details');
+
+        btn.addEventListener('click', async function () {
+            try {
+                div.style.color = 'purple';
+                div.textContent = await sendAJAX('http://127.0.0.1:9000/getPoem');
+            } catch (error) {
+                div.style.color = 'red';
+                div.innerHTML = `error: ${error}`;
+            }
+        })
+    </script>
+
+</body>
+
+</html>

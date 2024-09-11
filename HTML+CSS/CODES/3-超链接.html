@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>超链接</title>
+</head>
+
+<div>
+	<!-- 超链接-跳转页面 -->
+	<!-- 跳转到其他网页 -->
+	<a href="https://ys.mihoyo.com/cloud/?utm_source=default#/" target="_blank">云原神，启动！</a>
+	<!-- 跳转到本地网页 -->
+	<a href="./two-levels-up/parent/current/2-相对路径.html" target="_self">托马照片合集，点击即看！</a>
+</div>
+
+<div>
+	<!-- 超链接-跳转文件 -->
+	<!-- 跳转到浏览器可以打开的文件（图片、视频、pdf 等） -->
+	<a href="./two-levels-up//托马生日图.jpg">点击查看托马生日照</a>
+	<!-- 跳转到浏览器不可以打开的文件（zip 等），会触发自动下载 -->
+	<a href="./托马图片合集.7z">点击获取托马照片合集</a>
+	<!-- 通过 download 属性，强制触发自动下载，同时可以通过指定取值设定默认下载文件的名称 -->
+	<a href="./two-levels-up/托马生日图.jpg" download="托马生日照片">点击下载托马生日照</a>
+</div>
+
+<div>
+	<!-- 超链接-跳转锚点 -->
+	<!-- 1. 设置锚点 -->
+	<!-- 通过 a 标签的 name 属性设置锚点 -->
+	<a name="anchor_a">HHHHHHHHHH</a>
+	<!-- 任何标签和 id 属性配合设置锚点 -->
+	<h2 id="anchor_h2">这里是一个标定锚点</h2>
+	<!-- 2. 跳转锚点 -->
+	<!-- 通过 # + 锚点名/id 实现跳转到锚点 -->
+	<!-- 通过在超链接的 href 中添加 #，浏览器明白此时的超链接是想要跳转到一个锚点 -->
+	<a href="#anchor_a">调转到HHHHHHHHHH</a>
+	<a href="#anchor_h2">跳转到“这里是一个标定锚点”</a>
+	<a href="./two-levels-up/parent/current/2-相对路径.html#tomma">跳转到“托马比拼图”</a>
+	<!-- 3. 其他跳转行为 -->
+	<!-- 通过 href="#" 实现跳转到网页顶部 -->
+	<a href="#">回到顶部</a>
+	<!-- 通过 href="" 刷新页面 -->
+	<a href="">刷新</a>
+	<!-- 4. JS 弹窗行为 -->
+	<a href="javascript:alert('Hello world!');">欢迎世界</a>
+</div>
+
+<div>
+	<!-- 超链接-唤起指定应用 -->
+	<!-- 唤起电话拨号 -->
+	<a href="tel:10086">给 10086 拨打电话</a>
+	<!-- 唤起短信发送短信 -->
+	<a href="sms:10086">给 10086 发送短信</a>
+	<!-- 唤起邮箱发送邮件 -->
+	<a href="mailto:10000@qq.com">给 10000@qq.com 发送邮件</a>
+</div>
+
+<body>
+
+</body>
+
+</html>

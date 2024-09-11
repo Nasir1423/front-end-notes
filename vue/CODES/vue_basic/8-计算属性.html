@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>计算属性</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结
+      - 语法：需要在 Vue 实例的 options 中的 computed 中设置，需要以对象的形式给计算属性配置 getter 和 setter，其底层借助 Object.defineProperty 实现
+        计算属性名: {
+          get(){
+            return xxx
+          },
+          set(value){
+            xxxxxx
+          }
+        }
+      - 定义：计算属性对应的属性并不存在，是通过已有属性计算得到的
+      - getter、setter 的执行时机
+        - getter：(1) 初次读取时会执行一次 (2) 依赖的数据发生改变时会再次执行
+        - setter：计算属性被修改时执行
+        - 注：getter、setter 中的 this 指向当前 Vue 实例
+      - 优势：与 methods 相比，内部有缓存机制 (即模板中多次使用计算属性，仅读取一次，后续都是取缓存值)，方便复用，效率更高，便于调试
+      - 注意
+        - 计算属性最终都会出现在 vm 上，因此可以在模板中直接使用
+        - 计算属性如果需要修改，则必须通过 setter 修改，且其中逻辑必须引起计算属性所依赖的数据发生改变
+      - 简写语法: 当计算属性只有 getter 时 (仅读)，可以通过 计算属性名(){} 的方式设置计算属性的 getter
+   -->
+</head>
+
+<body>
+  <!-- 插值语法实现姓名案例 -->
+  <div id="root1">
+    <h1>姓名案例：插值语法实现</h1>
+    姓：<input type="text" v-model="firstName"> <br>
+    名：<input type="text" v-model="lastName"> <br>
+    全名：<span>{{firstName}}-{{lastName}}</span>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#root1',
+      data: {
+        firstName: '',
+        lastName: ''
+      }
+    })
+  </script>
+
+  <!-- methods 实现姓名案例 -->
+  <div id="root2">
+    <h1>姓名案例：methods 实现</h1>
+    姓：<input type="text" v-model="firstName"> <br>
+    名：<input type="text" v-model="lastName"> <br>
+    全名：<span>{{getFullName()}}</span>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#root2',
+      data: {
+        firstName: '',
+        lastName: ''
+      },
+      methods: {
+        getFullName() {
+          return this.firstName + "-" + this.lastName;
+        }
+      }
+    })
+  </script>
+
+  <!-- 计算属性实现姓名案例 -->
+  <div id="root3">
+    <h1>姓名案例：计算属性实现</h1>
+    姓：<input type="text" v-model="firstName"> <br>
+    名：<input type="text" v-model="lastName"> <br>
+    全名：{{fullName}}
+  </div>
+
+  <script>
+    new Vue({
+      el: '#root3',
+      data: {
+        firstName: '',
+        lastName: ''
+      },
+      computed: {
+        // 完整写法
+        // fullName: {
+        //   get() {
+        //     console.log('访问计算属性 fullName');
+        //     return this.firstName + "-" + this.lastName;
+        //   },
+        //   set(value) {
+        //     console.log('设置计算属性 fullName=' + value);
+        //     [this.firstName, this.lastName] = value.split('-');
+        //   }
+        // }
+        // 一般写法
+        fullName() {
+          console.log('访问仅读计算属性 fullName');
+          return this.firstName.slice(0, 3) + "-" + this.lastName;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

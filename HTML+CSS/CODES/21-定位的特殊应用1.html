@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>让定位元素的充满包含块</title>
+	<style>
+		.outer {
+			height: 200px;
+			background-color: skyblue;
+			border: 5px black solid;
+			position: relative;
+		}
+
+		.inner {
+			background-color: pink;
+			font-size: 30px;
+			padding: 20px;
+			border: 5px red solid;
+			text-align: center;
+			line-height: 140px;
+			position: absolute;
+
+			/* 让 inner 整体宽度撑满父元素的错误方式，
+			这样可以使 inner 内容区的宽度等于父亲内容区的宽度，
+			但是 inner 盒子模型还设置了边框和内边距，
+			因此会导致 inner 的盒子模型的宽度大于父元素内容区的宽度，
+			导致 inner 溢出了父元素的内容区 */
+			/* width: 100%; */
+
+			/* 让 inner 整体宽度撑满父元素的正确方式 */
+			left: 0px;
+			right: 0px;
+
+			/* 让 inner 整体高度撑满父元素的正确方式 */
+			top: 0px;
+			bottom: 0px;
+			
+		}
+	</style>
+</head>
+
+<body>
+	<div class="outer">
+		<div class="inner">你好世界</div>
+	</div>
+</body>
+
+</html>

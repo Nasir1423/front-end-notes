@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>多列布局</title>
+	<style>
+		.news {
+			column-count: 4;
+			column-rule: 1px dashed red;
+		}
+
+		.news h1 {
+			text-align: center;
+			column-span: all;
+		}
+
+		.news p {
+			text-indent: 2em;
+		}
+
+		.pics {
+			column-count: 3;
+		}
+
+		.pics img {
+			width: 100%;
+			cursor: pointer;
+
+			transition: 0.4s all linear;
+		}
+
+		.pics img:hover {
+			box-shadow: 0px 0px 20px black;
+			transform: scale(1.05);
+		}
+	</style>
+</head>
+
+<body>
+	<h2>文字多列布局</h2>
+	<div class="news">
+		<h1>物价企稳回升，暖意之中有新意</h1>
+		<p>国家统计局发布的最新数据显示，今年2月，我国居民消费价格（CPI）企稳回升，同比由上月下降0.8%转为上涨0.7%，其中扣除食品和能源价格的核心CPI涨幅为2022年2月以来最高。</p>
+		<p>值得关注的是，这是去年9月以来CPI涨幅首次由负转正。其中固然有春节错月等因素影响，但今年以来消费持续复苏和需求不断改善，是推动CPI回升的更主要原因。</p>
+		<p>物价本质上反映的是供需关系。据测算，在2月份0.7%的CPI同比变动中，翘尾影响约为-0.6个百分点，今年价格变动的新影响约为1.3个百分点。申万宏源证券发表的研究报告认为，即使剔除春节错月因素，2月CPI仍然超预期，显示终端消费需求正在改善。2月CPI结束“四连负”、重回正增长，预示着当前中国经济内需恢复、消费复苏的势头在加强，透出经济持续回升向好的浓浓暖意。
+		</p>
+		<p>进入2024年，消费市场的澎湃活力成为中国经济的新气象：“尔滨”火了，冰雪经济从元旦一路旺到春节，成为文旅融合的一大亮点；“国潮”热了，老牌国货产品迭代焕发新活力，新兴品牌加强创新质量优良；新型消费走俏，春节期间部分大型连锁超市绿色有机食品销售额增长近20%，部分电商平台骑行装备、滑雪装备销售额增长五成以上。最近，甘肃天水麻辣烫又“火爆出圈”，旅游订单同比大幅增长。目前，天水市精心打造的首条麻辣烫一条街已火爆开街，全力满足更多外地游客需求。
+		</p>
+		<p>进入2024年，消费市场的澎湃活力成为中国经济的新气象：“尔滨”火了，冰雪经济从元旦一路旺到春节，成为文旅融合的一大亮点；“国潮”热了，老牌国货产品迭代焕发新活力，新兴品牌加强创新质量优良；新型消费走俏，春节期间部分大型连锁超市绿色有机食品销售额增长近20%，部分电商平台骑行装备、滑雪装备销售额增长五成以上。最近，甘肃天水麻辣烫又“火爆出圈”，旅游订单同比大幅增长。目前，天水市精心打造的首条麻辣烫一条街已火爆开街，全力满足更多外地游客需求。
+		</p>
+		<p>中国首席经济学家论坛理事长连平认为，当前，随着经济稳步恢复，企业经营状况和利润开始改善，就业市场较为平稳，居民收入状况逐步好转，服务消费持续恢复，餐饮消费加快增长，地产销售触底回升以及汽车销售改善叠加促消费政策的落实到位，消费需求将会得到进一步释放，消费有望继续保持较快增长。
+		</p>
+		<p>《政府工作报告》在今年发展主要预期目标中提出，居民消费价格涨幅3%左右。相关部门表示，这一预期目标与2023年预期目标保持一致，符合物价企稳回升的总体趋势，并为加大宏观政策调控力度和深化价格改革留有一定余地。“从未来走势看，随着商品和服务需求持续恢复，叠加消费品以旧换新等政策带动，同时考虑到翘尾下拉影响减弱，预计居民消费价格将呈温和上涨态势。”国家统计局新闻发言人刘爱华说
+		</p>
+	</div>
+	<h2>图片多列布局</h2>
+	<div class="pics">
+		<img src="./images/genshin/img-1.jpg">
+		<img src="./images/genshin/img-2.jpg">
+		<img src="./images/genshin/img-3.jpg">
+		<img src="./images/genshin/img-4.jpg">
+		<img src="./images/genshin/img-5.jpg">
+		<img src="./images/genshin/img-6.jpg">
+		<img src="./images/genshin/img-7.jpg">
+		<img src="./images/genshin/img-8.jpg">
+		<img src="./images/genshin/img-9.jpg">
+		<img src="./images/genshin/img-10.jpg">
+		<img src="./images/genshin/img-11.jpg">
+		<img src="./images/genshin/img-12.jpg">
+		<img src="./images/genshin/img-13.jpg">
+		<img src="./images/genshin/img-14.jpg">
+		<img src="./images/genshin/img-15.jpg">
+		<img src="./images/genshin/img-16.jpg">
+		<img src="./images/genshin/img-17.jpg">
+		<img src="./images/genshin/img-18.jpg">
+		<img src="./images/genshin/img-19.jpg">
+		<img src="./images/genshin/img-20.jpg">
+		<img src="./images/genshin/img-21.jpg">
+		<img src="./images/genshin/img-22.jpg">
+		<img src="./images/genshin/img-23.jpg">
+		<img src="./images/genshin/img-24.jpg">
+		<img src="./images/genshin/img-25.jpg">
+		<img src="./images/genshin/img-26.jpg">
+		<img src="./images/genshin/img-27.jpg">
+		<img src="./images/genshin/img-28.jpg">
+		<img src="./images/genshin/img-29.jpg">
+		<img src="./images/genshin/img-30.jpg">
+		<img src="./images/genshin/img-31.jpg">
+		<img src="./images/genshin/img-32.jpg">
+		<img src="./images/genshin/img-33.webp">
+		<img src="./images/genshin/img-34.webp">
+		<img src="./images/genshin/img-35.webp">
+		<img src="./images/genshin/img-37.webp">
+		<img src="./images/genshin/img-38.webp">
+		<img src="./images/genshin/img-39.webp">
+		<img src="./images/genshin/img-40.webp">
+		<img src="./images/genshin/img-41.webp">
+		<img src="./images/genshin/img-42.webp">
+		<img src="./images/genshin/img-43.webp">
+	</div>
+
+</body>
+
+</html>

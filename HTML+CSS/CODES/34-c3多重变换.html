@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>多重变换</title>
+	<style>
+		.outer {
+			width: 200px;
+			height: 200px;
+			border: 2px solid black;
+			margin: 10px auto;
+			font-size: 30px;
+			line-height: 200px;
+			text-align: center;
+		}
+
+		.inner {
+			width: 200px;
+			height: 200px;
+			background-color: pink;
+		}
+
+		.box1 {
+			transform: scale(0.5);
+		}
+
+		.box2 {
+			transform: translate(100px, 100px);
+			font-size: 15px;
+		}
+
+		.outer:nth-of-type(3) {
+			margin-top: 120px;
+		}
+
+		.box3 {
+			transform: scale(0.5) translate(100px, 100px);
+			line-height: 100px;
+			font-size: 15px;
+		}
+
+		.outer:nth-of-type(4) {
+			margin-top: 120px;
+		}
+
+		.box4 {
+			transform: translate(100px, 100px) scale(0.5);
+			line-height: 100px;
+			font-size: 15px;
+		}
+
+		.outer:nth-of-type(5) {
+			margin-top: 120px;
+		}
+
+		.box5 {
+			transform: rotate(30deg);
+		}
+
+		.outer:nth-of-type(6) {
+			margin-top: 120px;
+			font-size: 15px;
+		}
+
+		.box6 {
+			transform: translate(100px, 100px);
+		}
+
+		.outer:nth-of-type(7) {
+			margin-top: 120px;
+			line-height: 100px;
+			font-size: 15px;
+		}
+
+		.box7 {
+			transform: rotate(30deg) translate(100px, 100px);
+			transform: rotate();
+		}
+
+		.outer:nth-of-type(8) {
+			margin-top: 200px;
+			line-height: 100px;
+			font-size: 15px;
+		}
+
+		.box8 {
+			transform: translate(100px, 100px) rotate(30deg);
+		}
+	</style>
+</head>
+
+<body>
+	<h2>缩放位移顺序之辨</h2>
+	<div class="outer">
+		<div class="inner box1">scale 0.5</div>
+	</div>
+	<div class="outer">
+		<div class="inner box2">translate 100px 100px</div>
+	</div>
+	<div class="outer">
+		<div class="inner box3">scale 0.5 => translate 100px 100px</div>
+	</div>
+	<div class="outer">
+		<div class="inner box4">translate 100px 100px => scale 0.5</div>
+	</div>
+	<h2>旋转位移顺序之辨</h2>
+	<div class="outer">
+		<div class="inner box5">rotate 30deg</div>
+	</div>
+	<div class="outer">
+		<div class="inner box6">translate 100px 100px</div>
+	</div>
+	<div class="outer">
+		<div class="inner box7">rotate 30deg => translate 100px 100px</div>
+	</div>
+	<div class="outer">
+		<div class="inner box8">translate 100px 100px => rotate 30deg</div>
+	</div>
+</body>
+
+</html>

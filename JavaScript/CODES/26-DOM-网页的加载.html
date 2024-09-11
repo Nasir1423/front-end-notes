@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档的加载</title>
+</head>
+
+<body>
+    <!-- 
+        1. 网页的加载规则：网页是自上向下加载的，因此存在一个问题，即如果 js 代码写在其要操作的对象上边，则 js 代码执行时会因为网页
+        没有加载完毕，而出现无法获取到 DOM 对象的情况
+
+        2. 解决因为网页加载规则而导致 js 未获取 DOM 对象这个问题的四种方式
+            - 方式一：将 <script> js 代码 </script> 编写在 body 标签中的最后位置
+            - 方式二：将代码编写在 window.onload 的回调函数中，如 <script> window.onload = function(){ js 代码 } </script>；
+            <script> window.addEventListener('load', function(){ js 代码 }) </script>
+                - window.onload 事件在窗口中所有的内容都加载完毕后触发
+            - 方式三：将代码编写在 document 的 DOMContentLoaded 的回调函数中，如 
+            <script> document.addEventListener('DOMContentLoaded', function(){ js 代码 }) </script>
+                - document 的 DOMContentLoaded 事件，只能通过事件监听器（添加事件的第三种方式）绑定回调函数
+                - document 的 DOMContentLoaded 事件在当前文档加载完毕后触发
+                - document 的 DOMContentLoaded 事件比 window 的 load 事件触发地更快，这是因为一个网页中可能会存在多个文档（如
+                通过 iframe 标签引入的网页也可以看作是一个文档）
+            - 方式四：将代码编写在外部的 js 文件，此时可以通过 defer 的形式引入，如 <script defer src="xxx.js"></script>
+                - 通过 defer 的形式引入的 js 文件，比通过 document 的 DOMContentLoaded 事件添加的代码的执行时机更早
+     -->
+
+</body>
+
+</html>

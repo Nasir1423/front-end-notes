@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>子后代、兄弟选择器</title>
+	<style>
+		/* 类选择器：设置类名为 .header 的标签的字体 */
+		.header {
+			font-family: 微软雅黑;
+		}
+
+		/* 元素选择器 */
+		h1 {
+			font-size: 50px;
+		}
+
+		/* 元素选择器 */
+		h2 {
+			font-size: 15px;
+		}
+
+		/* 后代选择器：设置 div 的 p 后代的字体 */
+		div p {
+			font-family: 华文新魏;
+		}
+
+		/* 后代选择器：设置 div 的 p 后代的类名为 first-sentence 的 span 后代的字体大小及颜色 */
+		div p span.first-sentence {
+			font-size: 50px;
+			color: rebeccapurple;
+		}
+
+		/* 后代选择器：设置 div 的 p 后代的 span 后代的字体颜色 */
+		div p span {
+			color: blue;
+		}
+
+		/* 子代选择器：设置 p 的子代中类名为 metaphor 的 span 标签的背景颜色 */
+		p>span.metaphor {
+			background-color: aqua;
+		}
+
+		/* 子代选择器：设置 div 的子代中的 p 标签的字体粗细 */
+		div>p {
+			font-weight: bold;
+		}
+
+		/* 兄弟选择器 */
+		legend~h3 {
+			color: chartreuse;
+		}
+
+		/* 兄弟选择器 */
+		ul~ul {
+			color: crimson;
+		}
+
+		/* 兄弟选择器 */
+		li+li {
+			font-size: 30px;
+		}
+
+
+	</style>
+</head>
+
+<body>
+	<fieldset>
+		<legend>西格里夫·薩松经典诗文</legend>
+		<h1 class="header">於我，過去，現在以及未來</h1>
+
+		<h2 class="header">西格里夫·薩松</h2>
+
+		<div>
+			<p><span class="first-sentence">於我</span>，<span class="time">過去</span>、<span class="time">現在</span>和<span
+					class="time">未来</span></p>
+			<p>商討聚會各執一詞 紛擾不息</p>
+			<p>林林總總的慾望，掠取着我的<span class="time">現在</span></p>
+			<p>把“理性”扼殺於它的寶座</p>
+			<p>我的愛越過<span class="time">未來</span>的藩籬</p>
+			<p>夢想解放出它們的雙腳，舞蹈不停。</p>
+			<p>於我，穴居人攫取了先知</p>
+			<p>佩戴花環的<span class="person">阿波羅神</span></p>
+			<p> 向<span class="person">亞伯拉罕</span>的聾耳唱嘆歌吟。</p>
+			<p>心有<span class="metaphor">猛虎</span>，細嗅<span class="metaphor">薔薇</span>。</p>
+			<p>審視我的內心吧，親愛的朋友，你應顫慄 </p>
+			<p>因為那才是你本來的面目。</p>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>诗文关键字提取</legend>
+		<h3>时间关键字</h3>
+		<ul>
+			<li>过去</li>
+			<li>现在</li>
+			<li>未来</li>
+		</ul>
+		<h3>意向关键字</h3>
+		<ul>
+			<li>
+				<span>人物意向</span>
+				<ul>
+					<li>阿波罗神</li>
+					<li>亚伯拉罕</li>
+				</ul>
+			</li>
+			<li>
+				<span>事物意向</span>
+				<ul>
+					<li>猛虎</li>
+					<li>蔷薇</li>
+				</ul>
+			</li>
+		</ul>
+	</fieldset>
+
+</body>
+
+</html>

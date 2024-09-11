@@ -1,0 +1,126 @@
+/* 基础设置 */
+
+/* 版心 */
+.container {
+	width: 1190px;
+	margin: 0 auto;
+}
+
+/* #region 顶部导航条 start */
+
+/* 最外层容器 */
+.topbar {
+	height: 30px;
+	background-color: #ECECEC;
+}
+
+/* 左侧欢迎区 */
+.welcome {
+	height: 30px;
+	line-height: 30px;
+	/* 单行文字居中 */
+	font-size: 0;
+	/* 消除回车转空格的影响 */
+	color: #666;
+}
+
+/* 欢迎区内元素 */
+.welcome span,
+.welcome a {
+	font-size: 12px;
+}
+
+/* 欢迎区内文字 */
+.welcome .hello {
+	margin-right: 28px;
+}
+
+/* 欢迎区内登录超链接 */
+.welcome .login {
+	padding-right: 10px;
+	border-right: 1px solid #666;
+}
+
+/* 欢迎区内注册超链接 */
+.welcome .register {
+	padding-left: 10px;
+}
+
+/* 右侧导航区 */
+.topbar-nav {
+	height: 30px;
+	/* 单行文字居中 */
+	line-height: 30px;
+}
+
+/* 导航区内列表元素 */
+.topbar-nav li {
+	float: left;
+}
+
+.topbar-nav li a {
+	padding: 0 15px;
+	border-right: 1px solid #666;
+}
+
+.topbar-nav li:first-child a {
+	padding-left: 0;
+}
+
+.topbar-nav li:last-child a {
+	padding-right: 0;
+	border-right: 0;
+}
+
+/* #endregion 顶部导航条 end */
+
+/* #region 头部 start */
+
+/* 最外层结构 */
+.header {
+	height: 120px;
+	background-color: skyblue;
+	/*占位颜色，为了方便观察 */
+}
+
+.header .search form {
+	margin-top: 42px;
+	font-size: 0;
+}
+
+/* 表单中的搜索框 */
+.header .search input {
+	width: 508px;
+	height: 34px;
+	border: 1px solid #DD302D;
+
+}
+
+/* 表单中的搜索按钮 */
+.header .search button {
+	width: 80px;
+	height: 36px;
+	background-color: #DD302D;
+	vertical-align: top;
+}
+
+/* 搜索按钮上的图片 */
+.header .search button img {
+	margin: 6px 28px;
+	vertical-align: middle;
+}
+
+/* 搜索按钮上的图片的另一种实现方式
+（如果解开以下注释，则需要注释掉 html 中 button 的 img 标签） */
+/* .header .search button {
+	background-image: url("../images/serch_icon.png");
+	background-repeat: no-repeat;
+	background-position: 28px 6px;
+} */
+
+/* #endregion 头部 end */
+
+
+
+
+

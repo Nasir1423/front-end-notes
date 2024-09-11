@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据代理</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结：数据代理
+      1. Object.defineProperty() 的使用
+        - DOCS: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+        - 语法：Object.defineProperty(obj, prop, descriptor)
+        - 功能：该静态方法允许精确地添加或修改对象上的属性，默认情况下，使用该方法添加的属性是不可写、不可枚举和不可配置的
+        - 参数
+          - obj: 要定义属性的对象。
+          - prop: 一个字符串或 Symbol，指定了要定义或修改的属性键。
+          - descriptor: 要定义或修改的属性的描述符 (property descriptor)。可选键为：
+            - both 数据描述符和访问器描述符
+              - configurable: 属性是否可以被删除，默认值为 false
+              - enumerable: 属性是否可以在对象的枚举 (如 Object.keys(), for-in) 中出现，默认值为 false
+            - only 数据描述符
+              - value: 与属性相关联的值，可以是任何有效的 JavaScript 值（数字、对象、函数等），默认值为 undefined
+              - writable: 如果与属性相关联的值可以使用赋值运算符更改，则为 true，默认值为 false
+            - only 访问器描述符
+              - get: 用作属性 getter 的函数，如果没有 getter 则为 undefined。当访问该属性时，将不带参地调用此函数，并将 this 设
+              置为通过该属性访问的对象（因为可能存在继承关系，这可能不是定义该属性的对象）。返回值将被用作该属性的值。默认值为 undefined。
+              - set: 用作属性 setter 的函数，如果没有 setter 则为 undefined。当该属性被赋值时，将调用此函数，并带有一个参数（要
+              赋给该属性的值），并将 this 设置为通过该属性分配的对象。默认值为 undefined。
+        - 返回值：传入函数的对象，其指定的属性已被添加或修改。
+        - 注意事项
+          - 如果描述符没有 value、writable、get 和 set 键中的任何一个，它将被视为数据描述符。
+          - 如果描述符同时具有 [value 或 writable] 和 [get 或 set] 键，则会抛出异常。
+      2. 数据代理：即通过一个对象代理对另一个对象的属性的操作 (读/写)
+      3. Vue 中的数据代理：通过 vm 对象来代理 data 对象中属性的操作 (读/写)
+        - 好处：更方便操作 data 中的数据 (vm.name 等价于 vm._data.name，显然前者更方便)
+        - 实现原理：通过 Object.defineProperty() 把 data 对象中所有属性都添加到 vm 上，为每一个添加到 vm 的属性都指定一个 getter/setter，
+        在 getter/setter 内部去操作 (读/写) data 中对应的属性
+   -->
+</head>
+
+<body>
+  <!-- Object.defineProperty() 的使用 -->
+  <script>
+    let number = 18;
+    let person = {
+      name: '张三',
+      gender: '男'
+    }
+
+    // 数据描述符
+    Object.defineProperty(person, 'height', {
+      value: 178, // 属性值
+      writable: true, // 可修改
+      configurable: true, // 可删除
+      enumerable: true // 可枚举
+    })
+
+    // 访问器描述符
+    Object.defineProperty(person, 'age', {
+      get() { // getter
+        console.log('正在读取年龄中...');
+        return number
+      },
+      set(newAge) { // setter
+        console.log('正在设置年龄中...')
+        number = newAge
+      },
+      configurable: true, // 可删除
+      enumerable: true // 可枚举
+    })
+  </script>
+
+  <!-- 数据代理的简单实现 -->
+  <script>
+    let obj = { x: 100 };
+    let proxy = {};
+
+    /* 通过 proxy 对象操作 obj 对象中的数据 */
+    Object.defineProperty(proxy, 'x', {
+      get() {
+        return obj.x;
+      },
+
+      set(value) {
+        obj.x = value;
+      }
+    })
+
+  </script>
+
+  <!-- Vue 中的数据代理 -->
+  <div id="root">
+    <h1>姓名: {{name}}</h1>
+    <h1>性别: {{gender}}</h1>
+  </div>
+
+  <script>
+    const vm = new Vue({
+      el: '#root',
+      data: {
+        name: 'chuanYiTu',
+        gender: '男'
+      }
+    })
+  </script>
+</body>
+
+</html>

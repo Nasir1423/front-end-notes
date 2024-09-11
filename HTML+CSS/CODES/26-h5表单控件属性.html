@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>表单控件属性</title>
+</head>
+
+<body>
+	<form action="#">
+		<label>
+			Account: <input type="text" name="account" placeholder="enter your account number" required autocomplete="on">
+		</label>
+		<br>
+		<label>
+			Password: <input type="password" name="password" placeholder="enter your password" required pattern="\w{6}">
+		</label>
+		<br>
+		Gender:
+		<label>
+			<input type="radio" value="male" name="gender" required>Male
+		</label>
+		<label>
+			<input type="radio" value="female" name="gender">Female
+		</label>
+		<br>
+		Major:
+		<label>
+			<input type="checkbox" value="c" name="major">C
+		</label>
+		<label>
+			<input type="checkbox" value="java" name="major">Java
+		</label>
+		<label>
+			<input type="checkbox" value="python" name="major" required>Python
+		</label>
+		<br>
+		<label>
+			Introduction:
+			<textarea name="intro" placeholder="enter your self-introduction"></textarea>
+		</label>
+		<br>
+		<button>Submit</button>
+	</form>
+</body>
+
+</html>

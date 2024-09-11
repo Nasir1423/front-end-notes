@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>框架标签</title>
+</head>
+
+<body>
+	<h2>通过 iframe 嵌入一个普通网页</h2>
+	<iframe src="https://www.bilibili.com" frameborder="1" width="600" height="300"></iframe>
+	<br>
+
+	<h2>通过 iframe 嵌入一个广告网页</h2>
+	<iframe src="https://pic3.zhimg.com/v2-8065c386354970c985325383711b337f_720w.webp?source=d6434cab" frameborder="1" width="600" height="300"></iframe>
+	<br>
+
+	<h2>通过 iframe 嵌入浏览器可以打开的文件（图片、视频、pdf 等）</h2>
+	<iframe src="./two-levels-up/托马生日图.jpg" frameborder="1" width="600" height="300"></iframe>
+
+	<h2>通过 iframe 的 name 属性与表单或超链接的 target 属性关联，可以让超链接（或表单提交后）要跳转的页面在 iframe 框架中打开</h2>
+	<a href="https://www.bilibili.com" target="container">点击访问哔哩哔哩</a>
+	<a href="https://www.taobao.com" target="container">点击访问淘宝</a> <br>
+	<form action="https://search.jd.com/search" target="container">
+		<label for="txt">
+			在京东商城搜索商品
+		</label>
+		<input type="text" name="keyword" id="txt">
+		<input type="submit" value="搜索">
+	</form>
+	<iframe name="container" frameborder="1" width="600" height="300"></iframe>
+</body>
+
+</html>

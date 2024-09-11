@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>条件渲染</title>
+  <script src="../js/vue.js"></script>
+  <style>
+    h4 {
+      cursor: pointer;
+      font-family: "华文新魏";
+    }
+  </style>
+  <!-- 
+    小结
+      1. v-if="表达式"、v-else-if="表达式"、v-else
+        - 功能：根据表达式结果为 true 或 false，选择是否渲染对应的 DOM，不展示的 DOM 元素直接被移除
+        - 适用场景：切换频率比较低的场景
+        - 注意：v-if 可以和 v-else-if、v-else 一起使用，但要求结构不能被 “打断”
+      2. v-show="表达式"
+        - 功能：根据表达式结果为 true 或 false，选择是否渲染对应的 DOM，这里是基于 display: none 实现渲染与否的，DOM 元素实际还
+        存在 (仅仅是用样式隐藏)
+        - 适用场景：切换频率比较高的场景
+      3. 注意：当使用 v-if 时，DOM 元素可能无法获取，而使用 v-show 则一定可以获取到对应的 DOM 元素
+    -->
+</head>
+
+<body>
+  <div id="root">
+    <h1 v-show="true">诗歌名：{{poem}}</h1>
+    <h3 v-show="3 > 2">作者：{{author}}</h3>
+    <hr>
+    <br v-if="n < 0">
+    <h3 v-else-if="n >= 0 && n < contents.length">{{contents[n]}}</h3>
+    <h3 v-else>展示完毕</h3>
+    <hr>
+    <h4 @click="n++">开始/下一句</h4>
+    <h4 @click="n=0">重新开始</h4>
+    <hr>
+    <!-- v-if 可以和 template 标签一起使用，渲染时 template 会自动被忽略 -->
+    <template v-if="n >= contents.length">
+      <h2 style="color: red;">警告</h2>
+      <h4>已经是第 {{n}} 条诗句了</h4>
+      <h4 @click="n=0">请重头开始</h4>
+    </template>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#root",
+      data: {
+        poem: "宣州謝朓樓餞别校書叔雲",
+        author: "唐·李白",
+        contents: [
+          "棄我去者昨日之日不可留，亂我心者今日之日多煩憂。",
+          "長風萬里送秋鴈，對此可以酣高樓。",
+          "蓬萊文章建安骨，中間小謝又清發。",
+          "俱懷逸興壯思飛，欲上青天攬明月。",
+          "抽刀斷水水更流，舉杯消愁愁更愁。",
+          "人生在世不稱意。明朝散髮弄扁舟。",
+        ],
+        n: -1
+      }
+    })
+  </script>
+</body>
+
+</html>

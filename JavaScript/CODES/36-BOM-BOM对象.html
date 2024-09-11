@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM</title>
+</head>
+
+<body>
+    <!-- 
+        1. BOM（Browser Object Model，浏览器对象模型）是 JavaScript 提供的一组对象，用于与浏览器进行交互。
+            - 主要的 BOM 对象包括：
+                - Window（窗口对象）：代表浏览器的一个窗口，提供了操作浏览器窗口的方法和属性，如打开新窗口、关闭窗口、设置窗口大小等。
+                - Navigator（浏览器对象）：提供了关于浏览器的信息，包括浏览器的类型和版本等，可用于检测用户浏览器的环境。
+                - Location（地址栏对象）：表示当前加载页面的 URL 信息，可以用于获取、设置或者重定向浏览器的地址栏。
+                - History（历史记录对象）：提供了浏览器窗口访问历史记录的方法，允许用户在浏览历史记录中进行导航。
+                - Screen（屏幕对象）：表示用户的屏幕信息，提供了关于屏幕尺寸、颜色等属性的信息。
+            - 注：这些 BOM 对象都作为 Window 对象的属性保存，因此可以直接通过 window 对象访问。
+     -->
+    <!-- 
+        2. Navigator
+            - navigator.userAgent 返回一个用于描述浏览器信息的字符串，可以用于识别浏览器。
+      -->
+    <script>
+        let sBrowser
+        const sUsrAg = navigator.userAgent
+
+        // The order matters here, and this may report false positives for unlisted browsers.
+
+        if (sUsrAg.indexOf("Firefox") > -1) {
+            sBrowser = "Mozilla Firefox"
+            // "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0"
+        } else if (sUsrAg.indexOf("SamsungBrowser") > -1) {
+            sBrowser = "Samsung Internet"
+            // "Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G955F Build/PPR1.180610.011) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/9.4 Chrome/67.0.3396.87 Mobile Safari/537.36
+        } else if (
+            sUsrAg.indexOf("Opera") > -1 ||
+            sUsrAg.indexOf("OPR") > -1
+        ) {
+            sBrowser = "Opera"
+            // "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 OPR/57.0.3098.106"
+        } else if (sUsrAg.indexOf("Trident") > -1) {
+            sBrowser = "Microsoft Internet Explorer"
+            // "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; Zoom 3.6.0; wbx 1.0.0; rv:11.0) like Gecko"
+        } else if (sUsrAg.indexOf("Edge") > -1) {
+            sBrowser = "Microsoft Edge (Legacy)"
+            // "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299"
+        } else if (sUsrAg.indexOf("Edg") > -1) {
+            sBrowser = "Microsoft Edge (Chromium)"
+            // Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.64
+        } else if (sUsrAg.indexOf("Chrome") > -1) {
+            sBrowser = "Google Chrome or Chromium"
+            // "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/66.0.3359.181 Chrome/66.0.3359.181 Safari/537.36"
+        } else if (sUsrAg.indexOf("Safari") > -1) {
+            sBrowser = "Apple Safari"
+            // "Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1 980x1306"
+        } else {
+            sBrowser = "unknown"
+        }
+
+        alert(`You are using: ${sBrowser}`);
+    </script>
+    <!-- 
+        3. Location
+            - location = 'https://www.baidu.com' 可以直接修改 location 为一个新的地址，此时网页会发生跳转
+            - location.assign(url) 跳转到一个新地址
+            - location.replace(url) 跳转到一个新地址（此时无法通过回退按钮回退）
+            - location.reload() 刷新页面
+            - location.reload(true) 强制刷新页面（会清除网页缓存）
+            - location.href 获取当前地址
+     -->
+    <button type="button" id="btn-skip">跳转百度</button>
+    <button type="button" id="btn-reload">刷新网页</button>
+    <script>
+        const btnSkip = document.getElementById('btn-skip');
+        btnSkip.addEventListener('click', function (event) {
+            alert(`当前地址为 ${location.href}，即将跳转百度`);
+            // location.replace('https://www.baidu.com'); // 不可回退
+            location.assign('https://www.baidu.com') // 可回退
+        });
+        const btnReload = document.getElementById('btn-reload');
+        btnReload.addEventListener('click', function (event) {
+            alert('即将刷新网页');
+            location.reload()
+        });
+    </script>
+    <!-- 
+        4. History
+            - history.back() 回退到上一个网页，相当于回退按钮
+            - history.forward() 前进到下一个网页，相当于前进按钮
+            - history.go(number)  如果 number > 0，则表示前进 number 个网页；否则表示回退 |number| 个网页
+     -->
+    <br>
+    <br>
+    <button id="btn-back">回退</button>
+    <button id="btn-forward">前进</button>
+    <script>
+        const btnBack = document.getElementById('btn-back');
+        btnBack.onclick = function (event) {
+            history.back();
+        };
+        const btnForward = document.getElementById('btn-forward');
+        btnForward.onclick = function (event) {
+            history.forward();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+/* 清除默认样式 */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* 游戏容器样式 */
+#container {
+    height: 420px;
+    width: 360px;
+    /* 使用怪异盒模型，此时宽高设置的是盒子总大小 */
+    box-sizing: border-box;
+    border: 10px solid black;
+    border-radius: 20px;
+    background-color: #b7d4a8;
+    margin: 50px auto;
+}
+
+/* 游戏视口样式 */
+#stage {
+    height: 300px;
+    width: 300px;
+    border: 2px solid black;
+    margin: 20px auto;
+    /* 开启相对定位，此时贪吃蛇和食物可以通过绝对定位脱离文档流 */
+    position: relative;
+}
+
+/* 贪吃蛇身体样式 */
+#stage #snake>div {
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    /* 开启绝对定位，此时贪吃蛇脱离文档流，可以相对于游戏视口进行移动 */
+    position: absolute;
+    border: 1px solid #b7d4a8;
+}
+
+/* 食物样式 */
+#stage #food {
+    width: 10px;
+    height: 10px;
+    /* 开启绝对定位，此时食物脱离文档流，可以放置在游戏视口 */
+    position: absolute;
+    /* 使用伸缩盒模型，设置伸缩容器中伸缩项目在主轴方向上的换行方式 */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* 构成食物的组成部分的样式  */
+#stage #food>div {
+    width: 5px;
+    height: 5px;
+    background-color: black;
+    transform: rotate(45deg);
+}
+
+/* 游戏信息样式 */
+#info {
+    width: 304px;
+    margin: 30px auto;
+    display: flex;
+    justify-content: space-between;
+    font: bold 20px 'Courier';
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>transition</title>
+	<style>
+		.box1 {
+			width: 200px;
+			height: 200px;
+			background-color: orange;
+			opacity: 0.5;
+
+			transition-property: all;
+			transition-duration: 1s;
+		}
+
+		.box1:hover {
+			width: 400px;
+			height: 400px;
+			background-color: green;
+			opacity: 1;
+			transform: rotate(45deg);
+			box-shadow: 0px 0px 20px black;
+		}
+
+		.outer {
+			width: 800px;
+			height: 900px;
+			border: 1px solid black;
+
+			font-size: 20px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.inner {
+			width: 150px;
+			height: 100px;
+
+			transition-property: all;
+			transition-duration: 5s;
+			transition-delay: 1s;
+		}
+
+		.outer:hover .inner {
+			width: 800px;
+		}
+
+		.inner1 {
+			background-color: red;
+			transition-timing-function: ease;
+		}
+
+		.inner2 {
+			background-color: orange;
+			transition-timing-function: linear;
+		}
+
+		.inner3 {
+			background-color: yellow;
+			transition-timing-function: ease-in;
+		}
+
+		.inner4 {
+			background-color: green;
+			transition-timing-function: ease-out;
+		}
+
+		.inner5 {
+			background-color: aqua;
+			transition-timing-function: ease-in-out;
+		}
+
+		.inner6 {
+			background-color: blue;
+			color: white;
+			transition-timing-function: step-start;
+		}
+
+		.inner7 {
+			background-color: indigo;
+			color: white;
+			transition-timing-function: step-end;
+		}
+
+		.inner8 {
+			background-color: violet;
+			transition-timing-function: steps(10, start);
+		}
+
+		.inner9 {
+			background-color: rosybrown;
+			transition-timing-function: cubic-bezier(1, 2.74, 0, -0.05);
+		}
+
+		.show-character,
+		.show-character img,
+		.mask {
+			width: 282.9px;
+			height: 235.8px;
+		}
+
+		.show-character {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.show-character:hover {
+			cursor: pointer;
+		}
+
+		.show-character img {
+			transition: 0.6s all linear;
+		}
+
+		.show-character:hover img {
+			transform: scale(1.5) rotate(20deg);
+		}
+
+		.mask {
+			background-color: black;
+			opacity: 0;
+
+			color: white;
+			font-size: 40px;
+			font-weight: bold;
+
+			text-align: center;
+			line-height: 235.8px;
+
+			position: absolute;
+			top: 0px;
+			left: 0px;
+		}
+
+		.show-character:hover .mask {
+			opacity: 0.5;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>过渡练习1</h2>
+	<p>before: shape=200px*200px bgcolor=orange opacity=0.5</p>
+	<p>after hover: shape=400px*400px bgcolor=green opacity=1 rotate(45deg) box-shadow=20px black</p>
+	<p>setting: property=all duration=1s</p>
+	<div class="box1"></div>
+	<h2>过渡练习2: 过渡类型</h2>
+	<div class="outer">
+		<div class="inner inner1">ease=>平滑</div>
+		<div class="inner inner2">linear=>线性/匀速</div>
+		<div class="inner inner3">ease-in=>慢→快</div>
+		<div class="inner inner4">ease-out=>快→慢</div>
+		<div class="inner inner5">ease-in-out=>慢→快→慢</div>
+		<div class="inner inner6">step-start=>瞬间完成</div>
+		<div class="inner inner7">step-end=>duration结束后瞬间完成</div>
+		<div class="inner inner8">steps(10, start)=>分为十段，每段瞬间完成</div>
+		<div class="inner inner9">cubic-bezier(1,2.74,0,-0.05)=>贝塞尔曲线</div>
+	</div>
+	<h2>过渡练习3: 小案例</h2>
+	<div class="show-character">
+		<img src="./two-levels-up/parent/current/child/two-levels-down/托马和狗.jpg">
+		<div class="mask">托马</div>
+	</div>
+</body>
+
+</html>

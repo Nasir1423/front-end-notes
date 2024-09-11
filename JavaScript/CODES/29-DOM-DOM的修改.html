@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM 的修改</title>
+</head>
+
+<body>
+    <script>
+        /*
+            1. 增加元素
+                - 方式一：创建一个元素节点，再添加到对应的位置
+                    - 元素节点的创建 const element = document.createElement(tagStr)
+                        - 创建好元素节点后，可以通过 element.xxx=yyy 的方式给元素节点添加属性
+                    - 元素节点的添加
+                        - element2.appendChild(element1) 给 element2 元素节点添加子元素节点 element1
+                        - element2.insertAdjacentElement(position, element1) 给 element2 元素节点的毗邻位置添加元素节点 element1
+                            - position 有四个可选值
+                                - 作为子元素插入：beforeend 标签中的最后；afterbegin 标签中的最前
+                                - 作为兄弟元素插入：beforebegin 标签前边；afterend 标签后边
+                - 方式二：直接将元素节点对应的 HTML 代码添加到对应的位置
+                    - element.insertAdjacentHTML(position, htmlCode) htmlCode 是一个元素节点对应的 HTML 代码，插入到 
+                    position 所指定的位置
+                        - 同样的，position 有四个可选值，意思同上
+            2. 替换元素
+                - element2.replaceWith(element1) 使用元素节点 element1 替换元素节点 element2
+            3. 删除元素
+                - element.remove() 删除元素节点 element
+        */
+
+        window.onload = function () {
+            const btnUp = document.getElementById('up');
+            const btnDown = document.getElementById('down');
+            const randomList = document.querySelector('ul'); // ***
+
+            let listLength = randomList.children.length; // ***
+
+            btnUp.onclick = function () {
+                listLength++;
+                randomList.insertAdjacentHTML('beforeend', `<li>随机数-${listLength}：${Math.random()}</li>`)
+                btnDown.disabled = listLength <= 0;
+            }
+
+            btnDown.onclick = function () {
+                if (listLength <= 0) {
+                    btnDown.disabled = true;
+                    return;
+                }
+                const lastItem = randomList.querySelector('li:last-child')
+                lastItem.remove();
+                listLength--;
+                btnDown.disabled = listLength <= 0; // 若列表为空，则禁用删除按钮
+            }
+        }
+    </script>
+
+    <button id="up">添加一个随机数</button>
+    <button id="down">删除一个随机数</button>
+    <br>
+    <ul></ul>
+
+</body>
+
+</html>

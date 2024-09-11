@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>四行三列的表格</title>
+    <!-- 4 行 3 列的表格，并且要求表格有隔行换色效果 ，且悬浮单元格能高亮显示 -->
+    <style>
+        table,
+        td {
+            border: 3px solid black;
+        }
+
+        table {
+            width: 200px;
+            height: 100px;
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        tr:nth-of-type(odd) td {
+            background-color: rgba(250, 235, 215);
+            opacity: 0.5;
+        }
+
+        tr:nth-of-type(even) td {
+            background-color: rgba(95, 158, 160);
+            opacity: 0.5;
+        }
+
+        tr td:hover {
+            opacity: 1;
+        }
+    </style>
+
+</head>
+
+<body>
+    <table>
+        <caption>Table</caption>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

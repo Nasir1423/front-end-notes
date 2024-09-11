@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>列表过滤</title>
+  <script src="../js/vue.js"></script>
+  <!-- 列表过滤可以由 watch 实现，也可以由 computed 实现，这里后者更简单 -->
+</head>
+
+<body>
+  <div id="root">
+    <h2>人员列表</h2>
+    <input type="text" v-model="keyWord" placeholder="请输入姓名关键字">
+    <ul>
+      <li v-for="(person, index) in filPersons" :key="person.id">
+        {{person.name}}-{{person.age}}-{{person.gender}}
+      </li>
+    </ul>
+  </div>
+
+  <!-- 列表过滤之 watch 实现 -->
+  <!-- <script>
+    new Vue({
+      el: '#root',
+      data: {
+        keyWord: "",
+        persons: [
+          { id: '001', name: '马冬梅', age: 19, gender: '女' },
+          { id: '002', name: '周冬雨', age: 20, gender: '女' },
+          { id: '003', name: '周杰伦', age: 21, gender: '男' },
+          { id: '004', name: '温兆伦', age: 22, gender: '男' }
+        ],
+        filPersons: []
+      },
+      watch: {
+        keyWord: {
+          immediate: true,
+          handler(val, _) {
+            this.filPersons = this.persons.filter((person) => {
+              return person.name.includes(val);
+              // return person.name.indexOf(val) !== -1;
+            })
+          }
+        }
+      }
+    })
+  </script> -->
+
+  <!-- 列表过滤之 computed 实现 -->
+  <script>
+    new Vue({
+      el: '#root',
+      data: {
+        keyWord: "",
+        persons: [
+          { id: '001', name: '马冬梅', age: 19, gender: '女' },
+          { id: '002', name: '周冬雨', age: 20, gender: '女' },
+          { id: '003', name: '周杰伦', age: 21, gender: '男' },
+          { id: '004', name: '温兆伦', age: 22, gender: '男' }
+        ]
+      },
+      computed: {
+        filPersons() {
+          return this.persons.filter((person) => {
+            return person.name.includes(this.keyWord);
+          });
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

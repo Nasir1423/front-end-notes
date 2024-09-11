@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>列表</title>
+</head>
+
+<body>
+	<!-- 有序列表：有顺序或侧重顺序的列表 -->
+	<!-- <ol> 和 <li> 来构成有序列表，
+			ol=ordered list, li=list item，
+			ol 表示有序列表，li 表示列表项，
+			注意 ol 中只能放 li -->
+	<h2>红烧肉的做法如下</h2>
+	<ol>
+		<li>准备材料，五花肉洗净，切成麻将块大小；</li>
+		<li>锅烧热放火麻油，爆香姜片大蒜花椒八角；</li>
+		<li>倒入五花肉翻炒至两面微焦，加入料酒或者白酒、酱油、冰糖；</li>
+		<li>转入砂锅加适量开水，慢火焖一个小时，要注意经常翻身，一方面均匀上色，另一方面避免猪皮粘锅。出锅之前撒点胡椒粉和盐就可以了。</li>
+	</ol>
+
+	<!-- 无序列表：无顺序或不侧重顺序的列表 -->
+	<!-- <ul> 和 <li> 来构成无序列表
+			ul=unordered list, li=list item,
+			ul 表示无序列表，li 表示列表项，
+			注意 ul 中只能放 li -->
+	<h2>西安旅游推荐景点如下</h2>
+	<ul>
+		<li>大雁塔</li>
+		<li>华清池</li>
+		<li>不夜城</li>
+		<li>钟楼</li>
+	</ul>
+
+	<!-- 列表嵌套：列表中的某项（item），又包含了一个列表 -->
+	<!-- 注意：li 标签最好写在 ul 或 ol ，不要单独使用 -->
+	<h2>我想去的几个城市</h2>
+	<ul>
+		<li>成都</li>
+		<li>重庆</li>
+		<li>
+			<span>北京</span>
+			<ul>
+				<li>天安门</li>
+				<li>圆明园</li>
+				<li>颐和园</li>
+				<li>故宫</li>
+			</ul>
+		</li>
+		<li>上海</li>
+	</ul>
+
+	<!-- 自定义列表：包含术语名称以及术语描述的列表 -->
+	<!-- <dl> 和 <dt> 和 <dd> 来构成自定义列表，
+			dl=definition list, dt=definition term, dd=definition description,
+			dl 表示自定义列表，dt 表示术语名称，dd 表示术语描述
+			注意：一个 dt 可以搭配多个 dd 进行使用-->
+	<h2>前端术语解释</h2>
+	<dl>
+		<dt>HTML</dt>
+		<dd>HTML 的全称是 HyperText Markup Language</dd>
+		<dd>HTML 中最重要的标签之一是 a</dd>
+
+		<dt>CSS</dt>
+		<dd>CSS 的全称是 Cascading Style Sheets</dd>
+		<dd>HTML 相当于网页的骨架，CSS 则对网页进行修饰</dd>
+	</dl>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>非单文件组件</title>
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结
+    1. Vue 组件使用的三大步骤
+      - 第一步：定义组件
+        - 语法：Vue.extend(options)
+        - 定义组件的 options 和创建 Vue 实例的 options 使用方式基本一样，区别为
+          - 不能写 el 属性，因为最终所有的组件都要经过一个 vm 的管理，由 vm 中的 el 决定服务哪个容器
+          - data 必须写成函数形式，这是为了避免组件被复用时，数据存在引用关系
+          - 此外，我们可以使用 template 属性配置组件结构
+      - 第二步：注册组件
+        - 局部注册：new Vue(options) 创建实例时，通过 components 属性注册，取值为一个对象，每一个键值对中键对应组件名，值对应定义的组件对象
+        - 全局注册：Vue.component('组件名', 组件对象)
+      - 第三步：使用组件
+        - 类似 HTML 标签去使用
+        - <组件名></组件名>
+    2. 组件定义的简写方式 —— 组件定义
+      - 如 const school = Vue.extend(options) 可简写为：const school = options
+      - 注：引入组件时，底层还是会调用 Vue.extends 方法
+    3. 组件命名规则 —— 组件注册
+      - 一个单词组成：
+        - 第一种写法(首字母小写)：如 school
+        - 第二种写法(首字母大写)：如 School
+			- 多个单词组成：
+        - 第一种写法(kebab-case 命名)：如 my-school
+				- 第二种写法(CamelCase 命名)：如 MySchool (需要 Vue 脚手架支持)
+      - 注意事项
+				- 组件名尽可能回避 HTML 中已有的元素名称，例如：h2、H2 都不行。
+				- 可以在定义组件时的 options 中使用 name 配置项指定组件在开发者工具中呈现的名字 (默认为注册组件时指定的组件名)。
+    4. 组件标签写法 —— 组件使用
+      - 第一种写法：如 <school></school>
+			- 第二种写法：如 <school/>，不用使用脚手架时，<school/> 会导致后续组件不能渲染。
+    5. 组件的嵌套
+      - 组件的嵌套即在组件的 options 中通过 components 为当前组件注册子组件
+      - 一般而言，我们只给 vm 注册一个名为 app 的子组件，然后再给 app 组件上注册其余组件，便于管理
+    6. 关于 VueComponent
+      - Vue.extend(options) 生成的组件本质是一个名为 VueComponent 的**构造函数**
+      - 当我们在模板中以标签的形式使用组件时，如 <school></school>，Vue 在解析模板时会自动帮我们创建对应组件 (如 school) 的**实例对象**，
+      即 Vue 帮我们执行了 new VueComponent(options)
+      - this 指向说明
+        - 在组件配置中：data 函数、methods 中的函数、watch 中的函数、computed 中的函数 它们的 this 均是【VueComponent 实例对象】
+        - new Vue(options) 配置中：data 函数、methods 中的函数、watch 中的函数、computed 中的函数 它们的 this 均是【Vue实例对象】
+      - 注意
+        - 每次调用 Vue.extend，返回的都是一个全新的 VueComponent！
+        - VueComponent 的实例对象简称 vc (又称组件实例对象)，Vue 的实例对象简称 vm
+    7. Vue 和 VueComponent 的原型关系：VueComponent.prototype.__proto__ === Vue.prototype，实现组件实例对象（vc）可以访问到 Vue 原型上的属性、方法
+   -->
+</head>
+
+<body>
+  <div id="root">
+    <!-- STEP3 使用组件 -->
+    <school></school>
+    <student></student>
+    <believe></believe>
+  </div>
+
+  <script>
+    /* STEP1 定义 school 组件 */
+    const school = Vue.extend({
+      template: `
+      <div>
+        <h2>Welcome to {{name}}, located in {{position.district}}, {{position.city}}, {{position.province}}</h2>
+      </div>
+      `,
+      data() {
+        return {
+          name: "XDU",
+          position: {
+            province: "Shaanxi",
+            city: "Xi'an",
+            district: "Chang'an"
+          }
+        }
+      }
+    })
+
+    /* STEP1 定义 student 组件 */
+    const student = Vue.extend({
+      template: `
+      <div>
+        <h2>{{name}}-{{age}}-{{gender}}, student in this school</h2>
+      </div>
+      `,
+      data() {
+        return {
+          name: "chuanYiTu",
+          age: 22,
+          gender: "male"
+        }
+      }
+    })
+
+    /* STEP1 定义 believe 组件 */
+    const believe = Vue.extend({
+      template: `
+      <div>
+        <h2>And we believe that everyone has talent for some area</h2>
+      </div>
+      `
+    })
+
+    /* STEP2 全局注册组件 */
+    Vue.component('believe', believe)
+
+    new Vue({
+      el: "#root",
+      /* STEP2 局部注册组件 */
+      components: {
+        school,
+        student
+      }
+    })
+  </script>
+</body>
+
+</html>

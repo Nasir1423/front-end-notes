@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>input 标签的 type 新增属性值</title>
+</head>
+
+<body>
+	<form action="#">
+		<label>
+			Email: <input type="email" name="email">
+		</label>
+		<br>
+		<label>
+			Url: <input type="url" name="url">
+		</label>
+		<br>
+		<label>
+			<!-- 限制偶数，限制范围 -->
+			Number: <input type="number" name="number" step="2" max="80" min="20">
+		</label>
+		<br>
+		<label>
+			Search: <input type="search" name="search">
+		</label>
+		<br>
+		<label>
+			Tel: <input type="tel" name="tel">
+		</label>
+		<br>
+		<label>
+			Range: <input type="range" name="range" max="50" min="10" value="20">
+		</label>
+		<br>
+		<label>
+			Color: <input type="color" name="color">
+		</label>
+		<br>
+		<label>
+			Date: <input type="date" name="date">
+		</label>
+		<br>
+		<label>
+			Month: <input type="month" name="month">
+		</label>
+		<br>
+		<label>
+			Week: <input type="week" name="week">
+		</label>
+		<br>
+		<label>
+			Time: <input type="time" name="time">
+		</label>
+		<br>
+		<label>
+			Data&Time: <input type="datetime-local" name="datetime-local">
+		</label>
+		<br>
+		<button>Submit</button>
+	</form>
+</body>
+
+</html>

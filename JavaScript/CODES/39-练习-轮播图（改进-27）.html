@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 
+        在练习 27 的基础上增加的功能：图片的自动播放，通过定时器去实现
+
+        实现思路
+            - 添加一个按钮开启自动播放，点击按钮后，设置定时器，每三秒自动触发下一张按钮的点击事件，实现图片轮播
+        需要注意的问题
+            - 为了避免因为多次点击自动播放按钮，导致开启多个定时器，从而使得图片的自动播放超出预期的情况出现，有以下解决措施
+                - 方式一：每次点击自动播放按钮，关闭之前设置的定时器，从新设置一个新的定时器
+                - 方式二：点击依次自动播放按钮后，禁用按钮
+            - 为了使得下一张和上一张的按钮功能保持正常，我们需要在触发下一张、上一张点击事件后，关闭定时器，此时如果采用方式二解决
+            定时器多开的问题，则还需要启用自动播放按钮
+     -->
+    <style>
+        #outer {
+            width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #picture {
+            height: 350px;
+            margin: 0 auto;
+            margin-top: 50px;
+            background: no-repeat 0 0 / cover;
+        }
+
+        button {
+            margin: 10px 5px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            // 页面加载后执行的函数
+
+            // 获取要处理的元素节点
+            const picture = document.getElementById('picture'); // 图片展示区域
+            const previousBtn = document.getElementById('previous'); // 上一张按钮
+            const nextBtn = document.getElementById('next'); // 下一张按钮
+            const info = document.getElementById('play-info'); // 显示当前播放信息的文本
+
+            // 获取图片路径数组
+            const picturePaths = ['1108136.jpg', '1108905.jpg', '1210474.jpg', '1219675.jpg', '1221809.png']
+                .map(path => './images/' + path); // 使用.map()方法将图片路径处理为带路径的完整数组
+
+            // 当前正在播放的图片索引
+            let currentDisplay = 0; // 默认从第一张图片开始显示
+            // 图片总数量
+            const totalPictures = picturePaths.length
+
+            // 更新图片展示和播放信息
+            function updateDisplay() {
+                picture.style.backgroundImage = `url(${picturePaths[currentDisplay]})`;
+                info.innerText = `正在播放第 ${currentDisplay + 1} 张图片（共 ${totalPictures} 张）`;
+            }
+
+            // 页面加载后，先加载第一张图片
+            updateDisplay();
+
+            // 对上一张和下一张按钮的点击事件绑定回调函数
+            previousBtn.onclick = function () {
+                // 清除轮播
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                // 启用按钮（对应问题解决方式二）
+                autoBtn.disabled = false;
+                // currentDisplay > 0 ? currentDisplay-- : currentDisplay = totalPictures - 1;
+                currentDisplay = (currentDisplay - 1 + totalPictures) % totalPictures
+                updateDisplay();
+            };
+            nextBtn.onclick = function () {
+                // 清除轮播
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                // 启用按钮（对应问题解决方式二）
+                autoBtn.disabled = false;
+                // currentDisplay < totalPictures - 1 ? currentDisplay++ : currentDisplay = 0;
+                currentDisplay = (currentDisplay + 1) % totalPictures
+                updateDisplay();
+            };
+
+            // 增加图片轮播功能
+            const autoBtn = document.getElementById('auto-play');
+            let timer; // 存储定时器的引用，放置定时器多开
+            autoBtn.onclick = function () {
+                // 问题解决方式二，禁用按钮
+                autoBtn.disabled = true;
+                // 问题解决方式一，清除定时器
+                // if (timer) {
+                //     clearTimeout(timer);
+                // }
+
+                timer = setTimeout(function cb() {
+                    nextBtn.click();
+                    timer = setTimeout(cb, 1000)
+                }, 1000)
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <div id="outer">
+        <div id="picture"></div>
+        <span id="play-info"></span>
+        <br>
+        <button id="previous">上一张</button>
+        <button id="next">下一张</button>
+        <button id="auto-play">轮播</button>
+    </div>
+</body>
+
+</html>

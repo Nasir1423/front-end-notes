@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>伪元素</title>
+	<style>
+		/* 选中 div 中内容的第一个文字 */
+		div::first-letter {
+			color: red;
+			font-size: 30px;
+		}
+
+		/* 选中 div 中内容的第一行 */
+		div::first-line {
+			background-color: gray;
+		}
+
+		/* 选中 div 中被鼠标选中的文字 */
+		div::selection {
+			background-color: pink;
+		}
+
+		/* 选中 input 元素的提示文字 */
+		input::placeholder {
+			color: skyblue;
+		}
+		
+		/* 给 li 内容的最前边添加内容，并选中 */
+		li::before{
+			content: "$";
+			color: red;
+		}
+
+		/* 给 li 内容的最后边添加内容，并选中 */
+		li:after{
+			content: ".00";
+			color: blue;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi officiis ut possimus velit labore molestias hic ducimus itaque totam magni ab porro ea voluptate sint, eos iusto repellendus. At, reiciendis.</div>
+	<br>
+	<input type="text" placeholder="请在这里输入用户名信息">
+	<br>
+	<ul>
+		<li>99</li>
+		<li>199</li>
+		<li>299</li>
+		<li>399</li>
+	</ul>
+</body>
+
+</html>

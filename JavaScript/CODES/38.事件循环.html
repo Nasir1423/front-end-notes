@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>循环队列</title>
+    <!-- 
+        1. 事件循环（event loop）
+            - 每次函数执行都会生成一个执行环境，该环境负责存储函数执行中产生的所有数据
+            - 调用栈存储函数的执行环境
+            - 消息队列存储将要执行的函数
+            - 事件循环不断检查调用栈和消息队列，如果调用栈为空且消息队列中有函数，则将其添加到调用栈中执行
+        2. 调用栈（call stack）
+            - 当一个函数被调用时，函数的执行环境会作为一个栈帧插入到调用栈的栈顶
+            - 当函数执行完毕后，其栈帧会自动从栈中弹出
+            - 全局环境也可以作为一个栈帧
+            - JavaScript 引擎只有一个调用栈，因此，同一时间只能执行一个函数，这被称为单线程
+        3. 消息队列
+            - 当我们触发一个事件，JS 会将事件的响应函数插入到消息队列中排队
+            - 一旦调用栈为空（表示栈中的函数执行完毕），则将消息队列中的函数作为一个栈帧压入调用栈
+            - JavaScript 引擎可以有多个消息队列，这使得 JavaScript 可以处理异步操作
+        4. 定时器的本质
+            - setTimeout 的本质是在指定时间后将函数添加到消息队列中。如果此时调用栈未清空，或者函数不在消息队列头部，则此时函数不
+            会被调用，仍需等待。
+            - setInterval 的本质是每隔一段时间就将函数添加到消息队列中。如果函数执行时间较长，则无法保证每次执行的间隔是一样的。
+            因为此时虽然下一段间隔时间的函数已经被添加进消息队列中，但是上一段间隔时间的函数还在调用栈中，因此无法出队列执行。
+        5. 如何通过定时器确保函数每次执行都有相同时间间隔 —— 通过 setTimeout 实现，大致语法见下，
+            setTimeout(function cb(){
+                回调函数体
+                setTimeout(cb, ms)
+            }, ms)
+     -->
+    <script>
+        console.time('seed');
+        setTimeout(function cb() {
+            console.timeEnd('seed');
+            console.log(`现在是北京时间${new Date()}`)
+            console.time('seed');
+            setTimeout(cb, 3000)
+        }, 3000)
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

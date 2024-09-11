@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>初识 Vue</title>
+  <!-- 引入 Vue 后，全局多了一个 Vue 构造函数 -->
+  <script src="../js/vue.js"></script>
+  <!-- 
+    小结
+      1. 想让 Vue 工作，必须创建一个 Vue 实例，同时传入一个配置对象 (el: 选择相应的容器，data: 存储供容器使用的数据)
+      2. 容器中的代码仍符合 HTML 规范，但混入了一些特殊的 Vue 语法 (如插值语法)
+      3. 容器中的代码称之为 Vue 模板，Vue 实例创建后会解析模板，并将相应的数据渲染到页面
+      4. Vue 实例和容器是一一对应的
+      5. 真实开发中只有一个 Vue 实例，并且会配合着组件一起使用
+      6. 容器中 {{xxx}} 中的 xxx 要写 js 表达式，同时 xxx 可以自动读取到 data 中的所有属性
+      7. 一旦 data 中的数据发生改变，页面中用到该数据的地方也会自动更新
+   -->
+</head>
+
+<body>
+  <!-- 准备一个容器 -->
+  <div id="root">
+    <h1>你好，{{name}}！</h1>
+    <h1>Hello, {{nameEn.toUpperCase()}}!</h1>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#root', // 指定当前 Vue 实例为哪个容器服务，取值通常为 css 选择器字符串 
+      data: { // 用于存储数据，供 el 所指定的容器去使用，可以在容器中使用 {{数据名}} 的方式获取数据值，这里暂以对象作为 data 取值
+        name: '世界',
+        nameEn: 'world'
+      }
+    })
+  </script>
+</body>
+
+</html>

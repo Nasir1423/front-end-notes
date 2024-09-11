@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <!-- 
+        在练习 41 的基础添加导航点功能，有以下要求和注意点
+            - 对应当前正在播放的图片的导航点高亮显示
+            - 鼠标悬浮的导航点高亮显示
+            - 点击导航点可以直接跳转图片
+            - 图片自动切换、通过按钮切换时，对应的导航点高亮显示，之前的导航点取消高亮显示
+        
+        如何将图片何导航点相联系？index！
+     -->
+    <style>
+        #pictures-container {
+            /* 给容器设置高度，避免因为给其中内容设置了绝对定位而使容器塌陷 */
+            height: 350px;
+            /* 容器居中 */
+            width: 600px;
+            margin: 0 auto;
+            /* 设置相对定位，成为 li 的包含块 */
+            position: relative;
+            /* 设置容器外边距 */
+            margin-top: 50px;
+        }
+
+        #pictures-container ul,
+        #pictures-container li {
+            /* 清除列表的默认样式 */
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        #pictures-container li {
+            /* 设置绝对定位，使图片脱离文档流 */
+            position: absolute;
+            /* 开启过渡效果 */
+            opacity: 0;
+            transition: 0.5s opacity;
+        }
+
+        #pictures-container img {
+            /* 清除图片的默认样式，因为图片是行内元素，由于基线原因，垂直方向难以对齐，需要设置垂直方向上的对齐方式  */
+            vertical-align: top;
+            /* 清楚图片的默认样式，也可以通过将图片设置为块元素而实现 */
+            /* display: block; */
+            /* 设置图片的样式 */
+            width: 600px;
+            height: 350px;
+            object-fit: cover;
+            /* 
+                object-fit 是一个 CSS 属性，用于控制嵌入内容（如 img, video, iframe 等）在容器中的缩放方式，在保持原始比例的同
+                时，使其适应容器的特定尺寸。
+                可选值：
+                    - fill 默认值，嵌入内容会被拉伸或压缩以完全嵌入其容器
+                    - contain 内容按比例缩放，使其完全装入容器内（不会裁剪内容，不一定填满整个容器）
+                    - cover 内容按比例缩放，使其完全覆盖容器（可能会裁剪内容，但是一定填满整个容器），常用
+                    - none 内容不缩放，多余部分直接裁剪，常常配合 overflow 属性使用
+                    - scale-down ...... 略
+            */
+        }
+
+        #pictures-container .topmost {
+            /* 我们设置类名为 topmost 的图片显示层级最高，然后通过动态删除添加类名，实现对图片显示层级的修改 */
+            z-index: 10;
+            /* 改变透明度，产生过渡效果（注：为了覆盖掉原本设置的透明度，选择器的优先级必须更高） */
+            opacity: 1;
+        }
+
+        /* 设置上一张、下一张的按钮样式 */
+
+        #skip div {
+            width: 30px;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: rgba(240, 248, 255, 0.5);
+            font-family: '华文楷体';
+            font-size: 18px;
+            position: absolute;
+            z-index: 20;
+        }
+
+        #skip div:hover {
+            cursor: pointer;
+            color: rgba(240, 248, 255);
+        }
+
+        #previous {
+            top: 140px
+        }
+
+        #next {
+            right: 0;
+            top: 140px;
+        }
+
+        /* 设置导航点整体样式 */
+        #pictures-container #nav-dots {
+            position: absolute;
+            bottom: 5px;
+            /* 让绝对定位的元素保持水平居中 */
+            display: flex;
+            justify-content: center;
+            left: 0;
+            right: 0;
+            z-index: 30;
+        }
+
+        /* 设置导航点样式 */
+        #pictures-container #nav-dots li {
+            position: static;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 5px;
+            background-color: #fff;
+            transition: none;
+            opacity: 0.5;
+        }
+
+        /* 设置每个悬浮的导航点或每个正在播放的导航点高亮 */
+        #pictures-container #nav-dots li:hover,
+        #pictures-container #nav-dots li.active {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+
+            // 图片元素数组
+            const picsArr = [...document.querySelectorAll('#pictures-container img')]
+            // 导航点元素数组
+            const navDotsArr = [...document.querySelectorAll('#pictures-container #nav-dots li')]
+
+            // 0-初始：第一张图片在顶层，对应导航点高亮
+            picsArr[0].parentElement.classList.add('topmost');
+            navDotsArr[0].classList.add('active');
+
+            // 辅助函数：切换图片自动播放状态
+            const toggleAutoPlay = (function () {
+                let timer;
+
+                return () => {
+                    if (timer) {
+                        clearInterval(timer);
+                        timer = null;
+                    } else {
+                        timer = setInterval(() => switchPictures('next'), 2000);
+                    }
+                }
+            }());
+
+            // 辅助函数：图片切换
+            const switchPictures = (function () {
+                // 当前图片索引
+                let currentIndex = 0;
+                // 下一张图片的索引
+                let nextIndex;
+                // 图片数组长度
+                const picLength = picsArr.length;
+
+                return (direction) => {
+                    // 获取"下"一张图片
+                    if (direction === 'next') {
+                        nextIndex = (currentIndex + 1) % picLength;
+                    } else if (direction === 'previous') {
+                        nextIndex = (currentIndex - 1 + picLength) % picLength;
+                    } else if (typeof direction === 'number') {
+                        nextIndex = direction;
+                    }
+                    // 切换到"下"一张图片
+                    picsArr[currentIndex].parentElement.classList.remove('topmost');
+                    navDotsArr[currentIndex].classList.remove('active');
+                    picsArr[nextIndex].parentElement.classList.add('topmost');
+                    navDotsArr[nextIndex].classList.add('active');
+                    currentIndex = nextIndex;
+                };
+            }());
+
+            // 1-开启图片轮播
+            toggleAutoPlay()
+
+            // 2-自动轮播的控制：进入图片区域关闭，离开图片区域开启
+            const picturesContainer = document.getElementById('pictures-container');
+
+            picturesContainer.onmouseenter = () => toggleAutoPlay();
+            picturesContainer.onmouseleave = () => toggleAutoPlay();
+
+            // 3-上一张、下一张的实现
+            // 上一张按钮
+            const preBtn = document.querySelector('#previous');
+            // 下一张按钮
+            const nextBtn = document.querySelector('#next');
+
+            // 切换到上一张图片
+            preBtn.onclick = () => switchPictures('previous');
+            // 切换到下一张图片
+            nextBtn.onclick = () => switchPictures('next');
+
+            // 4-点击导航点跳转图片
+            document.addEventListener('click', function (event) {
+                let navDotsIndex = navDotsArr.indexOf(event.target);
+                if (navDotsIndex !== -1) {
+                    switchPictures(navDotsIndex);
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="pictures-container">
+        <ul>
+            <li>
+                <img src="./images/1108136.jpg">
+            </li>
+            <li>
+                <img src="./images/1108905.jpg">
+            </li>
+            <li>
+                <img src="./images/1210474.jpg">
+            </li>
+            <li>
+                <img src="./images/1219675.jpg">
+            </li>
+            <li>
+                <img src="./images/1221809.png">
+            </li>
+        </ul>
+        <div id="skip">
+            <div id="previous">上一张</div>
+            <div id="next">下一张</div>
+        </div>
+        <ul id="nav-dots">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>包装类</title>
+</head>
+
+<body>
+    <script>
+        /* 
+            包装类
+            - 是什么？JavaScript 定义了五个包装类 String、Number、Boolean、BigInt、Symbol，通过包装类将原始值包装为一个对象，
+            当我们对一个原始值调用属性或方法时，JavaScript 解释器会临时将原始值包装为对应的对象，然后调用这个对象的属性或方法
+            - 使用说明
+                - 虽然我们可以通过 new String()、new Number()、new Boolean() 创建三个原始值对应的对象，但是十分不建议这么做，
+                原始值是不可修改的，而对象是可修改的，这样会导致一些问题，如 "hello" === new String("Hello") 为 false
+                - 包装类是为 JavaScript 解释器设计的，方便原始值调用属性或方法时自动将其转换为对象，然后调用对应属性或方法
+                - 之所以 null 和 undefined 无法调用 toString() 方法，是因为没有对应的包装类！
+        */
+
+        let bool1 = true;
+        let bool2 = new Boolean(true);
+        console.log(bool1 === bool2); // false
+
+        let str = "Hello World";
+        str.name = "Welcome" // 1. 此时 str 被转换为一个 String 对象，给转换后的对象添加了 name 属性
+        console.log(str.name); // 2. 此时 str 被转换为了一个 String 对象，访问了转换后的对象的 name 属性
+        // 1. 和 2. 转换的 String 对象是独立的，不是一个对象
+
+        let num = 22;
+        console.log(typeof num.toString()); // string
+
+    </script>
+
+</body>
+
+</html>

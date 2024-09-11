@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8">
+	<title>其他伪类</title>
+	<style>
+		/* 否定伪类 */
+
+		/* div 中的儿子 p 元素，但是排除类名为 element 的 p 元素 */
+		div>p:not(.element) {
+			font-family: 华文新魏;
+		}
+
+		/* div 中的儿子 p 元素，但是排除 title 属性以 “不常用” 开头的 p 元素 */
+		div>p:not([title^="不常用"]) {
+			color: red;
+		}
+
+		/* div 中的儿子 p 元素，但是排除其最后一个子元素（这里的次序计算到 div 中的所有子元素） */
+		div>p:not(:last-child) {
+			font-size: 30px;
+		}
+
+		/* UI 伪类 */
+
+		/* 选中的是勾选的复选框或单选按钮 */
+		input:checked {
+			width: 100px;
+			height: 100px;
+		}
+
+		/* 选中的是被禁用的 input 元素 */
+		input:disabled {
+			background-color: aqua;
+		}
+
+		/* 选中的是没有被禁用的 input 元素 */
+		input:enabled {
+			background-color: pink;
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<h2>其他伪类</h2>
+		<p class="negative" title="常用伪类">否定伪类</p>
+		<p class="ui" title="常用伪类">UI伪类</p>
+		<p class="object" title="不常用伪类">目标伪类</p>
+		<p class="element" title="不常用伪类">元素伪类</p>
+	</div>
+
+	<div>
+		<h2>UI伪类</h2>
+		<label>
+			Username <input type="text" value="请输入用户名" enabled>
+		</label>
+		<label>
+			Password <input type="password" disabled>
+		</label>
+		<br>
+		<label>
+			<input type="radio" name="gender"> Male
+		</label>
+		<label>
+			<input type="radio" name="gender"> Female
+		</label>
+		<br>
+		<label>
+			<input type="checkbox"> C++
+		</label>
+		<label>
+			<input type="checkbox"> Python
+		</label>
+		<label>
+			<input type="checkbox"> Java
+		</label>
+	</div>
+
+</body>
+
+</html>
